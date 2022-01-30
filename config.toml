@@ -1,0 +1,46 @@
+baseurl = "https://example.com"
+languageCode = "en-us"
+title = "EvanLyu's blog"
+theme = "hugo-tania"
+paginate = 6
+disqusShortname = "https-hugo-tania-netlify-app"
+
+[params]
+  # Emoji will show before the blog title on site navbar.
+  # titleEmoji  = "😎"
+  enableFootnotes = true
+  siteName = "evanlyu's site"
+  # siteDesc = ""
+  author = "Evan Lyu"
+
+  [params.colorScheme]
+    # Enable toggle colorScheme
+    # Default to true
+    toggle = true
+
+    # # Limit how many categories filter show above search input.
+    maxCategoryToShow = 10
+
+  # Show your social information with icon on index bio with `_index.md` content.
+  
+  # # Comments settigns
+  [params.comments]
+    enabled = false
+    provider = "disqus"
+
+# [menu]
+# [[menu.header]]
+#   name = "Posts"
+#   url = "/posts/"
+[[menu.footer]]
+    url = "/index.xml"
+
+[markup]
+[markup.highlight]
+  noClasses = false
+  lineNos = true
+[markup.goldmark.renderer]
+  unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
