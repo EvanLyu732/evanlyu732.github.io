@@ -2,6 +2,9 @@
 base_url = "https://evanlyu732.github.io"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
+
+default_language = "zh-tw"
+
 # What language to use
 generate_feed = true
 
