@@ -8,7 +8,6 @@ default_language = "zh"
 # What language to use
 generate_feed = true
 
-
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
@@ -23,7 +22,7 @@ seje_chinese_date = true
 # show summary instead of the whole article on the index page
 seje_show_summary_only = false
 # Google Font API mirror URLs (for China mainland users, try fonts.loli.net)
-seje_font_mirror = "fonts.googleapis.com"
+seje_font_mirror = "fonts.loli.net"
 # whether use traditional Chinese style vertical layout
 seje_vertical_layout = false
 # additional custom fonts to include (must be in CSS font-family format)
