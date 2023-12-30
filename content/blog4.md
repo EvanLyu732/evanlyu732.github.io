@@ -28,7 +28,7 @@ date = 2023-12-20
 
 因为我们的平台是Jetson Orin. 自然会去想使用Nvidia提供的一些硬件视频编解码或者其他工具链路来完成, 比较直观的想法是在gpu上做yuyv到bgr的转换, 或者能直接在硬件buffer里面完成转码肯定是最好的. 所以先尝试了能否在硬件上直接做转码. 就开始了解Nv的工具链, Jetson Pack等等. 当然也会在Nv的论坛上看别人的post, 最开始看回答的时候也有些云里雾里的. 还有很多时候明明也没有解决方案，Nv也会把帖子标为solved. 当然这里不会过多论述踩坑的过程, 比较有帮助是下面这张图, 这张图展示了Nv的生态工具链：
 
-![nvtoolkts](static/nv.png)
+![nvtoolkts](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/nv.png)
 
 
 ok, 明确了大体上Nv所提供的工具链之后, 接下来解决这一步的问题: 原始相机吐出来的格式是YUYV要转换成BGR24, 在这一过程要达到性能最优.
@@ -52,7 +52,7 @@ ok, 明确了大体上Nv所提供的工具链之后, 接下来解决这一步的
 
 `t0 = adjusted_sof = TSC - offset_ns `
 
-![sof-latency-path](static/SOF-latency-path.png)
+![sof-latency-path](https://github.com/EvanLyu732/evanlyu732.github.io/blob/main/static/images/SOF-latency-path.png?raw=true)
 
 再补偿回这个偏移量就可以得到尺度一样的时间戳. 如果是在Nv的板上的话，偏移量会存放在`/sys/devices/system/clocksource/clocksource0/offset_ns`这个路径下. 加上了这个偏移量那输出的就是`monotonic_time`.
 
