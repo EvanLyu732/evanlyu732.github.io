@@ -52,6 +52,8 @@ ok, 明确了大体上Nv所提供的工具链之后, 接下来解决这一步的
 
 `t0 = adjusted_sof = TSC - offset_ns `
 
+`TSC`即下图的`t1`, 其中`offset_ns`代表`latency`.
+
 ![sof-latency-path](https://github.com/EvanLyu732/evanlyu732.github.io/blob/main/static/images/SOF-latency-path.png?raw=true)
 
 再补偿回这个偏移量就可以得到尺度一样的时间戳. 如果是在Nv的板上的话，偏移量会存放在`/sys/devices/system/clocksource/clocksource0/offset_ns`这个路径下. 加上了这个偏移量那输出的就是`monotonic_time`.
