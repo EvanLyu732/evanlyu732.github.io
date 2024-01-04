@@ -48,7 +48,7 @@ ok, 明确了大体上Nv所提供的工具链之后, 接下来解决这一步的
 
 # 时间戳对齐
 
-相机驱动输出的结构体是`v4l2_struct`. 而`v4l2_struct`带的timestamp是相对时间戳（从系统上电开始计时）并且是Start Of Frame(即buffer里面第一个字节有数据时的时间),而需要转换到unix时间戳。那如何做转换呢? 通过`clock_gettime`函数里面, 传入两个`timespec`.一个为`realtime`另一个为`monotonic`. 再做差值就是两个尺度原点的差值. 此外, 还需要加RTCCPIU与CPU时间戳的偏移量(见[链接](https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_TX2_-_VI_Latency_Measurement_Techniques)):
+相机驱动输出的结构体是`v4l2_struct`. 而`v4l2_struct`带的timestamp是相对时间戳（从系统上电开始计时）并且是Start Of Frame(即buffer里面第一个字节有数据时的时间),而需要转换到unix时间戳。那如何做转换呢? 通过`clock_gettime`函数里面, 传入两个`timespec`.一个为`realtime`另一个为`monotonic`. 再做差值就是两个尺度原点的差值. 此外, 还需要加RTCPU与CPU时间戳的偏移量(见[链接](https://developer.ridgerun.com/wiki/index.php/NVIDIA_Jetson_TX2_-_VI_Latency_Measurement_Techniques)):
 
 `t0 = adjusted_sof = TSC - offset_ns `
 
