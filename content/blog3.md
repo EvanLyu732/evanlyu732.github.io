@@ -79,7 +79,7 @@ Quote13.
 Quote14. 
 > “All three are essential—you must learn to sell your ideas, not by propaganda, but by force of clear presentation. I am sorry to have to point this out; many scientists and others think good ideas will win out automatically and need not be carefully presented. They are wrong; many a good idea has had to be rediscovered because it was not well presented the first time, years before! New ideas are automatically resisted by the establishment, and to some extent justly.” - P822
 
-与清晰的表达比单纯只拥有一个好的点子更加重要.
+清晰的表达比单纯只拥有一个好的点子更加重要.
 
 
 Quote15. 
