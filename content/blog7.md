@@ -16,7 +16,7 @@ date = 2024-04-17
 之后是王海峰介绍的多模型推理部分. 也是从输入端会经过路由模型. 再由路由模型分发输入给不同的模型. 实际上所谓的Mixture Of Engine与Mixture Of Experts的思想是一致的. 只不过是宏观(多个模型)与微观(单个模型)之间的区别.
 ![infer](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/baidu-create02.png)
 
-最后是沈抖介绍的万源智能操作系统, 与Andrew Karpathy所提及的[LLM-OS](https://twitter.com/karpathy/status/1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png)是相同的. 之前看过Andrew的一个talk里面就讲到基本所有人都在往LLM-OS发力. 将一个复杂任务拆解的话, 现有的LLM已经具有相当的理解能力, 但是缺少对工具的使用能力. 如果要让LLM能够使用工具的话, 许多现有的应用都要重新开发. 或许也是未来的一个风口所在.
+最后是沈抖介绍的万源智能操作系统, 与Andrej Karpathy所提及的[LLM-OS](https://twitter.com/karpathy/status/1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png)是相同的. 之前看过Andrej的一个talk里面就讲到基本所有人都在往LLM-OS发力. 将一个复杂任务拆解的话, 现有的LLM已经具有相当的理解能力, 但是缺少对工具的使用能力. 如果要让LLM能够使用工具的话, 许多现有的应用都要重新开发. 或许也是未来的一个风口所在.
 
 ![wanyuan](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/baidu-create06.png)
 
