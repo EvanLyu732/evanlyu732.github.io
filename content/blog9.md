@@ -111,7 +111,7 @@ for (i=1; i<100; i++)
 
 Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很奇怪的一点是明明这里的操作也可以归为kernel的范畴, 但是Ian却单独抽里开. 说明Brook对Reducitons的实现与kernel是不同的. 而从语法上来看, 这段代码与CUDA调用kernel function几乎是一致的. 在CUDA中没有单独的概念, 说明这一操作已经在CUDA统一了.
 
-到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processor相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.
+到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processing相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.
 
 
 ## 为什么CUDA这样设计
