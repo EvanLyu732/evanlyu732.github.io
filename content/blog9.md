@@ -12,7 +12,7 @@ CUDA(Compute Unified Device Architecture)是Nvidia强大的护城河之一, 也�
 
 ## CUDA发展历史
 
-要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索[CUDA](https://en.wikipedia.org/wiki/CUDA#GPUs_supported), 里面有提到CUDA的发展历史, 以下为[原文](https://en.wikipedia.org/wiki/CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D):
+要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索[CUDA](https://en.wikipedia.org/wiki/CUDA), 里面有提到CUDA的发展历史, 以下为[原文](https://en.wikipedia.org/wiki/CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D):
 
 > __Ian Buck__, while at __Stanford__ in 2000, created an 8K gaming rig using 32 GeForce cards, then obtained a DARPA grant to perform __general purpose parallel programming on GPUs__. He then joined Nvidia, where since 2004 he has been overseeing CUDA development. In pushing for CUDA, Jensen Huang aimed for the Nvidia GPUs to become a __general hardware__ for scientific computing. CUDA was released in 2006. Around 2015, the focus of CUDA changed to neural networks.
 
