@@ -23,7 +23,7 @@ CUDA(Compute Unified Device Architecture)是Nvidia强大的护城河之一, 也�
 
 让我们一起再来看看BrookGPU的项目介绍:
 
-![brook-gpu]()
+![brook-gpu](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu.png)
 
 
 总结一下, Brook提出了**stream programming model**以及**stream application**并给出了对应的实现去解决[**通用计算**](https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E5%A4%84%E7%90%86%E5%99%A8%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97)的问题.
@@ -36,7 +36,7 @@ CUDA(Compute Unified Device Architecture)是Nvidia强大的护城河之一, 也�
   * 程序在GPU上执行时，其内存访问延迟主要受到两个关键因素的制约: 一是计算速率(compute rate), 二是内存带宽(memory bandwidth). 这意味着，GPU处理数据的速度和内存传输数据的能力共同决定了程序在内存操作中的延迟表现. BrookGPU的设计是为了让GPU计算充分发挥, 从而让内存时延主要部分为内存带宽.
   * Brook不是第一个尝试去解决通用计算问题, 但是是第一个使用流式处理(stream processing)去解决通用计算. 
 
-![advantage-of-streaming]()
+![advantage-of-streaming](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu2.png)
 
 在Ian提出Streaming Processing框架的这一节提到了很重要的一个观点. 内存的访问速度(memory access rate)即内存带宽(memory bandwidth)往往
 是制约程序性能的瓶颈. 而软件层由于改变不了物理的内存带宽, 因而会采取其他技巧去隐藏内存延迟(memory latency). 这里Streaming Processing使用data parallelism与[arithmetic Intensity](https://crd.lbl.gov/divisions/amcr/computer-science-amcr/par/research/roofline/introduction/)去隐藏内存延迟(hide memory latency). Ian也提出了什么是arithmetic Intensity的概念:
@@ -46,7 +46,7 @@ sity. **Arithmetic intensity is the ratio of arithmetic operations performed per
 operation, in other words, flops per word transferred.**
 
 感觉这里解释的不是很清楚, 于是询问GPT4的回答, 讲的很清楚:
-![advantage-of-streaming]()
+![arithmetic Intensity](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/arth-intensity.png)
 Arithmetic intensity指的是运算指令(add, mul..)与内存操作(load, store..)的比例.
 
 这里小结一下Brook做了什么事:
@@ -123,7 +123,7 @@ Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很
   从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread最小操作单元. 通过这样划分, 实现了[SIMT(Single Instruction Multiple Threads)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads). 从而隐藏内存延迟.
 
   下面这张图对于理解CUDA的概念非常有帮助:
-![cuda-concepts]()
+![cuda-concepts](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/gtc-cuda-concepts.png)
 
 ## 总结
 
