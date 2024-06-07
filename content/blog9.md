@@ -120,7 +120,7 @@ Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很
   
   从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟. 
   
-  从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread最小操作单元. 通过这样划分, 实现了[SIMT(Single Instruction Multiple Threads)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads). 从而隐藏内存延迟.
+  从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了[SIMT(Single Instruction Multiple Threads)](https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads). 从而隐藏内存延迟.
 
   下面这张图对于理解CUDA的概念非常有帮助:
 ![cuda-concepts](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/gtc-cuda-concepts.png)
