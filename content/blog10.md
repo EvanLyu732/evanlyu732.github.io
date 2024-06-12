@@ -91,6 +91,7 @@ ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇�
 
 接下来作者在不同指标上又进行了测试, 如果有兴趣建议阅读原文. 为了抓住重点, 我们先跳过这一部分. 作者使用[Neuron to Graph(N2G)](https://arxiv.org/pdf/2305.19911)去做特征的解释.
 
+
 ![n2g](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/n2g.png)
 
 上图的N2G论文原文的描述, 可以看到N2G是将语言模型输出的回答进行关联生成一张有向图. 
