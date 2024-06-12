@@ -9,13 +9,26 @@ date = 2024-06-07
 * paper: [Scaling and evaluating sparse autoencoders](https://cdn.openai.com/papers/sparse-autoencoders.pdf)
 * code: [openai/sparse_autoencoder](https://github.com/openai/sparse_autoencoder)
 
+<a id="目录"></a>
 # 目录
+
+- [目录](#目录)
+- [背景知识](#背景知识)
+  - [Autoencoder](#autoencoder)
+  - [Sparse Autoencoder](#sparse-autoencoder)
+  - [Sparse Autoencoder的特征可解释性](#sparse-autoencoder的特征可解释性)
+  - [Bottleneck Layer](#bottleneck-layer)
+  - [TopK激活函数](#topk激活函数)
+- [论文解读](#论文解读)
+- [参考资料](#参考资料)
 
 
 如果对背景知识不太了解的话, 推荐顺序阅读. 如果已经有足够的背景知识, 请点击这里开始正文阅读. 下面是对论文的解读. 
 
+ <a id="背景知识"></a>
 # 背景知识
 
+ <a id="Autoencoder"></a>
 ## Autoencoder
 
 根据吴恩达在CS294A的[讲义](http://stanford.edu/class/cs294a/sparseAutoencoder.pdf), Autoencoder是一种无监督学习, 在没有给定标签的数据{x(1), x(2), x(3)....}, 通过隐藏层(hidden layer)学习输入中隐含的特征, 从而让输出{x^(1), x^(2), x^(3)...}尽可能的逼近输入. 下图为autoencoder的结构(引用自[这里](http://stanford.edu/class/cs294a/sparseAutoencoder.pdf)):
@@ -24,6 +37,7 @@ date = 2024-06-07
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png" height="100" width="100"/>
 <!-- ![autoencoder](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png) -->
 
+ <a id="Sparse Autoencoder"></a>
 ## Sparse Autoencoder
 
 Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通过增加稀疏惩罚项(sparse penalty)使得前向传播时只有一部分神经元激活, 而不是所有神经元都激活. 由于相比与未做稀疏化处理的autoencoder结构, 激活的隐藏层神经元(hidden neruon)变少了, 因此每一个隐藏层神经元都包含了更丰富的隐藏特征(latent feature). 是不是和现在流行的[Mixture of Experts](https://huggingface.co/blog/moe)很像? 
@@ -33,6 +47,7 @@ Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通�
 ![sparse-autoencoder](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/sparse-autoencoder2.png)
 
 
+ <a id="sparse-autoencoder的特征可解释性"></a>
 ## Sparse Autoencoder的特征可解释性
 
 MIT6.S898 Deep Learning在2023年发表的一篇[blog](https://deep-learning-mit.github.io/staging/blog/2023/learning-interpretable-features-with-sparse-autoencoders/)在这里提到了
@@ -41,7 +56,8 @@ MIT6.S898 Deep Learning在2023年发表的一篇[blog](https://deep-learning-mit
 
 相比与未稀疏化的Autoencoder, 稀疏化的Autoencoder可以学习到更高维度的隐含特征. 换个角度说, 未经稀疏化的隐藏层神经往往是表示多维特征(polysemantic). 而经过稀疏化的隐藏层神经元所表示的特征维度更少, 从而使得隐含特征更加容易理解. 更详细的关于sparse autoencoder的可解释性, 可以点击Anthropic发的["Towards Monosemanticity: Decomposing Language Models With Dictionary Learning"](https://transformer-circuits.pub/2023/monosemantic-features)查看.
 
-#  Bottleneck Layer
+<a id="Bottleneck Layer"></a>
+##  Bottleneck Layer
 
 
 bottlenect layer指的是含有比前一层更少的神经元的网络层, 使得输入特征维度减少. 这里引用英文原文更方便理解:
@@ -49,11 +65,13 @@ bottlenect layer指的是含有比前一层更少的神经元的网络层, 使�
 >  A bottleneck layer is a layer that contains few nodes compared to the previous layers. It can be used to obtain a representation of the input with reduced dimensionality.
 
 
-#  TopK激活函数
+<a id="TopK激活函数"></a>
+##  TopK激活函数
 
 TopK是一种激活函数. 仅保留输入向量中最大的k的值，其余值设置为0.
 
 
+<a id="论文解读"></a>
 #  论文解读
 
 ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇文章. 首先是作者部分还有Ilya Sutskever与Jan Leike, 说明是OpenAI之前研究的存货. 再来看摘要部分:
@@ -87,6 +105,7 @@ ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇�
 
 
 
+<a id="参考资料"></a>
 # 参考资料
  
 * [Sparse autoencoder, CS294A Lecture notes - Andrew Ng](http://stanford.edu/class/cs294a/sparseAutoencoder.pdf)
