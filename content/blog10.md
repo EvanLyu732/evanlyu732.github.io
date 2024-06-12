@@ -30,7 +30,7 @@ Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通�
 下图为sparse autoencoder的结构(引用自[这里](https://medium.com/@syoya/what-happens-in-sparse-autencoder-b9a5a69da5c6)):
 
 
-![sparse-autoencoder](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/sparse-autoencoder.png)
+![sparse-autoencoder](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/sparse-autoencoder2.png)
 
 
 ## Sparse Autoencoder的特征可解释性
@@ -73,7 +73,7 @@ ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇�
 
 接下来作者在不同指标上又进行了测试, 如果有兴趣建议阅读原文. 为了抓住重点, 我们先跳过这一部分. 作者使用[Neuron to Graph(N2G)](https://arxiv.org/pdf/2305.19911)去做特征的解释.
 
-![n2g](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/n2g.png)
+![n2g](https://raw.githubusercontent.com/EvanLyu732/eva/nlyu732.github.io/main/static/images/n2g.png)
 
 上图的N2G论文原文的描述, 可以看到N2G是将语言模型输出的回答进行关联生成一张有向图. 
 
@@ -81,12 +81,22 @@ ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇�
 
 ![result](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/openai-result.png)
 
+最后作者给出了结论以及未来工作的方向:
+
+![paper-result](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/paper-result.png)
+
+
 
 # 参考资料
  
 * [Sparse autoencoder, CS294A Lecture notes - Andrew Ng](http://stanford.edu/class/cs294a/sparseAutoencoder.pdf)
 * [What does a bottleneck layer mean in neural networks?](https://stats.stackexchange.com/questions/262044/what-does-a-bottleneck-layer-mean-in-neural-networks)
 
+-------
+<br>
+<br>
+
+(第一次写这种论文解读类文章, 发现还是不好写. 因为有条件的话应该直接读原文, 不加如一些原文的图的话会表达不到意思, 加了太多又和读原文没什么区别.)
 
 
 
