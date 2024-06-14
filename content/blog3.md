@@ -5,7 +5,7 @@ date = 2023-12-09
 
 <em>这是一篇读书摘要汇总("The Art of Doing Science and Engineering: Learning to Learn")</em>
 
-写这篇文章的灵感来自于之前读[Richard Hamming](https://en.wikipedia.org/wiki/Richard_Hamming)的["The Art of Doing Science and Engineering: Learning to Learn"](https://www.amazon.com/Art-Doing-Science-Engineering-Learning/dp/1732265178). 书的内容来自于他给美国海军的一系列讲座集合, 之后整理成书. 书中Hamming有非常多精彩的观点,但是看书有一个问题就是到最后很难提炼成自己的东西, 所有这种好书就需要时间去吸收，看完不是结束，而是行动的开始. 这里选取了十五句本书对我最有影响的话.
+写这篇文章的灵感来自于之前读[Richard Hamming](https://en.wikipedia.org/wiki/Richard_Hamming)的["The Art of Doing Science and Engineering: Learning to Learn"](https://www.amazon.com/Art-Doing-Science-Engineering-Learning/dp/1732265178). 书的内容来自于他给美国海军的一系列讲座集合, 之后整理成书. 书中Hamming有非常多精彩的观点,但是看书有一个问题就是到最后很难提炼成自己的东西, 所以这种好书就需要时间去吸收, 看完不是结束, 而是行动的开始. 这里选取了十五句本书对我最有影响的话.
 
 Quote1. 
 > “In science, if you know what you are doing, you should not be doing it.
