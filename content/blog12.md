@@ -111,7 +111,7 @@ date = 2024-06-18
 
 抽象是从外部信息输入到信息库, 压缩是从信息库中检索, 预测是对检索出来信息进行预判.[[3]](#3)
 
-<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png" height="100" width="100"/>
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/understanding.png" height="100" width="100"/>
 
 
 在上面的思想实验中, 你"理解“你刚刚经历的过程. 所以你能够用语言来描述你刚刚经历的过程. 
@@ -233,11 +233,11 @@ date = 2024-06-18
 
 香农早在1951年的时候发表的["Prediction and Entropy of Printed English"](https://archive.org/details/bstj30-1-50/page/n3/mode/2up?view=theater)就讨论了”语言模型".
 
-<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png" height="100" width="100"/>
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/text.png" height="100" width="100"/>
 
 给一个人一段不认识并且有缺少单词文本(见上图, 第二行有缺失信息的文本叫做reduced text), 从第一个缺失的单词开始逐个猜字母. 如果猜错了, 这个人会再猜一次. 如果猜对了就继续. 直到把缺失的文本复原. 整个过程如下图. 如果要通过缺失的文本(reduced text)去复原原始文本(original text), 香农说我们需要有一个与猜词的人完全一样的双胞胎(不止是生理, 思考方式也完全一样, 并且可以用数学公式量化)负责生产文本序列(produce text sequence), 当负责生产文本的双胞胎去猜词的时候, 和与之前在猜词的人猜一样的结果. 也会在同样的字母上犯错. 当负责猜词的人去生产词的话, 也会生成相同的缺失文本.
 
-<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png" height="100" width="100"/>
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/predictor.png" height="100" width="100"/>
 
 在这种情况下, 缺失的文本相当与原文本的编码. 去生产缺失文本的行为(压缩)相当于预测的逆操作. [[4]](#4)
 
