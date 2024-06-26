@@ -27,6 +27,7 @@ date = 2024-06-18
 - [Mini Experiment](#mini-experiment)
 - [后记随想](#后记随想)
 - [参考资料](#参考资料)
+- [后记](#后记)
 - [附录](#附录)
 
 <a id="背景"></a>
@@ -351,6 +352,17 @@ the environment.  - The Book Of Why
 * [Logic and Probability](https://plato.stanford.edu/entries/logic-probability/)
 * [Understanding in Epistemology](https://iep.utm.edu/understa/)
 
+
+
+--------------------------
+<a id="后记"></a>
+# 后记
+
+分享在看之前Ilya点赞的[The Platonic Representation Hypothesis](https://arxiv.org/abs/2405.07987)里面, 有一段很有意思的话.
+
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/plato.png" height="100" width="100"/>
+
+神经网络必将走向智能. 
 
 ---------------------
 
