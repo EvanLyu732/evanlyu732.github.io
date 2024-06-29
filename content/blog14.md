@@ -4,7 +4,7 @@ title = "从零开始跟着Ilya Sutskever掌握90%的人工智能"
 date = 2024-06-26
 +++
 
-[John Carmack](https://baike.baidu.com/item/%E7%BA%A6%E7%BF%B0%C2%B7%E5%8D%A1%E9%A9%AC%E5%85%8B/1072333)让[Ilya Sutskever](https://baike.baidu.com/item/%E4%BC%8A%E5%B0%94%E4%BA%9A%C2%B7%E8%8B%8F%E8%8C%A8%E5%85%8B%E7%BB%B4/63739745)推荐关于了解当下人工智能的阅读资料. Ilya Sutskever给了大约有40篇研究论文的链接.
+[John Carmack](https://en.wikipedia.org/wiki/John_Carmack)让[Ilya Sutskever](https://en.wikipedia.org/wiki/Ilya_Sutskever)推荐关于了解当下人工智能的阅读资料. Ilya Sutskever给了大约有40篇研究论文的链接.
 
 >  If you really learn all of these, you’ll know 90% of what matters today. -  Ilya Sutskever
 >
