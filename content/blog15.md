@@ -12,7 +12,7 @@ date = 2024-06-29
 
 生活就像在大海上开船, 需要时不时打一下方向盘. 让自己在正确的轨迹上航行.
 
-在迷茫或者不知道该做什么的时刻, 我希望我能够回过头来看这份问题清单:
+在迷茫的时刻, 我希望我能够回过头来看这份问题清单:
 
 首先是新时代的"吾日三省吾身" ([汉明问题(Hamming Questions)](https://www.lesswrong.com/tag/hamming-questions)摘取自[这里](https://lemire.me/blog/2019/01/29/rethinking-hammings-questions/)):
 
