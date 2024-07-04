@@ -3,7 +3,7 @@ title = "Andrej Karpathy在2024UCB黑客马拉松的演讲"
 date = 2024-07-04
 +++
 
-昨天Andrej Karpathy(简称AK)刚在UCB的2024Hackathon上分享了关于如何从项目转换到应用的演讲.
+前几天Andrej Karpathy(简称AK)刚在UCB的2024Hackathon上分享了关于如何从项目转换到应用的演讲.
 视频链接在[这里(从4:10到22:20)](https://www.youtube.com/watch?v=tsTeEkzO9xc).
 
 首先AK重新提到了[LLM OS](https://arxiv.org/html/2312.03815v2)会是下一代"计算机". 过去的范式是通过GUI与编程来操作数据的, 以后会是由LLM去操控硬件以及数据.
