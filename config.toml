@@ -14,7 +14,8 @@ build_search_index = false
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = false
+highlight_code = true
+highlight_theme = "visual-studio-dark"
 
 [extra]
 # show Chinese date format instead of normal date format
@@ -34,6 +35,7 @@ seje_menu_links = [
     {url = "$BASE_URL/", name = "home"},
     {url = "$BASE_URL/archives", name = "archives"},
     {url = "$BASE_URL/about",  name = "about"},
+    {url = "$BASE_URL/note",  name = "note"},
     {url = "$BASE_URL/atom.xml", name = "rss"},
 ]
 
@@ -48,3 +50,4 @@ newer = "上一篇"
 older = "下一篇"
 loading = "加載中..."
 rss = "订阅"
+note = "笔记"
