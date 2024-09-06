@@ -26,7 +26,12 @@ date = 2024-09-03
 
 点击[这里](https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&e=1&dl=0)进入lecture1的slides. 一句话总结lecture1的内容: 强化学习可以表示为马尔可夫决策过程(Markov Decision Processes, MDPs). 解MDP有两种基本策略, Value Iteration和Policy Iteration. 另外, 引入Entropy带MDP可以提升MDP的鲁棒性.
 
-* MDP:
+* MDP: 需要了解什么是MDP. 先要了解什么是马尔可夫链(Markov chain). Markov为了证明独立同分布不是大数定律(Law of large numbers)满足的前提, 在1906年发表的文章里面提出了马尔可夫链(Markov chain). 如果需要进一步了解Markov chain, 推荐这个[视频](https://www.youtube.com/watch?v=CIe869Rce2k)
+
+  * Markov chain: 前提下一颗的状态 只取决于当前时刻 ,转移矩阵 
+  * Markov chains convergence: 我们在前面说到了Markov chain的提出是为了证明大数定律在非独立同分布的假设前提下, 依然成立. 那么Markov chain是如何收敛的呢?
+
+
 * Value Iteration:
 * Policy Iteration:
 * Maximum Entropy Formulation:
@@ -34,6 +39,7 @@ date = 2024-09-03
 
 我们这里通过slide里面的grid world并结合代码来理解一下整个过程.
 
+* 小结:
 
 <a id="lecture-2-deep-q-learning"></a>
 ## Lecture 2: Deep Q-Learning
