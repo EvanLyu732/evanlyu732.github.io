@@ -17,6 +17,7 @@ date = 2024-09-03
 - [CS 285:Deep Reinforcement Learning](#cs-285deep-reinforcement-learning)
 - [UCL Course on RL](#ucl-course-on-rl)
 - [项目](#项目)
+- [Where to Go Next?](#where-to-go-next)
 
 <a id="foundations-of-deep-reinforcement-learning-with-pieter-abbeel"></a>
 # Foundations of Deep Reinforcement Learning with Pieter Abbeel
@@ -32,6 +33,7 @@ date = 2024-09-03
   * frist-order Markov chain & n-order Markov chain:
   * Markov chains convergence: 我们在前面说到了Markov chain的提出是为了证明大数定律在非独立同分布的假设前提下, 依然成立. 那么Markov chain是如何收敛的呢?
 
+* Bellman equation: 
 
 * Value Iteration:
 * Policy Iteration:
@@ -107,3 +109,7 @@ date = 2024-09-03
 
 <a id="项目"></a>
 # 项目
+
+
+<a id="where-to-go-next"></a>
+# Where to Go Next?
