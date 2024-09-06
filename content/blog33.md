@@ -29,6 +29,7 @@ date = 2024-09-03
 * MDP: 需要了解什么是MDP. 先要了解什么是马尔可夫链(Markov chain). Markov为了证明独立同分布不是大数定律(Law of large numbers)满足的前提, 在1906年发表的文章里面提出了马尔可夫链(Markov chain). 如果需要进一步了解Markov chain, 推荐这个[视频](https://www.youtube.com/watch?v=CIe869Rce2k)
 
   * Markov chain: 前提下一颗的状态 只取决于当前时刻 ,转移矩阵 
+  * frist-order Markov chain & n-order Markov chain:
   * Markov chains convergence: 我们在前面说到了Markov chain的提出是为了证明大数定律在非独立同分布的假设前提下, 依然成立. 那么Markov chain是如何收敛的呢?
 
 
