@@ -3,7 +3,7 @@ title = "深度强化学习101"
 date = 2024-09-03
 +++
 
-记录一下接触深度强化学习的学习历程. 材料选自Pieter Abbeel的[Foundation of Deep RL Series.](https://www.youtube.com/watch?v=2GwBez0D20A). 整篇文章追求知识点的连惯性. 所以会补充详细的公式和历史背景. 这篇文章会一直持续更新. 也算是对之前说要写的llya30做一次原型测试吧. 由于会采用不用来源的资料所以概念会有重叠, 好处是可以从不同角度看到一个概念的描述. 方便更方便的理解.
+记录一下接触深度强化学习的学习历程. 材料选自Pieter Abbeel的[Foundation of Deep RL Series.](https://www.youtube.com/watch?v=2GwBez0D20A). 整篇文章追求知识点的连惯性. 所以会补充详细的公式和历史背景. 这篇文章会一直持续更新. 也算是对之前说要写的llya30做一次原型测试吧. 由于会采用不用来源的资料所以概念会有重叠, 好处是可以从不同角度看到一个概念的描述. 方便更全面的理解.
 
 ## 目录
 
@@ -33,6 +33,9 @@ date = 2024-09-03
   * frist-order Markov chain & n-order Markov chain:
   * Markov chains convergence: 我们在前面说到了Markov chain的提出是为了证明大数定律在非独立同分布的假设前提下, 依然成立. 那么Markov chain是如何收敛的呢?
 
+$$
+\frac{n!}{k!(n-k)!} = \binom{n}{k}
+$$
 * Bellman equation: 
 
 * Value Iteration:
