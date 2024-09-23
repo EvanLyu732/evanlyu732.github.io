@@ -7,7 +7,7 @@ date = 2024-09-23
 
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/hotz-twitter.png" height="100" width="100"/>
 
-如果不了解他的话, 这里补充一下背景tinygrad就是他一直在working的项目, 类似于pytorch这样的神经网络框架. 简单总结一下他的观点: 未来的计算机boot之后直接进入一个神经网络. 而神经网络依赖于神经网络框架. 所以tinygrad就像硬件层一样, 神经网络是软件层. 因此神经网络框架就等于操作系统. 其实就是[LLM OS](https://evanlyu732.github.io/blog8/)的一种分解.
+如果不了解他的话, 这里补充一下背景tinygrad就是他一直在working的项目, 类似于pytorch这样的神经网络框架. 简单总结一下他的观点: 未来的计算机boot之后直接进入一个神经网络. 而神经网络依赖于神经网络框架. 所以tinygrad就像硬件层一样, 神经网络是软件层. 因此神经网络框架就等于操作系统. 其实就是[LLM OS](https://evanlyu732.github.io/blog8/)的一种分解. 此外没有了CPU也就没有了内存问题, 神经网络只存在data flow而不存在control flow.
 
 最后让claude点评一下hotz的推文.
 
@@ -21,4 +21,4 @@ Too hype.
 
 -------------
 
-footnote: hotz的想法完全有可能达到, 只要有无限context window的[llm](https://evanlyu732.github.io/blog12/).
+footnote: hotz的想法完全有可能达到, 只要有无限context window和解决了幻觉的[llm](https://evanlyu732.github.io/blog12/).
