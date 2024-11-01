@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>Andrej Karpathy在2024UCB黑客马拉松的演讲 - evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="Andrej Karpathy在2024UCB黑客马拉松的演讲 - evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<article class="post">
+    <div class="post-title">
+        <h1 class="title">Andrej Karpathy在2024UCB黑客马拉松的演讲</h1>
+    </div>
+    <div class="post-content">
+        <p>前几天Andrej Karpathy(简称AK)刚在UCB的2024Hackathon上分享了关于如何从项目转换到应用的演讲.
+视频链接在<a href="https://www.youtube.com/watch?v=tsTeEkzO9xc">这里(从4:10到22:20)</a>.</p>
+<p>首先AK重新提到了<a href="https://arxiv.org/html/2312.03815v2">LLM OS</a>会是下一代&quot;计算机&quot;. 过去的范式是通过GUI与编程来操作数据的, 以后会是由LLM去操控硬件以及数据.</p>
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/llmos.png" height="100" width="100"/>
+<p>此外, AK还给了三条建议关于如何从项目转换到应用的建议:</p>
+<p>#1 snow balling your project.</p>
+<p>在自己的项目上面滚雪球. 一个小项目如果一直做下去, 最终会变成一个大项目. 有些项目注定不会一直滚雪球滚下去. 但是能做下去的项目最终会有很大的回报.</p>
+<p>例子1: 最开始AK在网上做视频的时候, 一开始做的类型有教游戏编程的, 神经元模拟器, 魔方识别的提取器, 游戏视频. 但是只有教游戏编程的点击量比较多, 能够一直做下去.
+AK开始从游戏编程教学转向做魔方教学, 在此获得了很多做教程方面的经验. 这项技能后来迁移到他开<a href="https://cs231n.stanford.edu/2016/">CS231N(斯坦福第一门深度学习课)</a>上, 
+以及现在他做<a href="https://github.com/karpathy/LLM101n">LLM101n(从头开始学会做一个讲故事的模型)</a>.</p>
+<p>例子2: 最开始AK联合创办OpenAI的时候, 那时候OpenAI的定位是制约Google的一股力量. 当时有一半研究AI的学者都在Google并且拥有强大的现金流. 而OpenAI只有8个人并且只有笔记本电脑.
+OpenAI一开始展开了很多不同的项目, 但是很多都没有继续持续下去. 但是有些项目也取得了一些成果. AK分享了Reddit Chatbot, 一个在Reddit能够对话的机器人. 当时有人建议说既然要与Google竞争就需要做更大的项目. 但是正因为一直坚持去做这个看起来很脆弱的项目才会有GPT4o的出现. </p>
+<p>#2 put in time</p>
+<p>AK是10000小时定律的忠实拥护者. AK建议说不要怕要做什么, 是否会成功以及失败. 只需要在这件事情上面计时. 即使那些不成功的项目, 也会带来很多启发. 
+只有高度练习过的付出才能带来熟练度.</p>
+<p>例子1: 最近AK做了一个推荐电影的网站. 在推特上有评论说他觉得这个网站很酷, 觉得AK是个天才.
+但其实AK已经做过 <strong>有20次类似的项目了.</strong> </p>
+<p>例子2: 最开始AK被召进Tesla自动驾驶负责人的时候, AK做的第一件事就是重头重写了项目本身的深度学习框架. 而这个框架也一直被Tesla内部使用. 当时别人都很惊讶Ak的技能, 而AK花了5年的时间在读PhD, 而他也一直在做类似的事情.</p>
+<p>#3 keep the dopamine flowing.</p>
+<p>观察自己的心理状态. 并对自己的大脑要有一定程度的了解. 大脑是一个需要奖励的机器, 什么样的奖励能够让大脑更高效?</p>
+<p>对于AK来说是持续的做项目并且持续的发布这些项目. 持续做项目的好处是能够聚焦并且在一个领域上面有深度的探索, 而课程往往是能带来广度. 持续的发布这些项目是会去考虑其他人去看你项目时候的反应, 因此会让自己提高项目的门槛并且你会额外付出做出更有质量的工作. 好的工作会有好的反馈, 好的反馈会让你更有动力的去完成你的工作.</p>
+<p>Snow balling the project and changing the world. Keep Hacking.</p>
+
+    </div>
+    <div class="post-meta">
+        <span class="post-time">
+        
+            
+
+
+二〇二四年七月四日
+
+        
+        </span>
+    </div>
+</article>
+
+<div class="prev_next">
+<nav id="prev_next">
+    <div class="prev">
+        
+    </div>
+    <div class="next">
+        
+    </div>
+</nav>
+</div>
+
+<div class="post-comment">
+
+
+
+
+</div>
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>
