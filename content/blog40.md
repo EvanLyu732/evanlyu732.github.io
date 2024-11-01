@@ -17,7 +17,8 @@ date = 2024-10-29
 
 * "Tell me the main topics of X".
 * "Subdivide X into as many topics as possible".
-* "For everything i say here, make me a list of topics i have to learn with [ ] on each one, be as specific as possible"(my particular one, but you can test each and see what's best).
+* "For everything i say here, make me a list of topics i have to learn with [ ] on each one, 
+be as specific as possible"(my particular one, but you can test each and see what's best).
 ```
 
 
