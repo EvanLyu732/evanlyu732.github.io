@@ -176,6 +176,17 @@
         .More {
             padding: 1em 0;
         }
+        pre {
+            overflow-x: auto;
+            white-space: pre;
+            word-wrap: normal;
+            max-width: 100%;
+            
+            code {
+                display: block;
+                overflow-x: auto;
+            }
+        }
     }
     .post-meta {
         color: black;
