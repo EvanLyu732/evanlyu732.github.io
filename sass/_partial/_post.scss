@@ -42,7 +42,9 @@
         border-radius: 2px;
         line-height: 1.1em;
         background-color: #f8f8f8;
-        overflow-x: auto;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: auto;
     }
     .highlight table, .highlight tr, .highlight td {
         width: 100%;
@@ -64,6 +66,14 @@
     pre {
         padding: 0.3em;
         color: #525252;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: pre !important;
+        word-wrap: normal !important;
+        max-width: 100%;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: auto;
+        display: block;
     }
     img {
         height: auto;
@@ -76,6 +86,16 @@
     }
     .shk {
         margin: 1em 0;
+    }
+    pre code {
+        display: block;
+        overflow-x: auto !important;
+        padding: 1em;
+        width: max-content;
+        min-width: 100%;
+        box-sizing: border-box;
+        -moz-tab-size: 4;
+        tab-size: 4;
     }
 }
 
