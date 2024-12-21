@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>消消乐学习法 - evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="消消乐学习法 - evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<article class="post">
+    <div class="post-title">
+        <h1 class="title">消消乐学习法</h1>
+    </div>
+    <div class="post-content">
+        <h1 id="qian-yan">前言</h1>
+<p>一直以来都想写一篇在适合LLM时代下学习范式的文章. 但是总感觉缺了点什么. 直到今天读到<a href="https://brunothedev.github.io/p/2024-10-28-how_to_learn.html">How to learn things by yourself</a>受到启发. 感觉瞬间框架完整了, 因此趁灵感还在的时候赶紧记录一下.</p>
+<h1 id="zheng-wen">正文</h1>
+<p>如果把学习定义为<strong>收集所需要的信息</strong>的话, 我认为学习包含两个&quot;消除&quot;. 第一个消除是&quot;消除边界不确定性&quot;也就是具体的科目. 第一个消除是&quot;消除信息不确定性&quot;. 信息也收集完整了. 所以才叫消消乐学习法. 先来看核心提示词(prompt).</p>
+<pre data-lang="txt" style="background-color:#eff1f5;color:#4f5b66;" class="language-txt "><code class="language-txt" data-lang="txt"><span># LLM prompt (From &quot;How to learn things by yourself&quot;)
+</span><span>
+</span><span>* &quot;Tell me the main topics of X&quot;.
+</span><span>* &quot;Subdivide X into as many topics as possible&quot;.
+</span><span>* &quot;For everything i say here, make me a list of topics i have to learn with [ ] on each one, 
+</span><span>be as specific as possible&quot;
+</span><span>
+</span><span># LLM提示词 (来自《如何自学》)
+</span><span>
+</span><span>* &quot;告诉我X的主要主题&quot;。
+</span><span>* &quot;将X细分为尽可能多的主题&quot;。
+</span><span>* &quot;对于我在这里说的每件事，给我列出我需要学习的主题列表，每个主题后面加上[ ]，尽可能具体&quot;
+</span></code></pre>
+<p>要使用&quot;消消乐学习法&quot;, 你需要</p>
+<ol>
+<li>一个电子笔记本 (笔记软件, 纸质本等)</li>
+<li>能够使用LLM的环境(Claude, GPT等)</li>
+</ol>
+<h1 id="bu-zou">步骤</h1>
+<p>Input: 想要了解的主题或领域X</p>
+<p>Output: 在X的范围内, 已经细化后可以执行的信息点</p>
+<p>Core: 使用下面的提示词</p>
+<pre data-lang="txt" style="background-color:#eff1f5;color:#4f5b66;" class="language-txt "><code class="language-txt" data-lang="txt"><span># 消消乐学习法Prompt
+</span><span>
+</span><span>##  LLM prompt 
+</span><span>
+</span><span>* For everything i say here, make me a list of topics i have to learn with [ ] on each one, be as specific as possible. For each question I ask, please provide a raw mind map in text format.
+</span><span>* Tell me the main topics of X.
+</span><span>* Subdivide X into as many topics as possible.
+</span><span>* For each topic enclosed in brackets [ ], provide a comprehensive and detailed explanation of the underlying knowledge points. Additionally, create three levels of exercises for each knowledge point—beginner, intermediate, and advanced—that are practical and actionable. 
+</span><span>* For each exercise and knowledge point you mentioned above, please include external references along with their corresponding links to help me gain a deeper understanding.
+</span><span>* For each knowledge point you mentioned, establish connections between related concepts and include external exercises to reinforce understanding.
+</span><span>
+</span><span>##  LLM提示词 
+</span><span>
+</span><span>* 对于我在这里说的每件事，给我列出我需要学习的主题列表，每个主题后面加上[ ]，尽可能具体。对于我提出的每个问题，请以文本格式提供原始的思维导图。
+</span><span>* 告诉我X的主要主题。
+</span><span>* 将X细分为尽可能多的主题。
+</span><span>* 对于每一个用[ ]括起来的主题，请提供全面且详细的知识点解释。此外，为每个知识点创建三个级别的练习——初级、中级和高级，要求练习具有实用性且可操作。
+</span><span>* 对于你上面提到的每个练习和知识点，请附上外部参考资料及其链接，以帮助我更深入地理解。
+</span><span>* 对于你提到的每个知识点，请建立相关概念之间的联系，并提供额外练习以加深理解。
+</span></code></pre>
+<ol>
+<li>笔记本上新展开一个空白页</li>
+<li>在LLM上新建一个对话</li>
+<li>按照上面的提示词依次输入</li>
+<li>将每次输出复制回笔记本空白页</li>
+<li>在LLM对话框中输入&quot;继续&quot;, 直到LLM遍历主题X</li>
+<li>空白页变成了Output</li>
+<li>对应着LLM给出的大纲, 完成练习并对有[ ]的主题打勾</li>
+</ol>
+<h1 id="an-li">案例</h1>
+<p>由于对话内容较长, 仅展示部分最终输出内容.</p>
+<h2 id="shi-yong-xiao-xiao-le-xue-xi-fa-du-shu">使用消消乐学习法读书</h2>
+<pre data-lang="txt" style="background-color:#eff1f5;color:#4f5b66;" class="language-txt "><code class="language-txt" data-lang="txt"><span>Input: X=道德经, LLM=GPT-4o
+</span><span>Output: 
+</span><span>为了帮助你更系统地理解《道德经》中的核心思想，并将各知识点串联起来，我将进一步深入探讨每个知识点之间的相互联系，并提供更高级的练习以帮助你加深理解。这将包括：
+</span><span>
+</span><span>1. **概念之间的关联图**
+</span><span>2. **高级练习：整合性与批判性思考**
+</span><span>
+</span><span>---
+</span><span>
+</span><span>### 一、道的定义、道与德的关系、无为而无不为的综合理解
+</span><span>
+</span><span>#### 概念之间的联系图（文本格式）
+</span><span>
+</span><span>道的定义
+</span><span>├── 道：无形无象的宇宙本源
+</span><span>│   ├── 是一切事物的起点和本质
+</span><span>│   ├── 超越语言与思维的限制
+</span><span>│   └── 无为而无不为（自然而然）
+</span><span>├── 德：道的具体表现
+</span><span>│   ├── 个人的道德修养与行为规范
+</span><span>│   ├── 道生德，德化人
+</span><span>│   ├── 以德治国，德行修身
+</span><span>│   └── 无为则德显
+</span><span>├── 无为而无不为
+</span><span>│   ├── 非消极不作为，而是顺应自然
+</span><span>│   ├── 个人修行与社会治理中的应用
+</span><span>│   └── 柔弱胜刚强，以柔克刚
+</span><span>
+</span><span>#### 综合理解：
+</span><span>- **道是宇宙的本质法则**，一切事物由“道”而生，而“德”是道在人世间的表现形式。无为则体现了对道的顺应，德则是“道”在日常行为中的实践。
+</span><span>- **道生德**：道是无形的，而德是可见的行为。德是道的延伸，通过“无为”来保持德行，最终达到和谐与平衡。
+</span><span>- **无为而无不为**是对道的终极理解——顺应自然，不刻意干涉，反而能够更好地达成目标。这一原则既适用于个人修身，也适用于社会治理。
+</span><span>
+</span><span>---
+</span><span>
+</span><span>### 二、综合练习
+</span><span>
+</span><span>#### 1. 概念联系练习
+</span><span>**初级练习**：
+</span><span>- **关联性描述**：用 200 字解释“道、德、无为”三者的关系，并举例说明如何在日常生活中同时实践这三个概念。
+</span><span>- **思维扩展**：列举三个现代管理场景，说明如何通过“无为”而达成管理目标，并保持团队的“德行”。
+</span><span>
+</span><span>**中级练习**：
+</span><span>- **案例分析**：
+</span><span>  - 找一个企业或社会组织的成功案例，分析其管理方式如何体现“无为而无不为”的理念，并如何通过“德”来维持组织的长远发展。
+</span><span>  - 搜索相关资料，阅读《道德经》第57章“以正治国，以奇用兵，以无事取天下”，并讨论它在现代社会管理中的应用。
+</span><span>
+</span><span>**高级练习**：
+</span><span>- **哲学论文**：
+</span><span>  - 选择“道与德的关系”作为主题，写一篇 1500 字的论文，讨论如何在个人成长与社会治理中实现道与德的平衡。引用至少三个哲学家（如黑格尔、康德、庄子）的观点。
+</span><span>- **跨文化对比**：
+</span><span>  - 对比道家的“无为”与西方管理学中的“授权领导”模式。探讨两者的异同，并结合实际管理经验撰写一份 1000 字的分析报告。
+</span><span>
+</span><span>---
+</span><span>
+</span><span>#### 2. 深度批判性思考练习
+</span><span>
+</span><span>**初级练习**：
+</span><span>- **情境模拟**：
+</span><span>  - 设想你是一名教师，如何在班级管理中实践“无为而治”？设计一周的教学计划，减少干预，让学生自我探索学习。
+</span><span>  
+</span><span>**中级练习**：
+</span><span>- **社会实验**：
+</span><span>  - 在你所在的社区组织一次关于“无为而治”的讨论会，邀请参与者分享他们在生活中减少干涉、顺应自然的经验。撰写一篇总结报告，分析“无为”理念在日常生活中的适用性。
+</span><span>
+</span><span>**高级练习**：
+</span><span>- **跨领域应用**：
+</span><span>  - 探讨“道、德、无为”在心理治疗中的应用。设计一个心理疗愈方案，帮助焦虑症患者通过减少过度控制来改善症状，并记录效果。
+</span><span>- **多学科整合**：
+</span><span>  - 结合道家哲学与量子物理学的“不确定性原理”，撰写一篇 2000 字的学术论文，探讨“无为”与“无确定性”之间的关联。
+</span><span>
+</span><span>---
+</span><span>
+</span><span>#### 3. 创意类练习
+</span><span>
+</span><span>**初级练习**：
+</span><span>- **绘画与思维导图**：
+</span><span>  - 用绘画或思维导图的形式，直观表达“道、德、无为”的关系。通过视觉化的方式理解老子的哲学思想。
+</span><span>
+</span><span>**中级练习**：
+</span><span>- **文学创作**：
+</span><span>  - 写一篇短篇小说，描述一个人如何通过“无为而治”改变了他的生活或工作环境。故事应突出道家的智慧在现实生活中的应用。
+</span><span>
+</span><span>**高级练习**：
+</span><span>- **社会问题分析**：
+</span><span>  - 选择一个当前的社会问题（如环境保护、社会公平、心理健康），并提出基于“道、德、无为”的解决方案。写一篇 3000 字的研究报告，讨论这些理念如何在现代社会中实现可持续的变化。
+</span><span>
+</span><span>---
+</span><span>
+</span><span>### 三、如何进一步查找与学习资源
+</span><span>为了深入理解上述内容，你可以：
+</span><span>1. 阅读《道德经》不同版本的注释（如王弼注本、河上公注本）。
+</span><span>2. 搜索以下关键词：
+</span><span>   - &quot;Dao and De relationship in Daoism&quot;
+</span><span>   - &quot;Non-action (Wu Wei) in modern management&quot;
+</span><span>   - &quot;Application of Daoist philosophy in psychotherapy&quot;
+</span><span>3. 使用学术数据库进行查找：
+</span><span>   - JSTOR、Google Scholar、中国知网
+</span><span>   - 课程平台如 Coursera、EdX 等
+</span><span>
+</span><span>如果你需要更详细的探讨或具体的研究资源，也可以提供更多细节，我会帮助你更深入地挖掘。希望这些练习能够帮助你在理解和实践《道德经》智慧的道路上更进一步！
+</span><span>
+</span></code></pre>
+<h2 id="shi-yong-xiao-xiao-le-xue-xi-fa-yan-jiu">使用消消乐学习法研究</h2>
+<pre data-lang="txt" style="background-color:#eff1f5;color:#4f5b66;" class="language-txt "><code class="language-txt" data-lang="txt"><span>Input: X=强化学习, LLM=GPT-4o
+</span><span>Output: 
+</span><span>
+</span><span>以下将针对**强化学习基础**中的每个知识点，建立相关概念之间的联系，并提供额外的练习题，以帮助你加深理解这些主题。
+</span><span>
+</span><span>### 强化学习基础概念之间的联系
+</span><span>
+</span><span>强化学习（Reinforcement Learning, RL）由多个核心概念组成，这些概念相互关联，共同构成强化学习的整体框架。以下是各个概念的关联与理解：
+</span><span>
+</span><span>强化学习
+</span><span>├── 智能体（Agent）
+</span><span>│   └── 在环境中观察状态（State）并执行动作（Action）
+</span><span>│
+</span><span>├── 环境（Environment）
+</span><span>│   └── 接收智能体的动作（Action），并反馈新的状态（State）和奖励（Reward）
+</span><span>│
+</span><span>├── 状态（State）
+</span><span>│   ├── 由环境定义，用于描述环境的当前情况
+</span><span>│   └── 决定智能体应该采取的动作
+</span><span>│
+</span><span>├── 动作（Action）
+</span><span>│   ├── 智能体根据策略（Policy）选择的行为
+</span><span>│   └── 动作的选择影响环境并导致新的状态和奖励
+</span><span>│
+</span><span>├── 奖励（Reward）
+</span><span>│   ├── 环境对智能体动作的即时反馈
+</span><span>│   └── 智能体通过奖励调整策略以最大化未来的累积回报（Return）
+</span><span>│
+</span><span>├── 策略（Policy）
+</span><span>│   ├── 决定智能体在每个状态下采取的动作
+</span><span>│   └── 可以是确定性策略或随机策略
+</span><span>│
+</span><span>└── 回报（Return）和折扣因子（Discount Factor）
+</span><span>    ├── 累积奖励的总和，用于衡量智能体的长期收益
+</span><span>    └── 折扣因子用于平衡短期与长期奖励的重要性
+</span><span>
+</span><span>### 概念之间的联系解释
+</span><span>
+</span><span>1. **智能体与环境**：智能体（Agent）在环境（Environment）中执行动作（Action）。环境基于智能体的动作，反馈一个新的状态（State）和奖励（Reward）。智能体通过不断与环境交互来优化其策略（Policy）。
+</span><span>
+</span><span>2. **状态与动作**：在每个时刻，智能体基于当前的状态（State）选择一个动作（Action），并根据策略（Policy）作出决策。动作的执行会导致环境状态的变化，并可能产生即时奖励。
+</span><span>
+</span><span>3. **奖励与策略**：奖励（Reward）是智能体学习的基础，通过调整策略以最大化累积奖励（Return）。智能体试图找到一条最优策略，使得在所有可能的状态下，累积回报最大化。
+</span><span>
+</span><span>4. **回报与折扣因子**：智能体关注的并不仅仅是立即的奖励，而是长期的累积回报。折扣因子（Discount Factor）用于平衡当前奖励与未来奖励的相对重要性，折扣因子越低，智能体越关注近期的奖励。
+</span><span>
+</span><span>---
+</span><span>
+</span><span>### 额外练习题（用于加深理解）
+</span><span>
+</span><span>#### **额外练习 1：理解核心概念之间的联系**
+</span><span>
+</span><span>- **初级**：
+</span><span>  1. 在强化学习中，为什么折扣因子会影响智能体对未来奖励的重视程度？
+</span><span>  2. 举例说明在现实生活中，智能体、环境、状态、动作和奖励的关系。
+</span><span>  3. 假设一个智能体在迷宫中导航，请描述智能体、环境、状态、动作和奖励的定义。
+</span><span>
+</span><span>- **中级**：
+</span><span>  1. 解释为什么在强化学习中，策略（Policy）是决定智能体行为的核心。
+</span><span>  2. 修改 OpenAI Gym 中的“FrozenLake”环境，调整奖励机制，使得智能体更容易学习到最优路径。
+</span><span>  3. 设计一个实验，比较不同折扣因子（如 0.5 和 0.9）对 Q-learning 算法的影响。
+</span><span>
+</span><span>- **高级**：
+</span><span>  1. 使用深度强化学习（Deep Q Network, DQN）训练智能体解决“CartPole”问题，并分析不同折扣因子对学习效率的影响。
+</span><span>  2. 基于一个实际应用场景（如自动驾驶），设计状态、动作和奖励函数，并训练一个智能体优化行驶路线。
+</span><span>  3. 设计一个复杂的多智能体环境，模拟多个代理在有限资源下的竞争，并分析不同策略对整体系统性能的影响。
+</span><span>
+</span><span>#### **额外练习 2：实际操作与应用**
+</span><span>
+</span><span>- **初级**：
+</span><span>  1. 使用 Python 和 NumPy 创建一个简单的“多臂老虎机”模拟器。
+</span><span>  2. 在 OpenAI Gym 环境中，使用 Q-learning 算法训练智能体解决“Taxi-v3”问题。
+</span><span>  3. 解释在“CartPole”环境中，如何调整奖励函数以增加智能体平衡杆的时间。
+</span><span>
+</span><span>- **中级**：
+</span><span>  1. 编写一个基于 SARSA 算法的智能体，并在“FrozenLake”环境中进行训练。
+</span><span>  2. 实现一个基于 Monte Carlo 方法的智能体解决“Blackjack”问题。
+</span><span>  3. 设计一个新的环境（如虚拟仓库管理系统），定义状态、动作和奖励机制，并训练强化学习智能体进行库存优化。
+</span><span>
+</span><span>- **高级**：
+</span><span>  1. 使用 TensorFlow 或 PyTorch 实现一个深度 Q 网络（DQN），解决“LunarLander”环境问题。
+</span><span>  2. 基于 Actor-Critic 方法，设计一个强化学习智能体用于股票市场交易决策。
+</span><span>  3. 构建一个多智能体强化学习环境，模拟机器人团队的协作任务（如灾害救援场景）。
+</span><span>
+</span><span>---
+</span><span>
+</span><span>### 额外参考资料
+</span><span>
+</span><span>以下是进一步深入学习的外部参考资源：
+</span><span>
+</span><span>- [OpenAI Gym 官方文档](https://gym.openai.com/docs/)
+</span><span>- [Reinforcement Learning: An Introduction by Sutton &amp; Barto](http://incompleteideas.net/book/RLbook2020.pdf)
+</span><span>- [深度强化学习教程（Udemy）](https://www.udemy.com/course/deep-reinforcement-learning/)
+</span><span>- [DeepMind&#39;s Research on Reinforcement Learning](https://deepmind.com/research/publications)
+</span><span>- [Towards Data Science: Reinforcement Learning 101](https://towardsdatascience.com/reinforcement-learning-101-e24b50e1d292)
+</span><span>
+</span><span>---
+</span><span>
+</span><span>通过这些练习和参考资料，你将能够更好地理解强化学习的各个概念，以及如何在实际应用中实现强化学习算法。如果有任何疑问或需要进一步深入学习某个主题，请随时告诉我！
+</span><span>
+</span><span>
+</span></code></pre>
+
+    </div>
+    <div class="post-meta">
+        <span class="post-time">
+        
+            
+
+
+二〇二四年十月廿九日
+
+        
+        </span>
+    </div>
+</article>
+
+<div class="prev_next">
+<nav id="prev_next">
+    <div class="prev">
+        
+    </div>
+    <div class="next">
+        
+    </div>
+</nav>
+</div>
+
+<div class="post-comment">
+
+
+
+
+</div>
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>
