@@ -76,6 +76,7 @@ date = 2025-02-07
 * 了解下RL-LLM的现状, 输出一篇文章
 * 阅读R1原文, 自己总结一下, 并对比这篇[文章](https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&mid=2247545512&idx=1&sn=3826ae3f788e8b90ffeb8fb3cc908c6e&chksm=e8eafcecde166feebab4345c2d027cca4c9574c6058f90df5fe4513cefae17180f2344507e31&mpshare=1&srcid=0207SpaQkGmiF7zHxsYYVcxv&sharer_shareinfo=72ac166e2fd073a2d05195fba0d13c61&sharer_shareinfo_first=72ac166e2fd073a2d05195fba0d13c61&from=singlemessage&scene=1&subscene=10000&sessionid=1738908596&clicktime=1738912215&enterid=1738912215&ascene=1&fasttmpl_type=0&fasttmpl_fullversion=7592104-zh_CN-zip&fasttmpl_flag=0&realreporttime=1738912215423&devicetype=android-34&version=28003855&nettype=WIFI&abtest_cookie=AAACAA%3D%3D&lang=zh_CN&countrycode=AD&exportkey=n_ChQIAhIQysgSGGYJ6guKNuOW3xqwIBLnAQIE97dBBAEAAAAAAMNIGcR4l2MAAAAOpnltbLcz9gKNyK89dVj0BWdk0ar1sZ1xZJAIx0fAVnhfktWB%2Fz8itbQaTOFkU4h7gQp9odCzk1ocQAS2AUeWAu3HuMOHuo%2B%2FRg4fqobn1Sj%2FGrp4kC2%2FwnQlidKKe9rC6DG9QskGXu%2Bd98s3PWSu9KCdhFPBcrHoj4jUqJQ5Kz7qS%2BImYs1u3W1vlhbKXcsLlzKIyFwXeDEPA4g8M3ykfYORxphxXaIw3Pf%2Bk6zjwSjkWZGQXrWe8KOI6k6kgOm2EZ4zt7jgZZ1WwC3xAUzQXA%3D%3D&pass_ticket=Qc%2FprbYOLQVh%2BBnvnYJVgLdkqVNLBJx%2BkqpS%2FYUP3njk1%2BHNc0IUwJ%2BW1jQKEFwe&wx_header=3), 了解更多的技术细节.
 * pi0开源了, 研究下pi0
+* 借助xxx平台提供的api, 实现一个属于自己的deep research. 也算是往agentic ai迈了一步.
 * 总结下DS的发展路线, 输出一篇文章
 
 
