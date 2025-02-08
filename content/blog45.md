@@ -92,3 +92,22 @@ date = 2025-02-07
 [4] [AI News](https://buttondown.com/ainews)
 
 [5] [LM Arena for model rankings](https://lmarena.ai/)
+
+
+
+--------
+
+# 20240208更新
+
+接着上片文章, 在2月7日的时候, 我一直在找如何请求deepseek-r1 api的方式. 因此现在ds大火, 服务器一直繁忙. 想找个渠道试一下r1都难. 也尝试了[硅基流动](https://www.silicon-flow.com/)以及一些其他的api提供商. 因为是尝试, 不太想直接往api服务商充钱. 于是, 截至到今日(20250208), 我试下来有两种免费方式可以请求deepseek-r1.
+
+1. [百度千帆](https://console.bce.baidu.com/qianfan/ais/console/onlineTest/LLM/DeepSeek-V3)
+2. [无问苍穹](https://cloud.infini-ai.com/genstudio/experience)
+
+目前这两个平台的api请求是免费的, 无问苍穹会快很多, 并且api的速度远比不上playground. 并且两个平台的api稳定性都不太好, 会有请求失败的问题. 之后, 我用cursor写了一个适配于百度千帆的命令行工具. 效果如下.
+
+![bd_llm_tui demo](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+
+
+顺便试了下百度的其他免费的模型, 响应速度还行.
+仓库链接点击[这里](https://github.com/EvanLyu732/bd_llm_tui)
