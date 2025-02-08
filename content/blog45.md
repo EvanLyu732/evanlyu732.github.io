@@ -106,7 +106,7 @@ date = 2025-02-07
 
 目前这两个平台的api请求是免费的, 无问苍穹会快很多, 并且api的速度远比不上playground. 并且两个平台的api稳定性都不太好, 会有请求失败的问题. 之后, 我用cursor写了一个适配于百度千帆的命令行工具. 效果如下.
 
-![bd_llm_tui demo](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+![bd_llm_tui demo](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/refs/heads/main/static/images/tui.gif)
 
 
 顺便试了下百度的其他免费的模型, 响应速度还行.
