@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>深度强化学习101 - evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="深度强化学习101 - evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<article class="post">
+    <div class="post-title">
+        <h1 class="title">深度强化学习101</h1>
+    </div>
+    <div class="post-content">
+        <p>记录一下接触深度强化学习的学习历程. 材料选自Pieter Abbeel的<a href="https://www.youtube.com/watch?v=2GwBez0D20A">Foundation of Deep RL Series.</a>. 整篇文章追求知识点的连惯性. 所以会补充详细的公式和历史背景. 这篇文章会一直持续更新. 也算是对之前说要写的llya30做一次原型测试吧. 由于会采用不用来源的资料所以概念会有重叠, 好处是可以从不同角度看到一个概念的描述. 方便更全面的理解.</p>
+<h2 id="mu-lu">目录</h2>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog33/#foundations-of-deep-reinforcement-learning-with-pieter-abbeel">Foundations of Deep Reinforcement Learning with Pieter Abbeel</a>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog33/#lecture-1-mdps-exact-solution-methods-max-ent-rl">Lecture 1: MDPs, Exact Solution Methods, Max-ent RL</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#lecture-2-deep-q-learning">Lecture 2: Deep Q-Learning</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#lecture-3-policy-gradients-advantage-estimation">Lecture 3: Policy Gradients, Advantage Estimation</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#lecture-4-trpo-ppo">Lecture 4: TRPO, PPO</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#lecture-5-ddpg-sac">Lecture 5: DDPG, SAC</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#lecture-6-model-based-rl">Lecture 6: Model-based RL</a></li>
+</ul>
+</li>
+<li><a href="https://evanlyu732.github.io/blog33/#cs-285deep-reinforcement-learning">CS 285:Deep Reinforcement Learning</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#ucl-course-on-rl">UCL Course on RL</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#%E9%A1%B9%E7%9B%AE">项目</a></li>
+<li><a href="https://evanlyu732.github.io/blog33/#where-to-go-next">Where to Go Next?</a></li>
+</ul>
+<p><a id="foundations-of-deep-reinforcement-learning-with-pieter-abbeel"></a></p>
+<h1 id="foundations-of-deep-reinforcement-learning-with-pieter-abbeel">Foundations of Deep Reinforcement Learning with Pieter Abbeel</h1>
+<p><a id="lecture-1-mdps-exact-solution-methods-max-ent-rl"></a></p>
+<h2 id="lecture-1-mdps-exact-solution-methods-max-ent-rl">Lecture 1: MDPs, Exact Solution Methods, Max-ent RL</h2>
+<p>点击<a href="https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;e=1&amp;dl=0">这里</a>进入lecture1的slides. 一句话总结lecture1的内容: 强化学习可以表示为马尔可夫决策过程(Markov Decision Processes, MDPs). 解MDP有两种基本策略, Value Iteration和Policy Iteration. 另外, 引入Entropy带MDP可以提升MDP的鲁棒性.</p>
+<ul>
+<li>
+<p>MDP: 需要了解什么是MDP. 先要了解什么是马尔可夫链(Markov chain). Markov为了证明独立同分布不是大数定律(Law of large numbers)满足的前提, 在1906年发表的文章里面提出了马尔可夫链(Markov chain). 如果需要进一步了解Markov chain, 推荐这个<a href="https://www.youtube.com/watch?v=CIe869Rce2k">视频</a></p>
+<ul>
+<li>Markov chain: 前提下一颗的状态 只取决于当前时刻 ,转移矩阵 </li>
+<li>frist-order Markov chain &amp; n-order Markov chain:</li>
+<li>Markov chains convergence: 我们在前面说到了Markov chain的提出是为了证明大数定律在非独立同分布的假设前提下, 依然成立. 那么Markov chain是如何收敛的呢?</li>
+</ul>
+</li>
+</ul>
+<p>$$
+\frac{n!}{k!(n-k)!} = \binom{n}{k}
+$$</p>
+<ul>
+<li>
+<p>Bellman equation: </p>
+</li>
+<li>
+<p>Value Iteration:</p>
+</li>
+<li>
+<p>Policy Iteration:</p>
+</li>
+<li>
+<p>Maximum Entropy Formulation:</p>
+</li>
+</ul>
+<p>我们这里通过slide里面的grid world并结合代码来理解一下整个过程.</p>
+<ul>
+<li>小结:</li>
+</ul>
+<p><a id="lecture-2-deep-q-learning"></a></p>
+<h2 id="lecture-2-deep-q-learning">Lecture 2: Deep Q-Learning</h2>
+<p>点击<a href="https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;e=1&amp;dl=0">这里</a>进入lecture2的slides. 一句话总结lecture2的内容: 由于实际情况下MDP的状态空间通常很大, 不适合直接用value iteration和policy iteration来解复杂的MDP. Q-Learning通过在样本空间进行采样来解复杂的MDP. 而Q-Learning也需要表格存储状态转移信息. DQN通过使用神经网络去采样来近似Q函数.</p>
+<ul>
+<li>
+<p>Q-Learning:</p>
+</li>
+<li>
+<p>DQN:</p>
+</li>
+</ul>
+<p><a id="lecture-3-policy-gradients-advantage-estimation"></a></p>
+<h2 id="lecture-3-policy-gradients-advantage-estimation">Lecture 3: Policy Gradients, Advantage Estimation</h2>
+<p>点击<a href="https://www.dropbox.com/scl/fi/htn2r6ac807oluoxeihdt/l3-policy-gradient-and-advantage-estimation.pdf?rlkey=26hsbd5qvthb8ozq53vdfjrr4&amp;e=1&amp;dl=0">这里</a>进入lecture3的slides. 一句话总结lecture3的内容: 由于Value Iteration无法表示下一步的动作, 并且Q-learning在高维空间下没办法有效求解. 相比与Value Iteration和Q-learning, Policy Gradients的表示更加简单. 而Policy Gradients通过Likelihood Ratio Graident求解出来的是Path. 需要使用Temporal decomposition分解成State和Action. 需要使用Baseline subtraction去改变最终选择的Path. 在使用公式去分解的时候, 需要使用Value function estimation求解. 而在Advantage Estimation介绍一些更加进阶的Value function estimation方法.</p>
+<ul>
+<li>Policy Gradients:</li>
+<li>Temporal Decomposition:</li>
+<li>Baseline subtraction:</li>
+<li>Value function estimation:</li>
+<li>Advantage Estimation(A2C/A3C/GAE):</li>
+</ul>
+<p><a id="lecture-4-trpo-ppo"></a></p>
+<h2 id="lecture-4-trpo-ppo">Lecture 4: TRPO, PPO</h2>
+<p>点击<a href="https://www.dropbox.com/scl/fi/z0ev7f53yoyilrkfl9jck/l4-TRPO-PPO.pdf?rlkey=1y8f0am0bpqyxysxq3adnkobu&amp;e=1&amp;dl=0">这里</a>进入lecture4的slides. 一句话总结lecture4的内容: 在Lecture 3中, 我们知道Policy Gradients可以求解出特定的Path. 但是在求解特定的Path的过程中, 步长(step-size)的大小该如何确定呢? TRPO解决了这个问题. 而TRPO需要second order来求解, 而不太方便做优化. PPO作为TRPO的改进, 降阶为first-order优化问题.</p>
+<ul>
+<li>Surrogate loss: </li>
+<li>Step-sizing and Trust Region Policy Optimization (TRPO):</li>
+<li>Proximal Policy Optimization (PPO):</li>
+</ul>
+<p><a id="lecture-5-ddpg-sac"></a></p>
+<h2 id="lecture-5-ddpg-sac">Lecture 5: DDPG, SAC</h2>
+<p>点击<a href="https://www.dropbox.com/scl/fi/302ef41a9929yvtedc77l/l5-DDPG-SAC.pdf?rlkey=xc21zgliwfjynjse1je8oo6mx&amp;dl=0">这里</a>进入lecture5的slides. 一句话总结lecture5的内容: 对于特定场景, on-policy方法采样复杂度会比较高. 而DDPG解决了这个问题. SAC通过引入entropy保证了更好的收敛和防止过拟合.</p>
+<ul>
+<li>Deep Deterministic Policy Gradient (DDPG):</li>
+<li>Soft Actor Critic (SAC):</li>
+</ul>
+<p><a id="lecture-6-model-based-rl"></a></p>
+<h2 id="lecture-6-model-based-rl">Lecture 6: Model-based RL</h2>
+<p>点击<a href="https://www.dropbox.com/scl/fi/pnv0k74lbajh2uahoegwr/l6-model-based-rl.pdf?rlkey=psemgw6b6a4c4owmc16liyba0&amp;dl=0">这里</a>进入lecture6的slides. 一句话总结lecture6的内容: 前面5个lecture讲的都是model-free RL. 所谓model-free RL是指agent直接通过action来迭代policy而不需要学习环境.  model-based RL通过对环境建模再进行policy迭代.</p>
+<ul>
+<li>Model-based RL:</li>
+<li>Robust Model-based RL:Model-EnsembleTRPO (ME-TRPO):</li>
+<li>Adaptive Model-based RL: Model-based Meta-Policy Optimization (MB-MPO):</li>
+</ul>
+<p><a id="cs-285deep-reinforcement-learning"></a></p>
+<h1 id="cs-285-deep-reinforcement-learning">CS 285:Deep Reinforcement Learning</h1>
+<p>这一部分采用CS 285来补充一下上一部分没提到的一些内容.</p>
+<p><a id="ucl-course-on-rl"></a></p>
+<h1 id="ucl-course-on-rl">UCL Course on RL</h1>
+<p><a id="项目"></a></p>
+<h1 id="xiang-mu">项目</h1>
+<p><a id="where-to-go-next"></a></p>
+<h1 id="where-to-go-next">Where to Go Next?</h1>
+
+    </div>
+    <div class="post-meta">
+        <span class="post-time">
+        
+            
+
+
+二〇二四年九月三日
+
+        
+        </span>
+    </div>
+</article>
+
+<div class="prev_next">
+<nav id="prev_next">
+    <div class="prev">
+        
+    </div>
+    <div class="next">
+        
+    </div>
+</nav>
+</div>
+
+<div class="post-comment">
+
+
+
+
+</div>
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>

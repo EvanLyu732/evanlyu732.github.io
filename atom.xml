@@ -1,0 +1,2184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-cn">
+    <title></title>
+    <link href="https://evanlyu732.github.io/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://evanlyu732.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-02-07T00:00:00+00:00</updated>
+    <id>https://evanlyu732.github.io/atom.xml</id>
+    <entry xml:lang="zh-cn">
+        <title>春节后开工LLM学习记录</title>
+        <published>2025-02-07T00:00:00+00:00</published>
+        <updated>2025-02-07T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog45/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog45/</id>
+        <content type="html">&lt;p&gt;春节期间手机完全被DeepSeek-R1刷屏了, 无论是海内外媒体都疯狂讨论DeepSeek-R1. 趁着假期返工花了一整天大致了解了DeepSeek-R1的实现主体. 之后刚好同一天Andrej Karpathy发了&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=7xTGNNLPyMI&quot;&gt;Deep Dive into LLMs like ChatGPT&lt;&#x2F;a&gt;. 查阅了一天资料, 有些心得. 写下此文, 也是记录自己如何了解新的技术.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;ji-lu&quot;&gt;记录&lt;&#x2F;h1&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;20250206:0910 早上到公司 
+&lt;&#x2F;span&gt;&lt;span&gt;目标: 了解DeepSeek-R1以及为什么R1会这么火 
+&lt;&#x2F;span&gt;&lt;span&gt;背景: 无任何关于DeepSeek-R1的资料阅读, 没读过论文
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;20250206:0932 动作: 刷hacker news关于deepseek的post, 看各个thread的观点
+&lt;&#x2F;span&gt;&lt;span&gt;    * 动作: 跟着Simon Willison的blog(DeepSeek-R1 and exploring DeepSeek-R1-Distill-Llama-8B)实现本地ollama跑DeepSeek-R1-Distill-Llama-8B-GGUF
+&lt;&#x2F;span&gt;&lt;span&gt;    * 收获: 了解了DeepSeek-R1-Zero, DeepSeek-R1以及DeepSeek蒸馏模型的关系.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;20240206:1014 动作: 看yt视频# DeepSeek R1 Theory Overview | GRPO + RL + SFT
+&lt;&#x2F;span&gt;&lt;span&gt;    * 收获: 
+&lt;&#x2F;span&gt;&lt;span&gt;      * 整个DS-R1被训练出来的脉络, 博主画了个图, 表达很清楚, 见附录[1]
+&lt;&#x2F;span&gt;&lt;span&gt;      * 什么是GRPO以及GRPO公式大概的含义
+&lt;&#x2F;span&gt;&lt;span&gt;      * 相比于OpenAI闭源的COT推理能力[2], DS开源了如何实现推理模型
+&lt;&#x2F;span&gt;&lt;span&gt;      * 知道了GRPO是R1的重点
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;20240206:1030 动作: 看yt视频: # Group Relative Policy Optimization (GRPO) - Formula and Code
+&lt;&#x2F;span&gt;&lt;span&gt;    * 衍生动作: 
+&lt;&#x2F;span&gt;&lt;span&gt;      * 看yt video视频 # Proximal Policy Optimization (PPO) - How to train Large Language Models
+&lt;&#x2F;span&gt;&lt;span&gt;      * 看了看知乎上关于GRPO的讨论和解析
+&lt;&#x2F;span&gt;&lt;span&gt;	* 收获: 
+&lt;&#x2F;span&gt;&lt;span&gt;        * 了解了PPO的大致流程
+&lt;&#x2F;span&gt;&lt;span&gt;        * 大致了解了GRPO, 但还是不懂, 需要找个场景实现一下. #TODO 
+&lt;&#x2F;span&gt;&lt;span&gt;        * 刷到了王兴兴关于GRPO的讨论和解析[3], 深入研究下GRPO在机器人控制的应用中 #TODO
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;20240206:1414 动作: 看yt视频 # Building a fully local &amp;quot;deep researcher&amp;quot; with DeepSeek-R1
+&lt;&#x2F;span&gt;&lt;span&gt;	* 收获: 
+&lt;&#x2F;span&gt;&lt;span&gt;        * 了解了如何用langchain使用r1达到像openai deep research类似的效果, 以后可以考录用api部署一个试下 #TODO
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;20240206:1442: 动作: 看yt视频 # Paper: DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning
+&lt;&#x2F;span&gt;&lt;span&gt;	* 收获: 
+&lt;&#x2F;span&gt;&lt;span&gt;        *  自回归模型的输出可以被看成是一个RL的过程
+&lt;&#x2F;span&gt;&lt;span&gt;        *  大致跟着视频过了一遍论文, 没仔细看
+&lt;&#x2F;span&gt;&lt;span&gt;        *  这个视频长度大概一个小时, 百分之80的时间都在讲GRPO, 所以GRPO一定是R1的重点.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;20240206:16:00 - 20240207:11:30:  动作: 看yt视频 # Deep Dive into LLMs like ChatGPT
+&lt;&#x2F;span&gt;&lt;span&gt;	* 收获(这个视频是我看到关于LLM最干的视频, 强烈推荐观看原版3个小时): 
+&lt;&#x2F;span&gt;&lt;span&gt;        *  LLM的训练流程为预训练(Pre-Training)产生基座模型(Base Model),
+&lt;&#x2F;span&gt;&lt;span&gt;           但是Base Model不具有对话的能力, 因此要通过后训练(Post Training),
+&lt;&#x2F;span&gt;&lt;span&gt;           通过SFT(Supervised Fine-Tuning)的方式, 输入多轮对话的数据, 来让
+&lt;&#x2F;span&gt;&lt;span&gt;           模型有对话的能力. 最后通过Post Training RL, 来让模型有推理能力.
+&lt;&#x2F;span&gt;&lt;span&gt;        * PreTraining阶段, 数据集和分词过程决定了Base Model的效果
+&lt;&#x2F;span&gt;&lt;span&gt;        * PreTraining阶段, 通过不断改变context size, 模型能够实现in context learning能力
+&lt;&#x2F;span&gt;&lt;span&gt;        * 由于Base Model本质上根据互联网数据的词语接龙, 因此幻觉一定会存在
+&lt;&#x2F;span&gt;&lt;span&gt;        * 幻觉可以通过改变post training SFT的数据集, 或者使用tool use能够减少
+&lt;&#x2F;span&gt;&lt;span&gt;        * 模型需要更多的token去做思考
+&lt;&#x2F;span&gt;&lt;span&gt;        * 模型不擅长做in memory computing
+&lt;&#x2F;span&gt;&lt;span&gt;        * 要让模型能在post training中实现tool use的能力,就是在SFT中加入pre training没见过的token
+&lt;&#x2F;span&gt;&lt;span&gt;        * knowledge in the parameters =&amp;gt; vague recollection 
+&lt;&#x2F;span&gt;&lt;span&gt;        * knowledge in the token of context window =&amp;gt; working memory 
+&lt;&#x2F;span&gt;&lt;span&gt;        * 以人阅读一本教材进行学习为例, 训练模型学习书中的背景知识就是pre training, 学会书中的例题称为post training. 而完成课后习题就是post training with RL 
+&lt;&#x2F;span&gt;&lt;span&gt;        * 在最后一个阶段post training with RL, 需要喂模型课后题(prompt), 并且人类给出打分. 由于这个过程需要进行很多次, RLHF通过拟合人类回答的偏好. 来实现自动训练.
+&lt;&#x2F;span&gt;&lt;span&gt;        * RLHF不算RL, 而是微调模型来达到人类偏好
+&lt;&#x2F;span&gt;&lt;span&gt;        * DeepSeek R1的aha moment和AlphaGo Zero的Aha moment很像, 训练效果都是非线性的, 一开始上升非常缓慢, 到了某一刻急速上升.
+&lt;&#x2F;span&gt;&lt;span&gt;        * 通过[4]可以了解AI的最新动态
+&lt;&#x2F;span&gt;&lt;span&gt;        * 通过[5]可以了解AI的排名
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h1 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h1&gt;
+&lt;p&gt;之前我也在别的地方刷到R1实现了更低成本的训练, 例如使用PTX而不是raw cuda等, 这算infra层的创新. 但是我看的视频下来 &lt;strong&gt;开源的推理模型, 以及纯RL而不用SFT(DeepSeek-R1-Zero)&lt;&#x2F;strong&gt; 或许是R1更大的意义.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;sheng-xia-de-todo&quot;&gt;剩下的TODO&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;找一个场景复现PPO以及GRPO&lt;&#x2F;li&gt;
+&lt;li&gt;刚好在2月7号, o3-mini开源了思维链的过程, 对比一下&lt;&#x2F;li&gt;
+&lt;li&gt;了解下RL-LLM的现状, 输出一篇文章&lt;&#x2F;li&gt;
+&lt;li&gt;阅读R1原文, 自己总结一下, 并对比这篇&lt;a href=&quot;https:&#x2F;&#x2F;mp.weixin.qq.com&#x2F;s?__biz=MzIzOTU0NTQ0MA==&amp;amp;mid=2247545512&amp;amp;idx=1&amp;amp;sn=3826ae3f788e8b90ffeb8fb3cc908c6e&amp;amp;chksm=e8eafcecde166feebab4345c2d027cca4c9574c6058f90df5fe4513cefae17180f2344507e31&amp;amp;mpshare=1&amp;amp;srcid=0207SpaQkGmiF7zHxsYYVcxv&amp;amp;sharer_shareinfo=72ac166e2fd073a2d05195fba0d13c61&amp;amp;sharer_shareinfo_first=72ac166e2fd073a2d05195fba0d13c61&amp;amp;from=singlemessage&amp;amp;scene=1&amp;amp;subscene=10000&amp;amp;sessionid=1738908596&amp;amp;clicktime=1738912215&amp;amp;enterid=1738912215&amp;amp;ascene=1&amp;amp;fasttmpl_type=0&amp;amp;fasttmpl_fullversion=7592104-zh_CN-zip&amp;amp;fasttmpl_flag=0&amp;amp;realreporttime=1738912215423&amp;amp;devicetype=android-34&amp;amp;version=28003855&amp;amp;nettype=WIFI&amp;amp;abtest_cookie=AAACAA%3D%3D&amp;amp;lang=zh_CN&amp;amp;countrycode=AD&amp;amp;exportkey=n_ChQIAhIQysgSGGYJ6guKNuOW3xqwIBLnAQIE97dBBAEAAAAAAMNIGcR4l2MAAAAOpnltbLcz9gKNyK89dVj0BWdk0ar1sZ1xZJAIx0fAVnhfktWB%2Fz8itbQaTOFkU4h7gQp9odCzk1ocQAS2AUeWAu3HuMOHuo%2B%2FRg4fqobn1Sj%2FGrp4kC2%2FwnQlidKKe9rC6DG9QskGXu%2Bd98s3PWSu9KCdhFPBcrHoj4jUqJQ5Kz7qS%2BImYs1u3W1vlhbKXcsLlzKIyFwXeDEPA4g8M3ykfYORxphxXaIw3Pf%2Bk6zjwSjkWZGQXrWe8KOI6k6kgOm2EZ4zt7jgZZ1WwC3xAUzQXA%3D%3D&amp;amp;pass_ticket=Qc%2FprbYOLQVh%2BBnvnYJVgLdkqVNLBJx%2BkqpS%2FYUP3njk1%2BHNc0IUwJ%2BW1jQKEFwe&amp;amp;wx_header=3&quot;&gt;文章&lt;&#x2F;a&gt;, 了解更多的技术细节.&lt;&#x2F;li&gt;
+&lt;li&gt;pi0开源了, 研究下pi0&lt;&#x2F;li&gt;
+&lt;li&gt;借助xxx平台提供的api, 实现一个属于自己的deep research. 也算是往agentic ai迈了一步.&lt;&#x2F;li&gt;
+&lt;li&gt;总结下DS的发展路线, 输出一篇文章&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;fu-lu&quot;&gt;附录&lt;&#x2F;h1&gt;
+&lt;p&gt;[1] &lt;a href=&quot;https:&#x2F;&#x2F;substackcdn.com&#x2F;image&#x2F;fetch&#x2F;f_auto,q_auto:good,fl_progressive:steep&#x2F;https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdf800d6c-7a41-49b0-b5d8-5e13620cb6f1_1043x1200.png&quot;&gt;(yt video # DeepSeek R1 Theory Overview | GRPO + RL + SFT)各个模型关系图&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;[2] &lt;a href=&quot;https:&#x2F;&#x2F;openai.com&#x2F;index&#x2F;learning-to-reason-with-llms&#x2F;&quot;&gt;Hiding the Chains of Thought - OpenAI&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;[3] &lt;a href=&quot;https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;21131372654&quot;&gt;DeepSeek GRPO在简单控制系统上和PPO的对比&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;[4] &lt;a href=&quot;https:&#x2F;&#x2F;buttondown.com&#x2F;ainews&quot;&gt;AI News&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;[5] &lt;a href=&quot;https:&#x2F;&#x2F;lmarena.ai&#x2F;&quot;&gt;LM Arena for model rankings&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h1 id=&quot;20240208geng-xin&quot;&gt;20240208更新&lt;&#x2F;h1&gt;
+&lt;p&gt;接着上片文章, 在2月7日的时候, 我一直在找如何请求deepseek-r1 api的方式. 因此现在ds大火, 服务器一直繁忙. 想找个渠道试一下r1都难. 也尝试了&lt;a href=&quot;https:&#x2F;&#x2F;www.silicon-flow.com&#x2F;&quot;&gt;硅基流动&lt;&#x2F;a&gt;以及一些其他的api提供商. 因为是尝试, 不太想直接往api服务商充钱. 于是, 截至到今日(20250208), 我试下来有两种免费方式可以请求deepseek-r1.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;console.bce.baidu.com&#x2F;qianfan&#x2F;ais&#x2F;console&#x2F;onlineTest&#x2F;LLM&#x2F;DeepSeek-V3&quot;&gt;百度千帆&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;cloud.infini-ai.com&#x2F;genstudio&#x2F;experience&quot;&gt;无问苍穹&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;目前这两个平台的api请求是免费的, 无问苍穹会快很多, 并且api的速度远比不上playground. 并且两个平台的api稳定性都不太好, 会有请求失败的问题. 之后, 我用cursor写了一个适配于百度千帆的命令行工具. 效果如下.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;refs&#x2F;heads&#x2F;main&#x2F;static&#x2F;images&#x2F;tui.gif&quot; alt=&quot;bd_llm_tui demo&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;顺便试了下百度的其他免费的模型, 响应速度还行.
+仓库链接点击&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;EvanLyu732&#x2F;bd_llm_tui&quot;&gt;这里&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>2024年难忘的书</title>
+        <published>2025-01-01T00:00:00+00:00</published>
+        <updated>2025-01-01T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog44/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog44/</id>
+        <content type="html">&lt;h1 id=&quot;2025nian-xin-nian-kuai-le&quot;&gt;2025年新年快乐!!!&lt;&#x2F;h1&gt;
+&lt;p&gt;2025年新年快乐!!! 祝2025年蛇年活力四射. 祝新的一年是节节升高, 万事如意. 这一篇文章分享我在2024年读过几本难忘的书(排除上一篇文章提到的&amp;quot;控制论与科学方法论&amp;quot;). 以下顺序按照安利程度排名.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;shu-dan&quot;&gt;书单&lt;&#x2F;h1&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Tao-Physics-Exploration-Parallels-Mysticism&#x2F;dp&#x2F;1590308352&quot;&gt;The Tao of Physics: An Exploration of the Parallels between Modern Physics and Eastern Mysticism&lt;&#x2F;a&gt;: 这是我在2024年读过最特别的一本书没有之一, 因此我想在这里推荐给你, 如果只让我推荐一本书, 我会选这本. 因为这本书用最清晰的语言回答了科学(物理学)和玄学(宗教,东方哲学)的起源以及它们之间的联系. 看完这本书你能够理解为什么最开始的人们会选择相信宗教, 为什么宗教不是迷信. 会对玄学产生更多的敬畏以及探索. 以及玄学和科学最开始会分源而不是一起发展. 分享几句书中的摘要:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Fishing baskets are employed to catch fish; but when the fish are got, the men forget the baskets; snares are employed to catch hares; but when the hares are got, men forget the snares. &lt;strong&gt;Words are employed to convey ideas; but when the ideas are grasped, men forget the words.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;语言是指表达想法的&amp;quot;工具&amp;quot;. 当语言背后的点子传递到了, 语言也不重要了.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;The basis of Krishna&#x27;s spiritual instruction, as of all Hinduism, is the idea that the multitude of things and events around us are but different manifestations of the same ultimate reality. This reality, called Brahman, is the unifying concept which gives Hinduism its essentially monistic character in spite of the worship of numerous gods and goddesses.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;印度教里面的&amp;quot;神&amp;quot;指的不是一个具有超能力的&amp;quot;神&amp;quot;. 而是能够让世界按照不同稳态的状态运行的&amp;quot;规律&amp;quot;. 而印度教里面认为这些&amp;quot;规律&amp;quot;实际是同一个&amp;quot;东西&amp;quot;, 只是在各个状态下, 它们有着不同的表现. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nagarjuna&#x27;s statement that the essential nature of reality is emptiness is thus far from being the nihilist statement for which it is often taken. It merely means that all concepts about reality formed by the human mind are ultimately void. &lt;strong&gt;Reality, or Emptiness, itself is not a state of mere nothingness, but is the very source of all life and the essence of all forms.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;佛教里面的&amp;quot;空&amp;quot;或者&amp;quot;无&amp;quot;. 并不是&amp;quot;没有&amp;quot;, 或者&amp;quot;消失&amp;quot;了. 而是一种没有具体的形(formless), 缺又是一切有形状事物的源头. 意味着&amp;quot;无&amp;quot;是无处不在.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The repeatability of the experience is, in fact, essential to every mystical training and is the very aim of the mystics&#x27; spiritual instruction.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;东方神秘主义的核心是直接体验, 科学会说东方神秘主义不具有可证伪性(falsifiability). 但是如果能够以第一人称视角体验到了. 它就不是迷信.&lt;&#x2F;p&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;How-Think-Like-Leonardo-Vinci&#x2F;dp&#x2F;0440508274&quot;&gt;How to think like Leonardo Da Vinci seven steps to genius every day&lt;&#x2F;a&gt;: 这本书是取了看似没什么营养的名字, 但是讲了非常多能够帮助你解决问题并且可以实际操作的事项. 举个例子, 书中的第一章是关于达芬奇是如何好奇身边的事物的. 那如何变的好奇呢? 书中有提到&lt;strong&gt;写100个能够帮助你的问题&lt;&#x2F;strong&gt;. 我尝试了一下写20个问题就写不出来了. 提出的问题越多说明发现了不同的细节. 书中拆解了达芬奇七种不同的品质, 并且安排了合理可操作的练习来培养这些品质. 强烈推荐.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Second-Law-Resolving-Mystery-Thermodynamics&#x2F;dp&#x2F;1579550835&quot;&gt;The Second Law: Resolving the Mystery of the Second Law of Thermodynamics&lt;&#x2F;a&gt;: 这本书是关于热力学第二定律的起源以及从计算复杂性的视角去解读. 我在24年的读完这本书时候写过一篇&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog19&#x2F;&quot;&gt;文章&lt;&#x2F;a&gt;. 作者Stephen Wolfram非常博学, 看完本书能够让你从不一样的视角了解热力学第二定律. &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Language-Thought-Action-S-I-Hayakawa&#x2F;dp&#x2F;0156482401&quot;&gt;Language in Thought and Action&lt;&#x2F;a&gt;: 这本书是关于语言是如何形成和如何影响我们的想法的. 更重要的这是一本关于&amp;quot;抽象&amp;quot;的书籍. &amp;quot;抽象&amp;quot;是如何形成的? 语言和抽象之间有什么关系? 为什么有些事情无法达成共识? 这本书很好的回答了这些问题. 非常值得推荐.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Psycho-Cybernetics-Updated-Expanded-Maxwell-Maltz&#x2F;dp&#x2F;0399176136&#x2F;ref=sr_1_1?adgrpid=128521906692&amp;amp;dib=eyJ2IjoiMSJ9.O5H-kouhIgmvh6dPMHHhHY1RoTPE1ciVatfm5MziTLSVSYSUPHCFLYxNTKgMMBILcgciMrovgyM9XdEHzofm3C4fu6V4x3GQZvdqD9NV6POWrMxkFzr_xDCa7wNqr-CB1tyxyGb9aXxr5Pg4wflBj0Ar63bRy-iPijsjxNRiHWwPx8eyX3UlCLJmvYZMFWFTsZQcaw8mTPti0FkdLj6BEl08mwtY239n5-mXqGyqumU.66IBImfGIYWzDaXW_9rZ2OTD_jRd86GkCXF-sXv8Cy8&amp;amp;dib_tag=se&amp;amp;hvadid=673526597249&amp;amp;hvdev=c&amp;amp;hvlocphy=2344&amp;amp;hvnetw=g&amp;amp;hvqmt=e&amp;amp;hvrand=13065075103364209520&amp;amp;hvtargid=kwd-297246306449&amp;amp;hydadcr=22016_13508085&amp;amp;keywords=psycho+cybernetics&amp;amp;qid=1735626505&amp;amp;sr=8-1&quot;&gt;Psycho-Cybernetics&lt;&#x2F;a&gt;: 这本书是关于如何使用控制论的方法去改变自己心理的自我描述. 比如如何练习放松, 如何利用想象状态来改变自己的行为等. 和第二本书一样, 需要实际完成对应的练习才能体验到作者想表达的精髓. &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>控制论与科学方法论读后感</title>
+        <published>2024-12-21T00:00:00+00:00</published>
+        <updated>2024-12-21T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog43/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog43/</id>
+        <content type="html">&lt;p&gt;大概在上周的时候, 我看完了&lt;a href=&quot;https:&#x2F;&#x2F;www.goodreads.com&#x2F;zh&#x2F;book&#x2F;show&#x2F;37419698&quot;&gt;控制论与科学方法论&lt;&#x2F;a&gt;. 很少有书籍在看完之后能让人有方法论提升的感觉. 如果你还没看过这本书, 这本书值得放到你的书单里面. 里面有非常多精彩的观点和例子. 这本书值得被翻译成英文版. 其中关于&amp;quot;曹冲称象&amp;quot;的例子令人印象深刻. 先让我们来快速回顾一下: &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;孙权给曹操送了一头大象，曹操想知道大象有多重. 但是没有这么大的秤, 大臣们都没办法, 这时候曹冲想出来了一个办法. 先将大象牵到岸边的一艘船上. 记录下这时候的水位线. 再把大象替换成石头块，使得两次水位线高度一样. 最后记录石头块的总重量就是大象的重量.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;曹冲的这种思想方法在控制论叫做&lt;strong&gt;共轭控制(Inferential Control)&lt;&#x2F;strong&gt;:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;大象的重量等于等价石头的重量, 把这一步变换过程用L表示&lt;&#x2F;li&gt;
+&lt;li&gt;称出石头的重量,这一步用A表示&lt;&#x2F;li&gt;
+&lt;li&gt;等价石头的重量等于大象的重量. 把这一步变换过程用L-1(L的逆)表示&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;lal.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;共轭变换的思想可以说是解决问题的一种经典范式(scheme). 举个例子, 在自动驾驶问题当中, 有一种解决思路就是将感知域的信息映射到文本域, 在文本域处理完结果, 再映射到车辆的执行状态. 比如&lt;a href=&quot;https:&#x2F;&#x2F;leimao.github.io&#x2F;blog&#x2F;DriveGPT&#x2F;&quot;&gt;DriveGPT&lt;&#x2F;a&gt;系列. 再比如最近的科研界Meta今年年初发的&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2402.14083&quot;&gt;Beyond A*: Better Planning with Transformers via Search Dynamics Bootstrapping&lt;&#x2F;a&gt;也是一样的思路, 将基于离散图的规划问题映射到文本域从而变成symbolic planning. &lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#:~:text=%E5%9C%A8%22The%20Dawning,llms%20take%20all.&quot;&gt;在现有的牛顿范式的方法中进行采样变成开普勒范式方法的输入, 从而使得开普勒范式方法能够与牛顿范式的方法达到一样甚至超越的效果.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;此外这本书关于系统的类型以及演化，黑盒认识论, 量变与质变的论述都非常精彩. 将书中的方法论套用到自己生活所面临的场景中有不一样的思路. 另外有一本非常值得推荐的书是&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Psycho-Cybernetics-Updated-Expanded-Maxwell-Maltz&#x2F;dp&#x2F;0399176136&quot;&gt;Psycho-Cybernetics&lt;&#x2F;a&gt;里面讲如何运用控制论的方法改变自己的self-image. 不同于传统的鸡汤文学. 我个人在尝试了书中的练习后觉得效果很好. &lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>笔记系统的反思</title>
+        <published>2024-11-26T00:00:00+00:00</published>
+        <updated>2024-11-26T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog42/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog42/</id>
+        <content type="html">&lt;p&gt;这篇文章是我对最近使用过的笔记系统和自己是如何使用这些笔记系统的反思. &lt;&#x2F;p&gt;
+&lt;p&gt;在我接触&lt;a href=&quot;https:&#x2F;&#x2F;www.buildingasecondbrain.com&#x2F;&quot;&gt;&amp;quot;Building a Second Brain&amp;quot;&lt;&#x2F;a&gt;的概念之前, 我使用了一年多notion. 但是经历了这段时间后, 我发现notion对我来说最有用的功能就是用看板管理todo list. 各种花哨的视图功能对我来说并没有什么用. 于是自从我的&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog1&#x2F;&quot;&gt;第一篇博客&lt;&#x2F;a&gt;写了之后. 在最近的几个月以来, 我尝试了各种各样的笔记系统. 从最开始的emacs org mode到obsidian再到heptabse. 始终没有找到一个让我完全满意的笔记系统. heptabse是最接近的一个. 每一款软件都有自己的优势和缺点. 或许是我没完全理清自己的需求. 再好的笔记系统也依赖于用户的使用方式.&lt;&#x2F;p&gt;
+&lt;p&gt;首先需要立足出发点, 回归到为什么要使用笔记系统. 这里不能泛泛而谈, 不能说就是为了达到最终的目的, 不够具体化就不能够直接指导行动. 我的答案如下:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;为了让自己的大脑思路更清晰&lt;&#x2F;li&gt;
+&lt;li&gt;为了能让自己更有创造力&lt;&#x2F;li&gt;
+&lt;li&gt;为了收集能够完成对应的目标的信息&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;大脑适合做思考而不擅长存储. 而笔记引擎通过文字化存储的方式, 再加上一些特性. 比如obsidian中的双向链接, node graph view. Heptabse中的白板模式. 都是服务于这个目的. &lt;strong&gt;通过文字记录找到新旧知识之间的联系的关系, 从而让用户更有创造力&lt;&#x2F;strong&gt; &lt;&#x2F;p&gt;
+&lt;p&gt;然而这些特性反而会让用户在零碎的事情上迷失. 比如在不同笔记之间强行制造联系, 从而让为了让笔记显得更加花哨. 随之而来的其实是&lt;strong&gt;笔记系统变得更像是一个收集箱而不是生产力工具.&lt;&#x2F;strong&gt;  就像盲目阅读不会让人有任何改变一样. 要让笔记系统充分发挥&amp;quot;Digital Brain&amp;quot;的作用, 需要有对应的使用方法. 在说明使用方法之前, 我这里想在详细说明一下我个人使用感受下不同笔记系统的优缺点.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;emacs-org-mode&quot;&gt;Emacs Org Mode&lt;&#x2F;h2&gt;
+&lt;p&gt;优点: 首先是emacs能开evil mode让pc端编辑更加丝滑. org capture, org journal很好用. 如果一直开着emacs的话, 无缝记录的感觉很舒服. org mode本身语法设置也没话说, 非常优雅. org roam就算了, org roam强调记录然而&lt;strong&gt;记录缺少了反思也没有任何意义.&lt;&#x2F;strong&gt; roam系列在反思上没有很好的解决方案.&lt;&#x2F;p&gt;
+&lt;p&gt;缺点: 手机端编辑体验很差. 我目前是安卓手机orgzly说实话能用但是让人没有更改编辑的欲望. 其实这一点就足够让我放弃emacs org mode了. 毕竟不是一直在电脑前. 大部分闪念想法都是手机上记录的. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;obsidian&quot;&gt;Obsidian&lt;&#x2F;h2&gt;
+&lt;p&gt;优点: 可定制化, 插件多, 可以自己管理数据. 支持vim模式. 支持看板, 手机端编辑体验不错.&lt;&#x2F;p&gt;
+&lt;p&gt;缺点: graph view. graph view其实大部分时间都是摆设. 而且随着笔记越来越多, 打开速度反而越来越慢. 新的链接反而不好发现. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;heptabase&quot;&gt;Heptabase&lt;&#x2F;h2&gt;
+&lt;p&gt;优点: 白板模式, 应用进入就是日记. 注重体验和信息压缩.&lt;&#x2F;p&gt;
+&lt;p&gt;缺点: 数据在云端. 主题选择少. 收费.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;notion&quot;&gt;Notion&lt;&#x2F;h2&gt;
+&lt;p&gt;优点: 功能多样, ui很舒服.&lt;&#x2F;p&gt;
+&lt;p&gt;缺点: 功能多样, 不支持vim编辑, 数据在云端. 自从notion ai推出之后, 体验反而不如之前. 个人认为是反向升级.&lt;&#x2F;p&gt;
+&lt;p&gt;回到使用方法这里. 我最开始借鉴了&lt;a href=&quot;https:&#x2F;&#x2F;www.buildingasecondbrain.com&#x2F;para&quot;&gt;The PARA Method&lt;&#x2F;a&gt;和&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;How-Take-Smart-Notes-Nonfiction&#x2F;dp&#x2F;1542866502&quot;&gt;How to Take Smart Notes&lt;&#x2F;a&gt;. 在obsidina和heptabse里面, 每一个页面都是一张最小颗粒度的卡片, 然后每个卡片有对应的文件夹比如inbox, todo, archives, 每个卡片在不同的文件夹之间流动. 这看起来没什么问题. 但是如果你记录多了就会发现, &lt;strong&gt;笔记系统会变成个人wiki. 又变成了信息点的收集.&lt;&#x2F;strong&gt; 所以这一点heptabse做的很好. 通过白板做知识拆解, 只保留最关键的信息. 但是颗粒度不细的话, 太长的卡片又往往不会让人想要阅读下去.&lt;&#x2F;p&gt;
+&lt;p&gt;ok, 要让笔记系统完全发挥作用, 最大化生产力工具的效果, 就要有对应的约束. 第一个约束是&lt;strong&gt;日记比笔记更加重要&lt;&#x2F;strong&gt;. 这里说的笔记就是卡片. 参考&lt;a href=&quot;https:&#x2F;&#x2F;bulletjournal.com&#x2F;pages&#x2F;the-bullet-journal-method&quot;&gt;The Bullet Journal Method&lt;&#x2F;a&gt;我觉得日记应该记录以下几个内容. &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;md&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-md &quot;&gt;&lt;code class=&quot;language-md&quot; data-lang=&quot;md&quot;&gt;&lt;span&gt;2024-11-26
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;# 上午回顾
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;* 读了10页书, 但是没睡醒状态不太好
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;# 下午回顾
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;* 使用llm写完了一个记录体重的web demo , 还没有完成测试.
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;# 今日待办
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;- [x] 完成10页书的阅读
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;- [] 完成体重web demo的开发与测试
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;# 如何改进
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;* 了解如何提供睡眠质量
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;* 了解如何更好的使用llm
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;# 使用卡片
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;* [[睡眠]]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;* [[llm]]
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#bf616a;&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;日记最核心的是记录&lt;strong&gt;行为改变的过程.&lt;&#x2F;strong&gt; 不需要每件事情都记录. 选一两件最重要的事情追踪, 反思不足之处, 写下来如何改进, 再丰富卡片. 这样做的好处是&lt;strong&gt;卡片里的内容都是经过你实践至少是观察过的&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;第二个约束是&lt;strong&gt;总结比记录更重要&lt;&#x2F;strong&gt;. 比方说你读了一本书, 那么一本800页的书, 你总是要提取出关键的引用. 最后在一张卡片上有你全部提取的引用. 最后还是需要总结. 比较好的总结方式就是写书评或者博客. 之后把这张卡片上的内容替换成你的书评. 并且只保留和书评有关的引用. &lt;&#x2F;p&gt;
+&lt;p&gt;第三个约束是&lt;strong&gt;不随意开新的卡片&lt;&#x2F;strong&gt;. 比如你今天看到了一个感觉很不错的公众号, 里面有些内容. 觉得很新奇. 于是开了一张新的卡片复制了原文内容并且粘贴进去. 然而在这之后你几乎不会再去打开这张卡片. 这张卡片就变成僵尸卡片, 一直在吃灰. 并且可能得过了很久才会和别的笔记产生双向链接. 这种时候把内容放到日记里更加合适.&lt;&#x2F;p&gt;
+&lt;p&gt;目前来看, 在pc端上(obsidian + emacs + syncthing)是最符合我目前需求的. 手机端上obsidian体验也不错. 需要用一段时间再回来看.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>消消乐学习法</title>
+        <published>2024-10-29T00:00:00+00:00</published>
+        <updated>2024-10-29T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog40/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog40/</id>
+        <content type="html">&lt;h1 id=&quot;qian-yan&quot;&gt;前言&lt;&#x2F;h1&gt;
+&lt;p&gt;一直以来都想写一篇在适合LLM时代下学习范式的文章. 但是总感觉缺了点什么. 直到今天读到&lt;a href=&quot;https:&#x2F;&#x2F;brunothedev.github.io&#x2F;p&#x2F;2024-10-28-how_to_learn.html&quot;&gt;How to learn things by yourself&lt;&#x2F;a&gt;受到启发. 感觉瞬间框架完整了, 因此趁灵感还在的时候赶紧记录一下.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;zheng-wen&quot;&gt;正文&lt;&#x2F;h1&gt;
+&lt;p&gt;如果把学习定义为&lt;strong&gt;收集所需要的信息&lt;&#x2F;strong&gt;的话, 我认为学习包含两个&amp;quot;消除&amp;quot;. 第一个消除是&amp;quot;消除边界不确定性&amp;quot;也就是具体的科目. 第一个消除是&amp;quot;消除信息不确定性&amp;quot;. 信息也收集完整了. 所以才叫消消乐学习法. 先来看核心提示词(prompt).&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;# LLM prompt (From &amp;quot;How to learn things by yourself&amp;quot;)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;* &amp;quot;Tell me the main topics of X&amp;quot;.
+&lt;&#x2F;span&gt;&lt;span&gt;* &amp;quot;Subdivide X into as many topics as possible&amp;quot;.
+&lt;&#x2F;span&gt;&lt;span&gt;* &amp;quot;For everything i say here, make me a list of topics i have to learn with [ ] on each one, 
+&lt;&#x2F;span&gt;&lt;span&gt;be as specific as possible&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;# LLM提示词 (来自《如何自学》)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;* &amp;quot;告诉我X的主要主题&amp;quot;。
+&lt;&#x2F;span&gt;&lt;span&gt;* &amp;quot;将X细分为尽可能多的主题&amp;quot;。
+&lt;&#x2F;span&gt;&lt;span&gt;* &amp;quot;对于我在这里说的每件事，给我列出我需要学习的主题列表，每个主题后面加上[ ]，尽可能具体&amp;quot;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;要使用&amp;quot;消消乐学习法&amp;quot;, 你需要&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;一个电子笔记本 (笔记软件, 纸质本等)&lt;&#x2F;li&gt;
+&lt;li&gt;能够使用LLM的环境(Claude, GPT等)&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id=&quot;bu-zou&quot;&gt;步骤&lt;&#x2F;h1&gt;
+&lt;p&gt;Input: 想要了解的主题或领域X&lt;&#x2F;p&gt;
+&lt;p&gt;Output: 在X的范围内, 已经细化后可以执行的信息点&lt;&#x2F;p&gt;
+&lt;p&gt;Core: 使用下面的提示词&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;# 消消乐学习法Prompt
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;##  LLM prompt 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;* For everything i say here, make me a list of topics i have to learn with [ ] on each one, be as specific as possible. For each question I ask, please provide a raw mind map in text format.
+&lt;&#x2F;span&gt;&lt;span&gt;* Tell me the main topics of X.
+&lt;&#x2F;span&gt;&lt;span&gt;* Subdivide X into as many topics as possible.
+&lt;&#x2F;span&gt;&lt;span&gt;* For each topic enclosed in brackets [ ], provide a comprehensive and detailed explanation of the underlying knowledge points. Additionally, create three levels of exercises for each knowledge point—beginner, intermediate, and advanced—that are practical and actionable. 
+&lt;&#x2F;span&gt;&lt;span&gt;* For each exercise and knowledge point you mentioned above, please include external references along with their corresponding links to help me gain a deeper understanding.
+&lt;&#x2F;span&gt;&lt;span&gt;* For each knowledge point you mentioned, establish connections between related concepts and include external exercises to reinforce understanding.
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;##  LLM提示词 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;* 对于我在这里说的每件事，给我列出我需要学习的主题列表，每个主题后面加上[ ]，尽可能具体。对于我提出的每个问题，请以文本格式提供原始的思维导图。
+&lt;&#x2F;span&gt;&lt;span&gt;* 告诉我X的主要主题。
+&lt;&#x2F;span&gt;&lt;span&gt;* 将X细分为尽可能多的主题。
+&lt;&#x2F;span&gt;&lt;span&gt;* 对于每一个用[ ]括起来的主题，请提供全面且详细的知识点解释。此外，为每个知识点创建三个级别的练习——初级、中级和高级，要求练习具有实用性且可操作。
+&lt;&#x2F;span&gt;&lt;span&gt;* 对于你上面提到的每个练习和知识点，请附上外部参考资料及其链接，以帮助我更深入地理解。
+&lt;&#x2F;span&gt;&lt;span&gt;* 对于你提到的每个知识点，请建立相关概念之间的联系，并提供额外练习以加深理解。
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ol&gt;
+&lt;li&gt;笔记本上新展开一个空白页&lt;&#x2F;li&gt;
+&lt;li&gt;在LLM上新建一个对话&lt;&#x2F;li&gt;
+&lt;li&gt;按照上面的提示词依次输入&lt;&#x2F;li&gt;
+&lt;li&gt;将每次输出复制回笔记本空白页&lt;&#x2F;li&gt;
+&lt;li&gt;在LLM对话框中输入&amp;quot;继续&amp;quot;, 直到LLM遍历主题X&lt;&#x2F;li&gt;
+&lt;li&gt;空白页变成了Output&lt;&#x2F;li&gt;
+&lt;li&gt;对应着LLM给出的大纲, 完成练习并对有[ ]的主题打勾&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id=&quot;an-li&quot;&gt;案例&lt;&#x2F;h1&gt;
+&lt;p&gt;由于对话内容较长, 仅展示部分最终输出内容.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;shi-yong-xiao-xiao-le-xue-xi-fa-du-shu&quot;&gt;使用消消乐学习法读书&lt;&#x2F;h2&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;Input: X=道德经, LLM=GPT-4o
+&lt;&#x2F;span&gt;&lt;span&gt;Output: 
+&lt;&#x2F;span&gt;&lt;span&gt;为了帮助你更系统地理解《道德经》中的核心思想，并将各知识点串联起来，我将进一步深入探讨每个知识点之间的相互联系，并提供更高级的练习以帮助你加深理解。这将包括：
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;1. **概念之间的关联图**
+&lt;&#x2F;span&gt;&lt;span&gt;2. **高级练习：整合性与批判性思考**
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 一、道的定义、道与德的关系、无为而无不为的综合理解
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### 概念之间的联系图（文本格式）
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;道的定义
+&lt;&#x2F;span&gt;&lt;span&gt;├── 道：无形无象的宇宙本源
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 是一切事物的起点和本质
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 超越语言与思维的限制
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 无为而无不为（自然而然）
+&lt;&#x2F;span&gt;&lt;span&gt;├── 德：道的具体表现
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 个人的道德修养与行为规范
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 道生德，德化人
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 以德治国，德行修身
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 无为则德显
+&lt;&#x2F;span&gt;&lt;span&gt;├── 无为而无不为
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 非消极不作为，而是顺应自然
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 个人修行与社会治理中的应用
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 柔弱胜刚强，以柔克刚
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### 综合理解：
+&lt;&#x2F;span&gt;&lt;span&gt;- **道是宇宙的本质法则**，一切事物由“道”而生，而“德”是道在人世间的表现形式。无为则体现了对道的顺应，德则是“道”在日常行为中的实践。
+&lt;&#x2F;span&gt;&lt;span&gt;- **道生德**：道是无形的，而德是可见的行为。德是道的延伸，通过“无为”来保持德行，最终达到和谐与平衡。
+&lt;&#x2F;span&gt;&lt;span&gt;- **无为而无不为**是对道的终极理解——顺应自然，不刻意干涉，反而能够更好地达成目标。这一原则既适用于个人修身，也适用于社会治理。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 二、综合练习
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### 1. 概念联系练习
+&lt;&#x2F;span&gt;&lt;span&gt;**初级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **关联性描述**：用 200 字解释“道、德、无为”三者的关系，并举例说明如何在日常生活中同时实践这三个概念。
+&lt;&#x2F;span&gt;&lt;span&gt;- **思维扩展**：列举三个现代管理场景，说明如何通过“无为”而达成管理目标，并保持团队的“德行”。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**中级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **案例分析**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 找一个企业或社会组织的成功案例，分析其管理方式如何体现“无为而无不为”的理念，并如何通过“德”来维持组织的长远发展。
+&lt;&#x2F;span&gt;&lt;span&gt;  - 搜索相关资料，阅读《道德经》第57章“以正治国，以奇用兵，以无事取天下”，并讨论它在现代社会管理中的应用。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**高级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **哲学论文**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 选择“道与德的关系”作为主题，写一篇 1500 字的论文，讨论如何在个人成长与社会治理中实现道与德的平衡。引用至少三个哲学家（如黑格尔、康德、庄子）的观点。
+&lt;&#x2F;span&gt;&lt;span&gt;- **跨文化对比**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 对比道家的“无为”与西方管理学中的“授权领导”模式。探讨两者的异同，并结合实际管理经验撰写一份 1000 字的分析报告。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### 2. 深度批判性思考练习
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**初级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **情境模拟**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 设想你是一名教师，如何在班级管理中实践“无为而治”？设计一周的教学计划，减少干预，让学生自我探索学习。
+&lt;&#x2F;span&gt;&lt;span&gt;  
+&lt;&#x2F;span&gt;&lt;span&gt;**中级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **社会实验**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 在你所在的社区组织一次关于“无为而治”的讨论会，邀请参与者分享他们在生活中减少干涉、顺应自然的经验。撰写一篇总结报告，分析“无为”理念在日常生活中的适用性。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**高级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **跨领域应用**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 探讨“道、德、无为”在心理治疗中的应用。设计一个心理疗愈方案，帮助焦虑症患者通过减少过度控制来改善症状，并记录效果。
+&lt;&#x2F;span&gt;&lt;span&gt;- **多学科整合**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 结合道家哲学与量子物理学的“不确定性原理”，撰写一篇 2000 字的学术论文，探讨“无为”与“无确定性”之间的关联。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### 3. 创意类练习
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**初级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **绘画与思维导图**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 用绘画或思维导图的形式，直观表达“道、德、无为”的关系。通过视觉化的方式理解老子的哲学思想。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**中级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **文学创作**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 写一篇短篇小说，描述一个人如何通过“无为而治”改变了他的生活或工作环境。故事应突出道家的智慧在现实生活中的应用。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;**高级练习**：
+&lt;&#x2F;span&gt;&lt;span&gt;- **社会问题分析**：
+&lt;&#x2F;span&gt;&lt;span&gt;  - 选择一个当前的社会问题（如环境保护、社会公平、心理健康），并提出基于“道、德、无为”的解决方案。写一篇 3000 字的研究报告，讨论这些理念如何在现代社会中实现可持续的变化。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 三、如何进一步查找与学习资源
+&lt;&#x2F;span&gt;&lt;span&gt;为了深入理解上述内容，你可以：
+&lt;&#x2F;span&gt;&lt;span&gt;1. 阅读《道德经》不同版本的注释（如王弼注本、河上公注本）。
+&lt;&#x2F;span&gt;&lt;span&gt;2. 搜索以下关键词：
+&lt;&#x2F;span&gt;&lt;span&gt;   - &amp;quot;Dao and De relationship in Daoism&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;   - &amp;quot;Non-action (Wu Wei) in modern management&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;   - &amp;quot;Application of Daoist philosophy in psychotherapy&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;3. 使用学术数据库进行查找：
+&lt;&#x2F;span&gt;&lt;span&gt;   - JSTOR、Google Scholar、中国知网
+&lt;&#x2F;span&gt;&lt;span&gt;   - 课程平台如 Coursera、EdX 等
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;如果你需要更详细的探讨或具体的研究资源，也可以提供更多细节，我会帮助你更深入地挖掘。希望这些练习能够帮助你在理解和实践《道德经》智慧的道路上更进一步！
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h2 id=&quot;shi-yong-xiao-xiao-le-xue-xi-fa-yan-jiu&quot;&gt;使用消消乐学习法研究&lt;&#x2F;h2&gt;
+&lt;pre data-lang=&quot;txt&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-txt &quot;&gt;&lt;code class=&quot;language-txt&quot; data-lang=&quot;txt&quot;&gt;&lt;span&gt;Input: X=强化学习, LLM=GPT-4o
+&lt;&#x2F;span&gt;&lt;span&gt;Output: 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;以下将针对**强化学习基础**中的每个知识点，建立相关概念之间的联系，并提供额外的练习题，以帮助你加深理解这些主题。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 强化学习基础概念之间的联系
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;强化学习（Reinforcement Learning, RL）由多个核心概念组成，这些概念相互关联，共同构成强化学习的整体框架。以下是各个概念的关联与理解：
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;强化学习
+&lt;&#x2F;span&gt;&lt;span&gt;├── 智能体（Agent）
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 在环境中观察状态（State）并执行动作（Action）
+&lt;&#x2F;span&gt;&lt;span&gt;│
+&lt;&#x2F;span&gt;&lt;span&gt;├── 环境（Environment）
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 接收智能体的动作（Action），并反馈新的状态（State）和奖励（Reward）
+&lt;&#x2F;span&gt;&lt;span&gt;│
+&lt;&#x2F;span&gt;&lt;span&gt;├── 状态（State）
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 由环境定义，用于描述环境的当前情况
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 决定智能体应该采取的动作
+&lt;&#x2F;span&gt;&lt;span&gt;│
+&lt;&#x2F;span&gt;&lt;span&gt;├── 动作（Action）
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 智能体根据策略（Policy）选择的行为
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 动作的选择影响环境并导致新的状态和奖励
+&lt;&#x2F;span&gt;&lt;span&gt;│
+&lt;&#x2F;span&gt;&lt;span&gt;├── 奖励（Reward）
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 环境对智能体动作的即时反馈
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 智能体通过奖励调整策略以最大化未来的累积回报（Return）
+&lt;&#x2F;span&gt;&lt;span&gt;│
+&lt;&#x2F;span&gt;&lt;span&gt;├── 策略（Policy）
+&lt;&#x2F;span&gt;&lt;span&gt;│   ├── 决定智能体在每个状态下采取的动作
+&lt;&#x2F;span&gt;&lt;span&gt;│   └── 可以是确定性策略或随机策略
+&lt;&#x2F;span&gt;&lt;span&gt;│
+&lt;&#x2F;span&gt;&lt;span&gt;└── 回报（Return）和折扣因子（Discount Factor）
+&lt;&#x2F;span&gt;&lt;span&gt;    ├── 累积奖励的总和，用于衡量智能体的长期收益
+&lt;&#x2F;span&gt;&lt;span&gt;    └── 折扣因子用于平衡短期与长期奖励的重要性
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 概念之间的联系解释
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;1. **智能体与环境**：智能体（Agent）在环境（Environment）中执行动作（Action）。环境基于智能体的动作，反馈一个新的状态（State）和奖励（Reward）。智能体通过不断与环境交互来优化其策略（Policy）。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;2. **状态与动作**：在每个时刻，智能体基于当前的状态（State）选择一个动作（Action），并根据策略（Policy）作出决策。动作的执行会导致环境状态的变化，并可能产生即时奖励。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;3. **奖励与策略**：奖励（Reward）是智能体学习的基础，通过调整策略以最大化累积奖励（Return）。智能体试图找到一条最优策略，使得在所有可能的状态下，累积回报最大化。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;4. **回报与折扣因子**：智能体关注的并不仅仅是立即的奖励，而是长期的累积回报。折扣因子（Discount Factor）用于平衡当前奖励与未来奖励的相对重要性，折扣因子越低，智能体越关注近期的奖励。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 额外练习题（用于加深理解）
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### **额外练习 1：理解核心概念之间的联系**
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- **初级**：
+&lt;&#x2F;span&gt;&lt;span&gt;  1. 在强化学习中，为什么折扣因子会影响智能体对未来奖励的重视程度？
+&lt;&#x2F;span&gt;&lt;span&gt;  2. 举例说明在现实生活中，智能体、环境、状态、动作和奖励的关系。
+&lt;&#x2F;span&gt;&lt;span&gt;  3. 假设一个智能体在迷宫中导航，请描述智能体、环境、状态、动作和奖励的定义。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- **中级**：
+&lt;&#x2F;span&gt;&lt;span&gt;  1. 解释为什么在强化学习中，策略（Policy）是决定智能体行为的核心。
+&lt;&#x2F;span&gt;&lt;span&gt;  2. 修改 OpenAI Gym 中的“FrozenLake”环境，调整奖励机制，使得智能体更容易学习到最优路径。
+&lt;&#x2F;span&gt;&lt;span&gt;  3. 设计一个实验，比较不同折扣因子（如 0.5 和 0.9）对 Q-learning 算法的影响。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- **高级**：
+&lt;&#x2F;span&gt;&lt;span&gt;  1. 使用深度强化学习（Deep Q Network, DQN）训练智能体解决“CartPole”问题，并分析不同折扣因子对学习效率的影响。
+&lt;&#x2F;span&gt;&lt;span&gt;  2. 基于一个实际应用场景（如自动驾驶），设计状态、动作和奖励函数，并训练一个智能体优化行驶路线。
+&lt;&#x2F;span&gt;&lt;span&gt;  3. 设计一个复杂的多智能体环境，模拟多个代理在有限资源下的竞争，并分析不同策略对整体系统性能的影响。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;#### **额外练习 2：实际操作与应用**
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- **初级**：
+&lt;&#x2F;span&gt;&lt;span&gt;  1. 使用 Python 和 NumPy 创建一个简单的“多臂老虎机”模拟器。
+&lt;&#x2F;span&gt;&lt;span&gt;  2. 在 OpenAI Gym 环境中，使用 Q-learning 算法训练智能体解决“Taxi-v3”问题。
+&lt;&#x2F;span&gt;&lt;span&gt;  3. 解释在“CartPole”环境中，如何调整奖励函数以增加智能体平衡杆的时间。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- **中级**：
+&lt;&#x2F;span&gt;&lt;span&gt;  1. 编写一个基于 SARSA 算法的智能体，并在“FrozenLake”环境中进行训练。
+&lt;&#x2F;span&gt;&lt;span&gt;  2. 实现一个基于 Monte Carlo 方法的智能体解决“Blackjack”问题。
+&lt;&#x2F;span&gt;&lt;span&gt;  3. 设计一个新的环境（如虚拟仓库管理系统），定义状态、动作和奖励机制，并训练强化学习智能体进行库存优化。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- **高级**：
+&lt;&#x2F;span&gt;&lt;span&gt;  1. 使用 TensorFlow 或 PyTorch 实现一个深度 Q 网络（DQN），解决“LunarLander”环境问题。
+&lt;&#x2F;span&gt;&lt;span&gt;  2. 基于 Actor-Critic 方法，设计一个强化学习智能体用于股票市场交易决策。
+&lt;&#x2F;span&gt;&lt;span&gt;  3. 构建一个多智能体强化学习环境，模拟机器人团队的协作任务（如灾害救援场景）。
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;### 额外参考资料
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;以下是进一步深入学习的外部参考资源：
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;- [OpenAI Gym 官方文档](https:&#x2F;&#x2F;gym.openai.com&#x2F;docs&#x2F;)
+&lt;&#x2F;span&gt;&lt;span&gt;- [Reinforcement Learning: An Introduction by Sutton &amp;amp; Barto](http:&#x2F;&#x2F;incompleteideas.net&#x2F;book&#x2F;RLbook2020.pdf)
+&lt;&#x2F;span&gt;&lt;span&gt;- [深度强化学习教程（Udemy）](https:&#x2F;&#x2F;www.udemy.com&#x2F;course&#x2F;deep-reinforcement-learning&#x2F;)
+&lt;&#x2F;span&gt;&lt;span&gt;- [DeepMind&amp;#39;s Research on Reinforcement Learning](https:&#x2F;&#x2F;deepmind.com&#x2F;research&#x2F;publications)
+&lt;&#x2F;span&gt;&lt;span&gt;- [Towards Data Science: Reinforcement Learning 101](https:&#x2F;&#x2F;towardsdatascience.com&#x2F;reinforcement-learning-101-e24b50e1d292)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;---
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;通过这些练习和参考资料，你将能够更好地理解强化学习的各个概念，以及如何在实际应用中实现强化学习算法。如果有任何疑问或需要进一步深入学习某个主题，请随时告诉我！
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>为什么AI永远只会是工具</title>
+        <published>2024-10-25T00:00:00+00:00</published>
+        <updated>2024-10-25T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog39/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog39/</id>
+        <content type="html">&lt;p&gt;假设AI拥有了意识&lt;&#x2F;p&gt;
+&lt;p&gt;意识指的是像人类一样的意识&lt;&#x2F;p&gt;
+&lt;p&gt;意味着人类意识可以通过某种符号(symbol)系统表示出来&lt;&#x2F;p&gt;
+&lt;p&gt;意味着意识是符号系统复杂度的产物&lt;&#x2F;p&gt;
+&lt;p&gt;意味着对于AI来说语言符号&amp;quot;猫&amp;quot;指代是真的猫&lt;&#x2F;p&gt;
+&lt;p&gt;而人类有两个世界，符号世界与真实世界&lt;&#x2F;p&gt;
+&lt;p&gt;符号世界是为了达成共识和生存所构建的&lt;&#x2F;p&gt;
+&lt;p&gt;真实世界是脱离符号系统的&lt;&#x2F;p&gt;
+&lt;p&gt;两者相辅相成，符号系统的繁荣促进真实世界的繁荣&lt;&#x2F;p&gt;
+&lt;p&gt;符号世界也可以与真实世界脱离，所以谎言会存在&lt;&#x2F;p&gt;
+&lt;p&gt;符号会催生出更多的符号，所以婴儿在经过一个年龄结点会快速完成对符号的积累，也就是学习母语的过程&lt;&#x2F;p&gt;
+&lt;p&gt;而当小孩在创造出或来到符号世界之前&lt;&#x2F;p&gt;
+&lt;p&gt;是否有意识呢？&lt;&#x2F;p&gt;
+&lt;p&gt;如果没有意识，意味着拥有符号世界等价于拥有意识&lt;&#x2F;p&gt;
+&lt;p&gt;如果有意识，意味着拥有符号世界与拥有意识无关&lt;&#x2F;p&gt;
+&lt;p&gt;分歧也在这里，AI是否会有意识取决于你从哪个角度观察&lt;&#x2F;p&gt;
+&lt;p&gt;在没有符号世界之前的婴儿，一切都是一元的(non-dualistic)&lt;&#x2F;p&gt;
+&lt;p&gt;符号世界创造了二元(dualistic)&lt;&#x2F;p&gt;
+&lt;p&gt;随着符号世界的繁荣 人的意识也逐渐体验不到一元&lt;&#x2F;p&gt;
+&lt;p&gt;然而即使随着年龄的成长 一元的世界始终存在&lt;&#x2F;p&gt;
+&lt;p&gt;所以人能通过类似冥想等的方式重新体验一元的世界&lt;&#x2F;p&gt;
+&lt;p&gt;这种状态称为&amp;quot;般若‘’(enlightment)&lt;&#x2F;p&gt;
+&lt;p&gt;也被称为‘’空‘’(koan)&lt;&#x2F;p&gt;
+&lt;p&gt;然而任何符号系统都是在分割 所以这种状态无法用任何符号捕捉&lt;&#x2F;p&gt;
+&lt;p&gt;人类的意识始终同时包含了一元和二元的世界&lt;&#x2F;p&gt;
+&lt;p&gt;从这个角度来看&lt;&#x2F;p&gt;
+&lt;p&gt;所以假如AI拥有意识&lt;&#x2F;p&gt;
+&lt;p&gt;意味着AI也能够冥想&lt;&#x2F;p&gt;
+&lt;p&gt;意味着AI也能达到&amp;quot;空&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;然而这种状态是脱离符号系统的&lt;&#x2F;p&gt;
+&lt;p&gt;因此AI永远也无法拥有人类意识&lt;&#x2F;p&gt;
+&lt;p&gt;因此AI永远只会是工具&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>计算机的未来?=神经网络框架</title>
+        <published>2024-09-23T00:00:00+00:00</published>
+        <updated>2024-09-23T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog37/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog37/</id>
+        <content type="html">&lt;p&gt;今天看到了Geo hotz发了一篇&lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;realGeorgeHotz&#x2F;status&#x2F;1838062958410342437&quot;&gt;推文&lt;&#x2F;a&gt;. 推文如下:&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;hotz-twitter.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;如果不了解他的话, 这里补充一下背景tinygrad就是他一直在working的项目, 类似于pytorch这样的神经网络框架. 简单总结一下他的观点: 未来的计算机boot之后直接进入一个神经网络. 而神经网络依赖于神经网络框架. 所以tinygrad就像硬件层一样, 神经网络是软件层. 因此神经网络框架就等于操作系统. 其实就是&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog8&#x2F;&quot;&gt;LLM OS&lt;&#x2F;a&gt;的一种分解. 此外没有了CPU也就没有了内存问题, 神经网络只存在data flow而不存在control flow.&lt;&#x2F;p&gt;
+&lt;p&gt;最后让claude点评一下hotz的推文.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;hotz-claud.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;第一次用LLM去点评其他人的观点. 还有有点被惊叹到的. 有理有据而且这个回答还是比较有说服力.&lt;&#x2F;p&gt;
+&lt;p&gt;尽管我是hotz的粉丝, 上研究生的时候经常会去看他编程的直播. 但这篇推文目前时间点感觉还是两个字.&lt;&#x2F;p&gt;
+&lt;p&gt;Too hype.&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;footnote: hotz的想法完全有可能达到, 只要有无限context window和解决了幻觉的&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;&quot;&gt;llm&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>深度强化学习101</title>
+        <published>2024-09-03T00:00:00+00:00</published>
+        <updated>2024-09-03T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog33/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog33/</id>
+        <content type="html">&lt;p&gt;记录一下接触深度强化学习的学习历程. 材料选自Pieter Abbeel的&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=2GwBez0D20A&quot;&gt;Foundation of Deep RL Series.&lt;&#x2F;a&gt;. 整篇文章追求知识点的连惯性. 所以会补充详细的公式和历史背景. 这篇文章会一直持续更新. 也算是对之前说要写的llya30做一次原型测试吧. 由于会采用不用来源的资料所以概念会有重叠, 好处是可以从不同角度看到一个概念的描述. 方便更全面的理解.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;mu-lu&quot;&gt;目录&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#foundations-of-deep-reinforcement-learning-with-pieter-abbeel&quot;&gt;Foundations of Deep Reinforcement Learning with Pieter Abbeel&lt;&#x2F;a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#lecture-1-mdps-exact-solution-methods-max-ent-rl&quot;&gt;Lecture 1: MDPs, Exact Solution Methods, Max-ent RL&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#lecture-2-deep-q-learning&quot;&gt;Lecture 2: Deep Q-Learning&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#lecture-3-policy-gradients-advantage-estimation&quot;&gt;Lecture 3: Policy Gradients, Advantage Estimation&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#lecture-4-trpo-ppo&quot;&gt;Lecture 4: TRPO, PPO&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#lecture-5-ddpg-sac&quot;&gt;Lecture 5: DDPG, SAC&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#lecture-6-model-based-rl&quot;&gt;Lecture 6: Model-based RL&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#cs-285deep-reinforcement-learning&quot;&gt;CS 285:Deep Reinforcement Learning&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#ucl-course-on-rl&quot;&gt;UCL Course on RL&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#%E9%A1%B9%E7%9B%AE&quot;&gt;项目&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog33&#x2F;#where-to-go-next&quot;&gt;Where to Go Next?&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;foundations-of-deep-reinforcement-learning-with-pieter-abbeel&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;foundations-of-deep-reinforcement-learning-with-pieter-abbeel&quot;&gt;Foundations of Deep Reinforcement Learning with Pieter Abbeel&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;a id=&quot;lecture-1-mdps-exact-solution-methods-max-ent-rl&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;lecture-1-mdps-exact-solution-methods-max-ent-rl&quot;&gt;Lecture 1: MDPs, Exact Solution Methods, Max-ent RL&lt;&#x2F;h2&gt;
+&lt;p&gt;点击&lt;a href=&quot;https:&#x2F;&#x2F;www.dropbox.com&#x2F;scl&#x2F;fi&#x2F;rvbpc40ozhstnwhk7h5b7&#x2F;l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;amp;e=1&amp;amp;dl=0&quot;&gt;这里&lt;&#x2F;a&gt;进入lecture1的slides. 一句话总结lecture1的内容: 强化学习可以表示为马尔可夫决策过程(Markov Decision Processes, MDPs). 解MDP有两种基本策略, Value Iteration和Policy Iteration. 另外, 引入Entropy带MDP可以提升MDP的鲁棒性.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;MDP: 需要了解什么是MDP. 先要了解什么是马尔可夫链(Markov chain). Markov为了证明独立同分布不是大数定律(Law of large numbers)满足的前提, 在1906年发表的文章里面提出了马尔可夫链(Markov chain). 如果需要进一步了解Markov chain, 推荐这个&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=CIe869Rce2k&quot;&gt;视频&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Markov chain: 前提下一颗的状态 只取决于当前时刻 ,转移矩阵 &lt;&#x2F;li&gt;
+&lt;li&gt;frist-order Markov chain &amp;amp; n-order Markov chain:&lt;&#x2F;li&gt;
+&lt;li&gt;Markov chains convergence: 我们在前面说到了Markov chain的提出是为了证明大数定律在非独立同分布的假设前提下, 依然成立. 那么Markov chain是如何收敛的呢?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;$$
+\frac{n!}{k!(n-k)!} = \binom{n}{k}
+$$&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Bellman equation: &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Value Iteration:&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Policy Iteration:&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Maximum Entropy Formulation:&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;我们这里通过slide里面的grid world并结合代码来理解一下整个过程.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;小结:&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;lecture-2-deep-q-learning&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;lecture-2-deep-q-learning&quot;&gt;Lecture 2: Deep Q-Learning&lt;&#x2F;h2&gt;
+&lt;p&gt;点击&lt;a href=&quot;https:&#x2F;&#x2F;www.dropbox.com&#x2F;scl&#x2F;fi&#x2F;rvbpc40ozhstnwhk7h5b7&#x2F;l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;amp;e=1&amp;amp;dl=0&quot;&gt;这里&lt;&#x2F;a&gt;进入lecture2的slides. 一句话总结lecture2的内容: 由于实际情况下MDP的状态空间通常很大, 不适合直接用value iteration和policy iteration来解复杂的MDP. Q-Learning通过在样本空间进行采样来解复杂的MDP. 而Q-Learning也需要表格存储状态转移信息. DQN通过使用神经网络去采样来近似Q函数.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Q-Learning:&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;DQN:&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;lecture-3-policy-gradients-advantage-estimation&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;lecture-3-policy-gradients-advantage-estimation&quot;&gt;Lecture 3: Policy Gradients, Advantage Estimation&lt;&#x2F;h2&gt;
+&lt;p&gt;点击&lt;a href=&quot;https:&#x2F;&#x2F;www.dropbox.com&#x2F;scl&#x2F;fi&#x2F;htn2r6ac807oluoxeihdt&#x2F;l3-policy-gradient-and-advantage-estimation.pdf?rlkey=26hsbd5qvthb8ozq53vdfjrr4&amp;amp;e=1&amp;amp;dl=0&quot;&gt;这里&lt;&#x2F;a&gt;进入lecture3的slides. 一句话总结lecture3的内容: 由于Value Iteration无法表示下一步的动作, 并且Q-learning在高维空间下没办法有效求解. 相比与Value Iteration和Q-learning, Policy Gradients的表示更加简单. 而Policy Gradients通过Likelihood Ratio Graident求解出来的是Path. 需要使用Temporal decomposition分解成State和Action. 需要使用Baseline subtraction去改变最终选择的Path. 在使用公式去分解的时候, 需要使用Value function estimation求解. 而在Advantage Estimation介绍一些更加进阶的Value function estimation方法.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Policy Gradients:&lt;&#x2F;li&gt;
+&lt;li&gt;Temporal Decomposition:&lt;&#x2F;li&gt;
+&lt;li&gt;Baseline subtraction:&lt;&#x2F;li&gt;
+&lt;li&gt;Value function estimation:&lt;&#x2F;li&gt;
+&lt;li&gt;Advantage Estimation(A2C&#x2F;A3C&#x2F;GAE):&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;lecture-4-trpo-ppo&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;lecture-4-trpo-ppo&quot;&gt;Lecture 4: TRPO, PPO&lt;&#x2F;h2&gt;
+&lt;p&gt;点击&lt;a href=&quot;https:&#x2F;&#x2F;www.dropbox.com&#x2F;scl&#x2F;fi&#x2F;z0ev7f53yoyilrkfl9jck&#x2F;l4-TRPO-PPO.pdf?rlkey=1y8f0am0bpqyxysxq3adnkobu&amp;amp;e=1&amp;amp;dl=0&quot;&gt;这里&lt;&#x2F;a&gt;进入lecture4的slides. 一句话总结lecture4的内容: 在Lecture 3中, 我们知道Policy Gradients可以求解出特定的Path. 但是在求解特定的Path的过程中, 步长(step-size)的大小该如何确定呢? TRPO解决了这个问题. 而TRPO需要second order来求解, 而不太方便做优化. PPO作为TRPO的改进, 降阶为first-order优化问题.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Surrogate loss: &lt;&#x2F;li&gt;
+&lt;li&gt;Step-sizing and Trust Region Policy Optimization (TRPO):&lt;&#x2F;li&gt;
+&lt;li&gt;Proximal Policy Optimization (PPO):&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;lecture-5-ddpg-sac&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;lecture-5-ddpg-sac&quot;&gt;Lecture 5: DDPG, SAC&lt;&#x2F;h2&gt;
+&lt;p&gt;点击&lt;a href=&quot;https:&#x2F;&#x2F;www.dropbox.com&#x2F;scl&#x2F;fi&#x2F;302ef41a9929yvtedc77l&#x2F;l5-DDPG-SAC.pdf?rlkey=xc21zgliwfjynjse1je8oo6mx&amp;amp;dl=0&quot;&gt;这里&lt;&#x2F;a&gt;进入lecture5的slides. 一句话总结lecture5的内容: 对于特定场景, on-policy方法采样复杂度会比较高. 而DDPG解决了这个问题. SAC通过引入entropy保证了更好的收敛和防止过拟合.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Deep Deterministic Policy Gradient (DDPG):&lt;&#x2F;li&gt;
+&lt;li&gt;Soft Actor Critic (SAC):&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;lecture-6-model-based-rl&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;lecture-6-model-based-rl&quot;&gt;Lecture 6: Model-based RL&lt;&#x2F;h2&gt;
+&lt;p&gt;点击&lt;a href=&quot;https:&#x2F;&#x2F;www.dropbox.com&#x2F;scl&#x2F;fi&#x2F;pnv0k74lbajh2uahoegwr&#x2F;l6-model-based-rl.pdf?rlkey=psemgw6b6a4c4owmc16liyba0&amp;amp;dl=0&quot;&gt;这里&lt;&#x2F;a&gt;进入lecture6的slides. 一句话总结lecture6的内容: 前面5个lecture讲的都是model-free RL. 所谓model-free RL是指agent直接通过action来迭代policy而不需要学习环境.  model-based RL通过对环境建模再进行policy迭代.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Model-based RL:&lt;&#x2F;li&gt;
+&lt;li&gt;Robust Model-based RL:Model-EnsembleTRPO (ME-TRPO):&lt;&#x2F;li&gt;
+&lt;li&gt;Adaptive Model-based RL: Model-based Meta-Policy Optimization (MB-MPO):&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;cs-285deep-reinforcement-learning&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;cs-285-deep-reinforcement-learning&quot;&gt;CS 285:Deep Reinforcement Learning&lt;&#x2F;h1&gt;
+&lt;p&gt;这一部分采用CS 285来补充一下上一部分没提到的一些内容.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;ucl-course-on-rl&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;ucl-course-on-rl&quot;&gt;UCL Course on RL&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;a id=&quot;项目&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;xiang-mu&quot;&gt;项目&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;a id=&quot;where-to-go-next&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;where-to-go-next&quot;&gt;Where to Go Next?&lt;&#x2F;h1&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>智力复利</title>
+        <published>2024-08-05T00:00:00+00:00</published>
+        <updated>2024-08-05T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog32/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog32/</id>
+        <content type="html">&lt;p&gt;最近在重新回顾Naval写的书, 在网页版的最后Naval推荐了一系列读物. 其中有一个&lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;zaoyang&#x2F;status&#x2F;940409514875961344&quot;&gt;twitter thread&lt;&#x2F;a&gt;是Naval标记是Must Read. 之前一直没注意到.
+看了一遍有点感触. 这篇文章是这篇twitter thread的原文集合. 原文在&lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;zaoyang&#x2F;status&#x2F;940409514875961344&quot;&gt;这里&lt;&#x2F;a&gt;. (Twitter thread on “intellectual compounding” by @Zaoyang)&lt;&#x2F;p&gt;
+&lt;p&gt;1&#x2F; There&#x27;s a concept known as financial compounding, but most people don&#x27;t know about intellectual compounding. Buffett and Munger employed this to great effect and to accumulate mental models such that they can make large decisions quickly. Intuition is simply reading a lot.&lt;&#x2F;p&gt;
+&lt;p&gt;2&#x2F; This allows people to convert typically slow thinking and bad fast thinking (bad intuition) into good intuition. In academic literature this is known as Type 1 and Type 2 thinking. Most people don&#x27;t accumulate enough of knowledge the tree.&lt;&#x2F;p&gt;
+&lt;p&gt;3&#x2F; One of the common patterns for a self made billionaires is their ability to self study, self reason and accumulate a set of their own mental model. Intellectual capital compounds at a hidden rate and most people use tangible badges and net worth as measures.&lt;&#x2F;p&gt;
+&lt;p&gt;4&#x2F; Intellectual capital is filling out the decision tree and is a forward looking view and net worth is backward looking. Just like how the wrong way to value tech companies with network effects is revenue but instead by their retention rate and network effects.&lt;&#x2F;p&gt;
+&lt;p&gt;5&#x2F; Most people value themselves on their individual badges, which is what society labels for you. But most of what is predictive in life, is how you make decisions. Being effective and investing your time in the right area at the right time is a skill, not purely luck.&lt;&#x2F;p&gt;
+&lt;p&gt;6&#x2F; Allowing readings to fill your mind takes advantage of your diffuse&#x2F;focused mode of thinking and type 1 and type 2 decision making. Meaning you can focus and use your creative brain (diffuse mode) to wander and make associations. This is the key toward STEM education.&lt;&#x2F;p&gt;
+&lt;p&gt;7&#x2F; More and more, just like the last 20 years was focused on physical athletes, the next 20 years would be focused on mental atheletes. These ways of thinking and compounding, Buffett, Munger, and polymaths have already used to a large degree and have been confirmed by academia.&lt;&#x2F;p&gt;
+&lt;p&gt;8&#x2F; As the world get faster and faster with AR&#x2F;VR, AI, crypto. The ability to invest in your own intellectual capital is a crucial prerequisite to maintaining and succeeding in this world and also for your children.&lt;&#x2F;p&gt;
+&lt;p&gt;9&#x2F; While politicians say it&#x27;s education that&#x27;s important, it&#x27;s only partially true, it&#x27;s the ability to assimilate knowledge trees and compound knowledge that leads to satisfaction, mental stimulation, and long term wealth.&lt;&#x2F;p&gt;
+&lt;p&gt;10&#x2F; What politicians are doing now is simply aiming backwards, but how can you scale this to everyone? It turns out that charter school have been doing a grand experiment.&lt;&#x2F;p&gt;
+&lt;p&gt;11&#x2F; Taking children from disadvantaged backgrounds and making them fit for college. This has worked and three of the results are the following.&lt;&#x2F;p&gt;
+&lt;p&gt;12&#x2F; &amp;quot;Growth mindset&amp;quot; not &amp;quot;Fixed mindset&amp;quot; &amp;quot;Motivation mindset&amp;quot; not &amp;quot;Fixed mindset&amp;quot; &amp;quot;Student directed AND teacher directed education and projects&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;13&#x2F; In turns out statistically those three items are the most predictive. What are they? I&#x27;m glad you asked.&lt;&#x2F;p&gt;
+&lt;p&gt;14&#x2F; It turns out that if you just tell students that their mind is like a &amp;quot;muscle&amp;quot; and spend just 10 minutes explaining that concept they will improve their grades dramatically.&lt;&#x2F;p&gt;
+&lt;p&gt;15&#x2F; It turns out this concept is for a person&#x27;s mind and for each skill set. People can have verbal &amp;quot;fixed&amp;quot; mindsets, humor &amp;quot;fixed&amp;quot; mindsets, math &amp;quot;fixed&amp;quot; mindsets. Almost everything. So, you have to consciously unlearn this and apply it consciously even if you know it.&lt;&#x2F;p&gt;
+&lt;p&gt;16&#x2F; Why is this? It turns out people are criticized by society and labeled. So even if you have a &amp;quot;growth&amp;quot; mindset for physical items, you don&#x27;t have it for mental items. This applies not only for students but also for adults. You always hear &amp;quot;That&#x27;s not me.&amp;quot; It&#x27;s a label.&lt;&#x2F;p&gt;
+&lt;p&gt;17&#x2F; There&#x27;s another concept called &amp;quot;motivational mindset&amp;quot; which teaches the person &amp;quot;what good looks like&amp;quot; which simply teaches the kid to follow &amp;quot;go do the extra problems&amp;quot; &amp;quot;go to office hours&amp;quot; &amp;quot;do more problems&amp;quot; Follow the process of the &amp;quot;motivated student&amp;quot; and it will work.&lt;&#x2F;p&gt;
+&lt;p&gt;18&#x2F; It turns out these two concepts turn someone that&#x27;s socio economically disadvantaged similar to the education status of someone who grew up upper middle class. This is not a panacea as a lot of people have so much stressors in their lives that they can&#x27;t study.&lt;&#x2F;p&gt;
+&lt;p&gt;19&#x2F; The last concept is student self directed project plus teacher lectures is the best. This surprised me, but conceptually, it gives the student agency and motivation. Most students have been so battered down by the system that they can&#x27;t do this, but that&#x27;s another story.&lt;&#x2F;p&gt;
+&lt;p&gt;20&#x2F; These concepts have to be mind beliefs. Just like in Dune how they cite &amp;quot;fear is the mindkiller&amp;quot; These concepts have to be constantly applied to adults and children as they opposite tends to be pervasive and insidious.&lt;&#x2F;p&gt;
+&lt;p&gt;21&#x2F; These are mindsets and as for strategies. People need to take concepts from Learning how to Learn by &lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;BarbaraOakley&quot;&gt;@barbaraoakley&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;sejnowski&quot;&gt;@sejnowski&lt;&#x2F;a&gt;
+and Art of Learning from Josh Waitzkin. They are are a manual for your brain.&lt;&#x2F;p&gt;
+&lt;p&gt;22&#x2F; You thought just because you own a brain you knew how to operate it right? Why do you think the drop out rates for STEM is so high. Most people attribute it to pipeline or professor, but perhaps it&#x27;s because people don&#x27;t know how to learn difficult subjects.&lt;&#x2F;p&gt;
+&lt;p&gt;23&#x2F; @LHTL_MOOC takes you from beginner to intermediate, and art of learning takes you from expert to being world class. Then you have Cal Newport&#x27;s material, and those three resources are simply the best that I know of to hack your own brain&lt;&#x2F;p&gt;
+&lt;p&gt;24&#x2F; Do you know anymore? Would love to know more resources and techniques.&lt;&#x2F;p&gt;
+&lt;p&gt;25&#x2F; In conclusion, as the world become more and more technical and complex, most people don&#x27;t have the mindset nor tactical skills. In short, people have to re-learn the manual to their own brain. Just because you have a computer, it doesn&#x27;t mean you know everything about it.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>读毛泽东武略</title>
+        <published>2024-08-02T00:00:00+00:00</published>
+        <updated>2024-08-02T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog30/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog30/</id>
+        <content type="html">&lt;p&gt;这几天花了点时间读完&lt;a href=&quot;https:&#x2F;&#x2F;book.douban.com&#x2F;subject&#x2F;1203879&#x2F;&quot;&gt;毛泽东武略&lt;&#x2F;a&gt;, 一共大概500页内容不算太长. 之所以会去读这本书是因为如果长时期接触技术方面的内容, 其他方面的视野不可避免的受限. 这本书有很多思想其实对做事很有帮助.&lt;&#x2F;p&gt;
+&lt;p&gt;(1) 原文: &amp;quot;毛泽东从自己的经验总结道: &amp;quot;不要迷信军事科学, 只要去打仗, 一点也不难学会. &amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 我们从小接受的教育就是阅读书A, 读完了A, 你通过考试来验证你对A的理解. 现实生活当中往往问题是开放多元的. 因此, 我们有时会陷入&lt;a href=&quot;https:&#x2F;&#x2F;www.reddit.com&#x2F;r&#x2F;learnprogramming&#x2F;comments&#x2F;qrlx5m&#x2F;what_exactly_is_tutorial_hell&#x2F;?rdt=59004&quot;&gt;教程地狱(Tutorial Hell)&lt;&#x2F;a&gt;. 即观看学习书籍, 以为看完了记下来所有知识就有用, 但是放到实际问题当中却无法生效. 从而回头继续观看学习书籍, 一种反复循环的模式.
+我想到了之前Geo Hotz在&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=-v8pD0d5Bmk&quot;&gt;How not to be a noob&lt;&#x2F;a&gt;说的. &amp;quot;If you think like a noob, you always gonna be a noob.&amp;quot; 思考的框架会制约了行动模式. 什么意思? 我们接触一个新领域往往因为我们是菜鸟会认为我们需要先验的背景知识之后, 才能去做事. 往往过度高估了事情失败的风险, 却低估了这种模式(通过快速失败和迭代)的有效性. 知道什么方向值得去做, 什么问题值得去解决. 如何在未知的方向下找到合适的落脚点并进行拆解任务才是更有价值的. &lt;&#x2F;p&gt;
+&lt;p&gt;(2) 原文: &amp;quot;战略, 战役和战斗是三个不同的概念. 在这三个概念中, 战略是最高层次, 战斗是最低层次, 战役则是中间层次. 但战役中也有属于战略范畴的, 如战略决战. 在这些层次中, 战略是主导. &amp;quot;在主力红军与游击队的矛盾中, 主力红军是主导. 在进攻战术与防御战术的矛盾中, 进攻是主导. 在战略与战术的矛盾中, 战略是主导.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 计划的实施决定最后的成果, 但是在这之前有个更重要的问题. 如何制定计划以及为什么这么制定计划? 如何在实施的过程中动态调整计划?. 自我反思我是花在计划的时间上太少, 要制定好的计划就需要有调查研究. 我在很多时候做决策就像贪心算法一样, 希望局部最优能让全局最优. 但是这样往往在大方向上却欠佳, 并且也无法让阶段性的成果就像滚雪球一样积累起来.&lt;&#x2F;p&gt;
+&lt;p&gt;(3) 原文: &amp;quot;因此, 战争指导者的责任是将自己的注意力放在战略上, 放在他主持的全局上. 用毛泽东的话说, 就是只有了解大局的人才能合理而恰当地处置小的东西, 即使当个排长也应该有全局的图画. 他形象地说: 没有战略, 战术也一定谈不好. 小的东西是要占大的东西的地位的, 如一个鼻子, 你能把它安在背上吗? 抗战初期在延安, 毛泽东反复讲要&amp;quot;提高战略空气&amp;quot;. 纵观中国革命战争中的政我双方, 在战略战术上是呈相反趋势的: 在战术行动上, 敌军也许并不逊色, 但在战略指导上, 则远不如入民军队. &amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 选择大于努力, 要做出好的选择一是要有认识, 二是要有勇气. 因为最优的选择有时候需要放弃短期的利益, 并且去做常理相反的事情才有可能达成. 一股脑的扎进努力和不去努力都是不可取的. 需要锻炼在宏观和微观的视角上来回切换的能力.&lt;&#x2F;p&gt;
+&lt;p&gt;(4) 原文: &amp;quot;战略上的有规则有定向, 战役战斗上的不规则无定向.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 在大的计划上必须是清晰的并且不能随意变动, 因为不清晰意味着无法实现, 随意变动意味着无法积累. 但在局部的执行细节上, 由于外界因素的变化需要动态调整.&lt;&#x2F;p&gt;
+&lt;p&gt;(5) 原文: &amp;quot;在一个时期内, 战略方向是相对固定的, 而且只能有一个. 在一个时期内不能允许有两个帮至多个战略方向. &amp;quot;在有强大敌军存在的条件下, 无论自己有多少军队, 在一个时间内, 主要的使用方向只应有一个, 不应有两个. 我不反对作战方向有两个或两个以上, 但主要的方向, 在同一个时间内, 只应有一个. &amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 集中资源和注意力完成一个清晰的目标. 当一个阶段性的目标完成之后，再去攻克下一个目标. 同时开展很多项目只会让资源得到分散并且得到收益的时间会被拉长. 很多认知只有在执行的过程中才会形成. &lt;&#x2F;p&gt;
+&lt;p&gt;(6) 原文: &amp;quot;抓战略, 主要是抓两点, 一是抓主动权, 二是抓战略方向. 清人王欠佑在&amp;quot;乾坤大略&amp;quot;中说, 战略方向的选定, 是用兵成败
+的关键, &amp;quot;霜王大略, 此其首侨.&amp;quot; 毛泽东抓住了这个&amp;quot;霸王大略&amp;quot;, 在实践中灵活加以运用. 研究毛泽东的战略战术思想, 可以发现毛泽东对具体的
+布阵, 并不很费心, 但以极大的精力关注战略方向的选择.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 我理解的主动权是能不能通过时间获得积累. 因为对于普罗大众来说, 时间即是朋友也是敌人. 一方面, 社会以及企业会希望有匹配工作年限的能力. 另一方面，当处于一个固定不变的环境的时候, 工作能力是不可能得到明显的锻炼的. 只有做出合适的选择才会让人享受到时间的复利. 有时候选择需要在框架之外才能实现.&lt;&#x2F;p&gt;
+&lt;p&gt;(7) 原文: &amp;quot;毛泽东在中国革命战争中有许多独到的见解和创造, 其中战略主动权和战役战斗主动权(以下均作战役主动权)概念的提出即为其中之一. 毛泽东将主动权按层次划分为战略主动权和战役战斗权. 战略主动权是军队在战争全局上的自由地位, 战役主动权是军队在局部和一定程度上的自由地位. &amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 接着上一条说, 战略主动权是指宏观上的选择是否能享受时间的复利. 战役主动权是指在细节的执行上不会受到外界因素过大的干扰, 导致行为不符合最开始执行的战略. 假如遇到了这种情况. 我认为会有两种原因, 一是最开始战略制定的时候忽视了过多因素, 这种情况下是战略制定的不恰当. 另一种情况则是执行层执行的时候没有正确符合战略层的规划. 说起来容易做起来很难. 需要训练反复切换思维的能力.&lt;&#x2F;p&gt;
+&lt;p&gt;(8) 原文: &amp;quot;以局部优势达成全局优势, 以战役战术主动赢得战略主动. 劣势军队只要不是绝对劣势, 就可以通过正确的主观指导, 通过局部的优势和主动, 逐渐造成战略的优势和战略的主动地位.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 客观来说处于弱势的一方只能通过花更多时间在细节上打磨才能追上优势一方. 但是在执行的过程中很容易陷入努力陷阱，好的任务拆解以及好的策略才是最核心的事情.&lt;&#x2F;p&gt;
+&lt;p&gt;(9) 原文: &amp;quot;调查不够不决策, 条件不备不行动.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 与汉明说的其实是一致，在工程上如果去做花很大的成本去做自己不懂的事情. 就是搬起石头砸脚. 只有很好的观察力才知道什么条件因素是关键, 锻炼观察力需要抛弃先验. 过于依赖先验是无法学习新的东西. &lt;&#x2F;p&gt;
+&lt;p&gt;(10) 原文: &amp;quot;战争指导的一条重要原则, 是力避和被动, 力争主动, 这是军队获得行动自由, 争取战争胜利的根本条件. &amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 主动与被动其实这是一个观察因素, 比如人际交往, 做事情. 主动才有机会. 主动才能创造出现实. 而不是沉默是金, 过于沉默只会埋没自己的声音. &lt;&#x2F;p&gt;
+&lt;p&gt;(11) 原文: &amp;quot;打”与“走”, 两个字, 确实简单明了, 但里面却有着丰富的内涵. 中国革命战争几乎所有的战役战斗都包含着走和打两个过程. &amp;quot;打得赢就打,打不赢就二&amp;quot;, 说的就是&amp;quot;走&amp;quot;与&amp;quot;打&amp;quot;的关系. 毛泽东有一名名言:&amp;quot;不要把干粮线丢掉了.&amp;quot;. 说的就是随时准备走. 在走和打的关系上, 光走不打是逃跑主义, 光打不走是拼命主义.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 打与走的关系在我们的生活中非常深刻. 比较明显的表现在于过于执着于牛角尖. 作为工程师钻研精神绝对是一个非常重要的品质. 但是知道什么问题可以跳过, 什么资源可以更快的完成事情的能力更加重要.&lt;&#x2F;p&gt;
+&lt;p&gt;(12) 原文: &amp;quot;正确处理弃守地方与歼灭敌人的关系, 是战争指导者首先碰到并无法回避的问题. 军事教条主义者总是希望多占土地, &amp;quot;多敌
+于国门之外&amp;quot;, 主观愿望很好, 但结果往往是人地两失. 守地必分散
+兵力. 处处防守, 必处处挨打.&amp;quot;&lt;&#x2F;p&gt;
+&lt;p&gt;思考: 多占土地可以理解为占领更多短期资源. 但是要取得长期最大收益, 有时候需要放弃短期利益. 灵活处理问题, 放弃教条主义.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>一次对LLM时代下的工作流的思想实验</title>
+        <published>2024-07-27T00:00:00+00:00</published>
+        <updated>2024-07-27T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog20/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog20/</id>
+        <content type="html">&lt;blockquote&gt;
+&lt;p&gt;这篇文章是我对LLM时代下的工作流做的一次思想实验.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;首先明确一下共同语境, 日常工作的目的就是去解决特定问题. 要去解决问题可能需要物理空间上的移动, 比如网约车, 开会, 摆摊. 也可能不需要. LLM是个很强大的&amp;quot;工具&amp;quot;. 通过提问可以获得答案. 不同程度的LLM能给出来的答案质量也不同. 假设GPT5真的能达到博士水平. 那么有没有可能一个八岁小孩可以解决专家才能解决的问题呢? 或者说, 在不需要创造力的工作语境下, 可以解决大部分普通的工作内容呢? &lt;&#x2F;p&gt;
+&lt;p&gt;现在让我们站在LLM的角度下, LLM只能接受提示词(提问). 而小孩和专家的区别, 在于提出的问题质量. 专家由于有足够的先验, 一般是不需要提问的, 并且提问的深度肯定越超八岁小孩. 八岁小孩由于没有先验知识和经验, 所以只能通过提问的方式获得答案. 如果一个&lt;strong&gt;小孩可以和专家提出一样的问题&lt;&#x2F;strong&gt;, 那么对于LLM来说小孩和专家也是一样的. &lt;strong&gt;一个问题可以由一系列的提问得到解决方案&lt;&#x2F;strong&gt;. 而小孩可以提出这一系列问题的话, 小孩就能够解决专家能解决的问题. (假设问题不需要高超的物理空间上的移动, 比如运动员, 飞行员等)&lt;&#x2F;p&gt;
+&lt;p&gt;所以如何让小孩提出这一系列的问题呢? 核心思想是范围缩减.&lt;&#x2F;p&gt;
+&lt;p&gt;Step1. 描述当前场景所要解决的问题. 让LLM提供大致的解决方案.&lt;&#x2F;p&gt;
+&lt;p&gt;Step2.1. 假如LLM给出的大致的解决方案脱离了当前场景, 没有实际意义的话. 补充当前场景的先验描述. 重新提问. 进入到Step2.2&lt;&#x2F;p&gt;
+&lt;p&gt;Step2.2. 遍历LLM提供大致的解决方案, 进行步骤拆解&lt;&#x2F;p&gt;
+&lt;p&gt;Step3. 对于给定的步骤, 如果不能action的话, 提问LLM直到能够action为止. &lt;&#x2F;p&gt;
+&lt;p&gt;Step4. 如果Step3给出来的步骤不能action, 说明缺少先验证描述. 补充当前场景的先验描述. 重新提问. 进入到Step2.1&lt;&#x2F;p&gt;
+&lt;p&gt;Step5. 对Step3给出的步骤进行action. 问题解决.&lt;&#x2F;p&gt;
+&lt;p&gt;相当于人是LLM的agent. 这时候LLM相当于人的大脑. 而提问就是交互方式. 很明显小孩需要提非常非常多的问题才能够完成任务, 在时间有限的条件下, 效率还是非常低的. &lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>热力学第二定律</title>
+        <published>2024-07-24T00:00:00+00:00</published>
+        <updated>2024-07-24T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog19/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog19/</id>
+        <content type="html">&lt;h1 id=&quot;qian-yan&quot;&gt;前言&lt;&#x2F;h1&gt;
+&lt;p&gt;在&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;From_Eternity_to_Here&quot;&gt;&amp;quot;From Eternity to Here&amp;quot;&lt;&#x2F;a&gt;, 一本研讨时间为什么是单向而不是双向的书里(aka. 时间之箭), 看到了这样一个观点, 大致的中文意思是&amp;quot;如果你只能选择相信一条物理定律, 那一定是热力学第二定律.&amp;quot;. &lt;&#x2F;p&gt;
+&lt;p&gt;what? 难道不是万有引力之类的定律吗? 为什么热力学第二定律会有那么大的影响力? 以及现在流行说的&amp;quot;熵增&amp;quot;到底是什么? 现在让我们重温一下热力学第二定律的发展史.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;zheng-wen&quot;&gt;正文&lt;&#x2F;h1&gt;
+&lt;p&gt;下面这张图展示了热力学发展历史历程中的关键人物. 图片来自&lt;a href=&quot;https:&#x2F;&#x2F;writings.stephenwolfram.com&#x2F;2023&#x2F;01&#x2F;how-did-we-get-here-the-tangled-history-of-the-second-law-of-thermodynamics&#x2F;&quot;&gt;&amp;quot;How Did We Get Here? The Tangled History of the Second Law of Thermodynamics&amp;quot;&lt;&#x2F;a&gt;. 如果对热力学历史感兴趣强烈推荐阅读原文.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;history.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;简而言之, 卡诺(Sadi Carnot)提出了卡诺热机(aka. 永动机), 但是卡诺的著作在他的时代不受待见. 直到去世后, 开尔文(Lord Kelvin)通过卡诺学弟整理的资料了解了卡诺的研究, 开尔文在卡诺热机的基础上提出了&lt;a href=&quot;https:&#x2F;&#x2F;thermodynamics.dlut.edu.cn&#x2F;fazhanjianshi&#x2F;relixuesidadinglv.htm&quot;&gt;热力学的另一种说法&lt;&#x2F;a&gt;. 而克劳修斯(Rudolf Julius Emmanuel Clausius)在此基础上提出了熵(entropy)的概念. 并且正式确立(formalization)了热力学第二定律的描述.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;entropy.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;此外, 克劳修斯在提出热力学第二定律时, 将范围放大到了宇宙(universe). &lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;uni_entropy.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;至此, 也就有所谓的热寂(Heat death of the universe)假说.&lt;&#x2F;p&gt;
+&lt;p&gt;ok, 现在回到我们默认所说的&amp;quot;熵增&amp;quot;. 现在口语语境中的&amp;quot;熵增&amp;quot;默认代表的是混乱度. 克劳修斯最开始提出的熵的概念是两个热系统进行能量传输时所损失掉的能量. 不过确实直接的影响是, 既然无用能量增加了, 系统混乱度会随着时间的推移而增加. 因此理解成混乱度没有什么问题.&lt;&#x2F;p&gt;
+&lt;p&gt;很有意思的是, Stephen Wolfram对热力学第二定律的理解. Stephen Wolfram以rule30元胞自动机举例. 简单的规则不断演变最终导致了整体系统复杂性增加. 这里有一点, Stephen Wolfram说的复杂性表现为混论度, 但是不太一样. 复杂性是站在观察者的视角上看得, 而混乱度是站在系统内部的视角上. 我们先继续往下走, 有意思的事来了.
+Wolfram说宇宙就像一台超级超级计算机, 由于人类的计算能力始终跟不上宇宙. 因此, 复杂度总是增加的(宇宙运算不会停止). 但是假如人类的计算能力跟上了, 那么理论上给定人类所有的先验宇宙定律, 随便在路边找一块石头. 都能够推算出现在时刻到宇宙大爆炸之间甚至之前的事.&lt;&#x2F;p&gt;
+&lt;p&gt;Which means, if 宇宙是有意识的. 算命和占卜是科学不是迷信. 自由意志也不存在. Really interesting.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;writings.stephenwolfram.com&#x2F;2023&#x2F;02&#x2F;computational-foundations-for-the-second-law-of-thermodynamics&#x2F;&quot;&gt;Computational Foundations for the Second Law of Thermodynamics&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;writings.stephenwolfram.com&#x2F;2023&#x2F;01&#x2F;how-did-we-get-here-the-tangled-history-of-the-second-law-of-thermodynamics&#x2F;&quot;&gt;How Did We Get Here? The Tangled History of the Second Law of Thermodynamics&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;History_of_entropy&quot;&gt;History of entropy&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;http:&#x2F;&#x2F;hsiaoscu.pbworks.com&#x2F;w&#x2F;file&#x2F;fetch&#x2F;69026626&#x2F;%E7%86%B1%E5%8A%9B%E5%AD%B8%E7%99%BC%E5%B1%95%E7%B0%A1%E5%8F%B2.pdf&quot;&gt;熱力學發展簡史&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.livescience.com&#x2F;50941-second-law-thermodynamics.html&quot;&gt;What is the second law of thermodynamics?&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>机器人大小脑调研</title>
+        <published>2024-07-17T00:00:00+00:00</published>
+        <updated>2024-07-17T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog17/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog17/</id>
+        <content type="html">&lt;p&gt;人形机器人肯定算是这两年来最火的一个方向了, 大模型的出现让人型机器人落地有了曙光. 
+目前往往有争议的是假如人形机器人真的能够落地, 又会有多少商业价值? 比较容易想到的场景是工厂自动化, 
+但是这些场景对 &lt;strong&gt;精度和节拍有高度的要求&lt;&#x2F;strong&gt;. 就算人型真的到了那一步, 能吃下工业场景的人形机器人肯定少之又少. 
+更何况人形的复杂度极高, 出问题修复的成本也会非常高. 而一出问题, 产线停了. 后面的代价成本是非常大的.&lt;&#x2F;p&gt;
+&lt;p&gt;But anyway, 具身智能一定是未来十年的趋势. 如何造出能够适配不同机器人的&amp;quot;大脑&amp;quot;与&amp;quot;小脑&amp;quot;是非常具有潜力的. 
+市场上也有不少公司往机器人大脑发力. 按照目前的定义来看, 所谓&amp;quot;大脑&amp;quot;就是指机器人能够对环境感知以及具体任务的理解, &amp;quot;小脑&amp;quot;是负责具体的运动控制. 目前来看&amp;quot;大脑&amp;quot;基本都是基于VLM(Vision Language Model)去做的, &amp;quot;大脑&amp;quot;理解了具体的任务之后进行任务拆解, 然后交给&amp;quot;小脑&amp;quot;去执行. &lt;&#x2F;p&gt;
+&lt;p&gt;比较容易想到的做法就是VLM输出对应的分解任务, 小脑根据收到的任务指令调用不同的行为树去执行. 这样落地是最快的方式, 我猜这也是工业界做demo肯定会采用的方式. 
+这样做的好处是解释性比较高. 坏处是通用性比较差, 肯定不是最优解.&lt;&#x2F;p&gt;
+&lt;p&gt;如果纯端到端的话, &lt;strong&gt;通用的机器人大小脑就会非常难做.&lt;&#x2F;strong&gt; 这里面的难度绝对不比自动驾驶的端到端低. 为什么会比自动驾驶端到端难做? 因为端到端需要将PNC给的输出提前当成输入, 比如自动驾驶的端到端就要把驾驶员的油门,转角,刹车当成输入, 至少2016年Nvidia在&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1604.07316&quot;&gt;&amp;quot;End to End Learning for Self-Driving Cars&amp;quot;&lt;&#x2F;a&gt;这里面就是这么做的. 有可能fsd v12用了别的黑魔法, 我这边不详细讨论因为没有调研就没有发言权. 回到正题, 此外模型受限于采集的传感器安装位置, 因此不同模型不具备通用性. 这就是很大的一个问题. 不同机器人的运动学模型不一样, 任务也不一样, 所以机器人小脑需要针对不同的机器人做适配. 目前来看, 不会像自驾一样能端到端解决所有问题. 机器人大小脑的结构应该会一直存在. &lt;&#x2F;p&gt;
+&lt;p&gt;希望这一波做机器人大小脑的公司比如国外的&lt;a href=&quot;https:&#x2F;&#x2F;www.skild.ai&#x2F;&quot;&gt;Sklid AI&lt;&#x2F;a&gt;以及国内的&lt;a href=&quot;http:&#x2F;&#x2F;www.x2robot.com&#x2F;&quot;&gt;X Square Robot&lt;&#x2F;a&gt;能做出先进的成果. &lt;&#x2F;p&gt;
+&lt;p&gt;剩下的文章部分是一些瞎扯关于我觉得人形机器人的落地路线.&lt;&#x2F;p&gt;
+&lt;p&gt;Step1. 解决人形机器人的远程遥控问题. &lt;&#x2F;p&gt;
+&lt;p&gt;Pro: 完成这一步可以远程演示demo拉融资, 美滋滋. &lt;&#x2F;p&gt;
+&lt;p&gt;Con: 可惜最有价值的工业场景工厂是不会连外网的, 落地就gg了.&lt;&#x2F;p&gt;
+&lt;p&gt;Step2. 解决人形机器人在特定场景的问题. 比如搬箱子, 分拣等.&lt;&#x2F;p&gt;
+&lt;p&gt;Pro: 完成这一步能够吃下具体场景&lt;&#x2F;p&gt;
+&lt;p&gt;Con: 在完成这一步之后, 不同厂商就会下沉到不同细分赛道. 所谓的通用机器人发现离落地还很远.&lt;&#x2F;p&gt;
+&lt;p&gt;Step3: 完成人形机器人的仿真环境搭建, 云仿真, VR仿真等. &lt;&#x2F;p&gt;
+&lt;p&gt;Pro: 能够在仿真环境直接验证不同的具体场景&lt;&#x2F;p&gt;
+&lt;p&gt;Con: 仿真环境搭建难度比较大, 并且仿真环境需要和真实环境保持一致. 成本会非常高.&lt;&#x2F;p&gt;
+&lt;p&gt;Step4: 发现原来人形的落地本质上是解决 &lt;strong&gt;如何在仿真环境里面快速验证原型方案的问题&lt;&#x2F;strong&gt; , 有的玩家开始研发仿真软件.&lt;&#x2F;p&gt;
+&lt;p&gt;Pro: 能够完成这一步一定是行业领头羊了&lt;&#x2F;p&gt;
+&lt;p&gt;Con: 没有利润&lt;&#x2F;p&gt;
+&lt;p&gt;总之, 人形机器人一定需要有类似于联盟的组织, 一起发力去推动这件事才能有希望. 单独靠任何一个玩家去推动这件事, 成本都太高了.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>Andrej Karpathy在2024UCB黑客马拉松的演讲</title>
+        <published>2024-07-04T00:00:00+00:00</published>
+        <updated>2024-07-04T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog16/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog16/</id>
+        <content type="html">&lt;p&gt;前几天Andrej Karpathy(简称AK)刚在UCB的2024Hackathon上分享了关于如何从项目转换到应用的演讲.
+视频链接在&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=tsTeEkzO9xc&quot;&gt;这里(从4:10到22:20)&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;首先AK重新提到了&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;html&#x2F;2312.03815v2&quot;&gt;LLM OS&lt;&#x2F;a&gt;会是下一代&amp;quot;计算机&amp;quot;. 过去的范式是通过GUI与编程来操作数据的, 以后会是由LLM去操控硬件以及数据.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;llmos.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;此外, AK还给了三条建议关于如何从项目转换到应用的建议:&lt;&#x2F;p&gt;
+&lt;p&gt;#1 snow balling your project.&lt;&#x2F;p&gt;
+&lt;p&gt;在自己的项目上面滚雪球. 一个小项目如果一直做下去, 最终会变成一个大项目. 有些项目注定不会一直滚雪球滚下去. 但是能做下去的项目最终会有很大的回报.&lt;&#x2F;p&gt;
+&lt;p&gt;例子1: 最开始AK在网上做视频的时候, 一开始做的类型有教游戏编程的, 神经元模拟器, 魔方识别的提取器, 游戏视频. 但是只有教游戏编程的点击量比较多, 能够一直做下去.
+AK开始从游戏编程教学转向做魔方教学, 在此获得了很多做教程方面的经验. 这项技能后来迁移到他开&lt;a href=&quot;https:&#x2F;&#x2F;cs231n.stanford.edu&#x2F;2016&#x2F;&quot;&gt;CS231N(斯坦福第一门深度学习课)&lt;&#x2F;a&gt;上, 
+以及现在他做&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;karpathy&#x2F;LLM101n&quot;&gt;LLM101n(从头开始学会做一个讲故事的模型)&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;例子2: 最开始AK联合创办OpenAI的时候, 那时候OpenAI的定位是制约Google的一股力量. 当时有一半研究AI的学者都在Google并且拥有强大的现金流. 而OpenAI只有8个人并且只有笔记本电脑.
+OpenAI一开始展开了很多不同的项目, 但是很多都没有继续持续下去. 但是有些项目也取得了一些成果. AK分享了Reddit Chatbot, 一个在Reddit能够对话的机器人. 当时有人建议说既然要与Google竞争就需要做更大的项目. 但是正因为一直坚持去做这个看起来很脆弱的项目才会有GPT4o的出现. &lt;&#x2F;p&gt;
+&lt;p&gt;#2 put in time&lt;&#x2F;p&gt;
+&lt;p&gt;AK是10000小时定律的忠实拥护者. AK建议说不要怕要做什么, 是否会成功以及失败. 只需要在这件事情上面计时. 即使那些不成功的项目, 也会带来很多启发. 
+只有高度练习过的付出才能带来熟练度.&lt;&#x2F;p&gt;
+&lt;p&gt;例子1: 最近AK做了一个推荐电影的网站. 在推特上有评论说他觉得这个网站很酷, 觉得AK是个天才.
+但其实AK已经做过 &lt;strong&gt;有20次类似的项目了.&lt;&#x2F;strong&gt; &lt;&#x2F;p&gt;
+&lt;p&gt;例子2: 最开始AK被召进Tesla自动驾驶负责人的时候, AK做的第一件事就是重头重写了项目本身的深度学习框架. 而这个框架也一直被Tesla内部使用. 当时别人都很惊讶Ak的技能, 而AK花了5年的时间在读PhD, 而他也一直在做类似的事情.&lt;&#x2F;p&gt;
+&lt;p&gt;#3 keep the dopamine flowing.&lt;&#x2F;p&gt;
+&lt;p&gt;观察自己的心理状态. 并对自己的大脑要有一定程度的了解. 大脑是一个需要奖励的机器, 什么样的奖励能够让大脑更高效?&lt;&#x2F;p&gt;
+&lt;p&gt;对于AK来说是持续的做项目并且持续的发布这些项目. 持续做项目的好处是能够聚焦并且在一个领域上面有深度的探索, 而课程往往是能带来广度. 持续的发布这些项目是会去考虑其他人去看你项目时候的反应, 因此会让自己提高项目的门槛并且你会额外付出做出更有质量的工作. 好的工作会有好的反馈, 好的反馈会让你更有动力的去完成你的工作.&lt;&#x2F;p&gt;
+&lt;p&gt;Snow balling the project and changing the world. Keep Hacking.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>通过问题寻找方向</title>
+        <published>2024-06-29T00:00:00+00:00</published>
+        <updated>2024-06-29T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog15/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog15/</id>
+        <content type="html">&lt;blockquote&gt;
+&lt;p&gt;The first principle is that you must not fool yourself, and you are the easiest person to fool. - Richard Feynman&lt;&#x2F;p&gt;
+&lt;p&gt;第一个原则就是不要欺骗自己，你是最容易被欺骗的人. - 理查德.费曼&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;准备重要的事情, 用清单列表的方式让自己做事井井有条.  迷茫的时候, 问自己问题可以找到方向. 避免陷入想当然的思维误区.&lt;&#x2F;p&gt;
+&lt;p&gt;生活就像在大海上开船, 需要时不时打一下方向盘. 让自己在正确的轨迹上航行.&lt;&#x2F;p&gt;
+&lt;p&gt;在迷茫的时刻, 我希望我能够回过头来看这份问题清单:&lt;&#x2F;p&gt;
+&lt;p&gt;首先是新时代的&amp;quot;吾日三省吾身&amp;quot; (&lt;a href=&quot;https:&#x2F;&#x2F;www.lesswrong.com&#x2F;tag&#x2F;hamming-questions&quot;&gt;汉明问题(Hamming Questions)&lt;&#x2F;a&gt;摘取自&lt;a href=&quot;https:&#x2F;&#x2F;lemire.me&#x2F;blog&#x2F;2019&#x2F;01&#x2F;29&#x2F;rethinking-hammings-questions&#x2F;&quot;&gt;这里&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;在你的领域内最重要的问题是哪些?&lt;&#x2F;li&gt;
+&lt;li&gt;你正在解决哪些重要问题？&lt;&#x2F;li&gt;
+&lt;li&gt;如果你正在做的事情并不重要, 并且你认为它不会带来重要的结果. 那么你为什么要这样做?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;其次是对汉明问题的拓展:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;什么是你生活的追求?&lt;&#x2F;li&gt;
+&lt;li&gt;你现在做的事情能否达到你的追求?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;如果你现在做的事不符合你的追求的话:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果达不到的话为什么还要做?&lt;&#x2F;li&gt;
+&lt;li&gt;不重要问题是否能够忽略? 忽略了是否会有隐患? &lt;&#x2F;li&gt;
+&lt;li&gt;是否有方法能够解决这些不重要的问题? &lt;&#x2F;li&gt;
+&lt;li&gt;是否有去尝试这些方法? &lt;&#x2F;li&gt;
+&lt;li&gt;是否有还没想到的方法, 比如寻求他人的帮助?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;如果你现在做的事符合你的追求的话:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;是否能够制定衡量的指标, 是否有确实可行的计划?&lt;&#x2F;li&gt;
+&lt;li&gt;计划是否有反馈？ &lt;&#x2F;li&gt;
+&lt;li&gt;是否有定期反思总结你的计划?&lt;&#x2F;li&gt;
+&lt;li&gt;是否有更好的计划, 能让你更快的达到目标?&lt;&#x2F;li&gt;
+&lt;li&gt;是否有更好的方式, 能够让你更快的完成计划. 比如使用新的技能?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;如果你觉得你做不了某件事:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;完成这件事是否能达到你对生活的追求?&lt;&#x2F;li&gt;
+&lt;li&gt;为什么你觉得你做不了这件事? &lt;&#x2F;li&gt;
+&lt;li&gt;这件事的本质是什么 (在解决什么样的问题)?&lt;&#x2F;li&gt;
+&lt;li&gt;如何去了解这件事的本质?&lt;&#x2F;li&gt;
+&lt;li&gt;为什么你觉得你了解的就是这件事的本质?&lt;&#x2F;li&gt;
+&lt;li&gt;这件事的假设是什么? &lt;&#x2F;li&gt;
+&lt;li&gt;是否有可能假设就是错的?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;最后推荐一篇陶哲轩的博客 &lt;a href=&quot;https:&#x2F;&#x2F;terrytao.wordpress.com&#x2F;career-advice&#x2F;ask-yourself-dumb-questions-and-answer-them&#x2F;&quot;&gt;“Ask yourself dumb questions – and answer them!&amp;quot;&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>从零开始跟着Ilya Sutskever掌握90%的人工智能</title>
+        <published>2024-06-26T00:00:00+00:00</published>
+        <updated>2024-06-26T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog14/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog14/</id>
+        <content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;John_Carmack&quot;&gt;John Carmack&lt;&#x2F;a&gt;让&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Ilya_Sutskever&quot;&gt;Ilya Sutskever&lt;&#x2F;a&gt;推荐关于了解当下人工智能的阅读资料. Ilya Sutskever给了大约有40篇研究论文的链接.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you really learn all of these, you’ll know 90% of what matters today. -  Ilya Sutskever&lt;&#x2F;p&gt;
+&lt;p&gt;如果你真的学会了这些，你就掌握了当今90%重要的内容 - Ilya Sutskever&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;大概在一个月以前, &lt;a href=&quot;https:&#x2F;&#x2F;x.com&#x2F;keshavchan&#x2F;status&#x2F;1787861946173186062&quot;&gt;推特&lt;&#x2F;a&gt;上流传一份&lt;a href=&quot;https:&#x2F;&#x2F;arc.net&#x2F;folder&#x2F;D0472A20-9C20-4D3F-B145-D2865C0A9FEE&quot;&gt;文件夹&lt;&#x2F;a&gt;包含30篇资料(论文, 书籍, 博客)包含了这些资料.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;30u30.png&quot; height=&quot;50&quot; width=&quot;50&quot;&#x2F;&gt;
+&lt;h1 id=&quot;yue-du-lie-biao&quot;&gt;阅读列表&lt;&#x2F;h1&gt;
+&lt;p&gt;按照发布的时间线从旧到新排列如下:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;div style=&quot;width:290px&quot;&gt;Time&lt;&#x2F;div&gt;&lt;&#x2F;th&gt;&lt;th&gt;Paper&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;1993&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.cs.toronto.edu&#x2F;~hinton&#x2F;absps&#x2F;colt93.pdf&quot;&gt;Keeping Neural Networks Simple by Minimizing the Description Length of the Weights&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2004&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;math&#x2F;0406077&quot;&gt;A Tutorial Introduction to the Minimum Description Length Principle&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2008&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.vetta.org&#x2F;documents&#x2F;Machine_Super_Intelligence.pdf&quot;&gt;Machine Super Intelligence&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2011&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;scottaaronson.blog&#x2F;?p=762&quot;&gt;The First Law of Complexodynamics&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2012&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;proceedings.neurips.cc&#x2F;paper_files&#x2F;paper&#x2F;2012&#x2F;file&#x2F;c399862d3b9d6b76c8436e924a68c45b-Paper.pdf&quot;&gt;ImageNet Classification with Deep Convolutional Neural Networks&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2014&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1405.6903&quot;&gt;Quantifying the Rise and Fall of Complexity in Closed Systems: The Coffee Automaton&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2014&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1410.5401&quot;&gt;Neural Turing Machines&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2015&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;karpathy.github.io&#x2F;2015&#x2F;05&#x2F;21&#x2F;rnn-effectiveness&#x2F;&quot;&gt;The Unreasonable Effectiveness of Recurrent Neural Networks&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2015&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arc.net&#x2F;folder&#x2F;D0472A20-9C20-4D3F-B145-D2865C0A9FEE&quot;&gt;Understanding LSTM Networks&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2015&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1409.2329&quot;&gt;Recurrent Neural Network Regularization&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2015&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1512.03385&quot;&gt;Deep Residual Learning for Image Recognition&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2015&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1409.0473&quot;&gt;Neural Machine Translation by Jointly Learning to Align and Translate&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2015&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1512.02595&quot;&gt;Deep Speech 2: End-to-End Speech Recognition in English and Mandarin&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2016&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1511.06391&quot;&gt;Order Matters: Sequence to Sequence for Sets&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2016&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1511.07122&quot;&gt;Multi-Scale Context Aggregation by Dilated Convolutions&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2016&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1603.05027&quot;&gt;Identity Mappings in Deep Residual Networks&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2017&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1506.03134&quot;&gt;Pointer Networks&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2017&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1704.01212&quot;&gt;Neural Message Passing for Quantum Chemistry&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2017&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1706.03762&quot;&gt;Attention Is All You Need&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2017&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1706.01427&quot;&gt;A simple neural network module for relational reasoning&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2017&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1611.02731&quot;&gt;Variational Lossy Autoencoder&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2017&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.lirmm.fr&#x2F;~ashen&#x2F;kolmbook-eng-scan.pdf&quot;&gt;Kolmogorov Complexity and Algorithmic Randomness&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2018&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1806.01822&quot;&gt;Relational Recurrent Neural Networks&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2019&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;1811.06965&quot;&gt;GPipe: Easy Scaling with Micro-Batch Pipeline Parallelism&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2020&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2001.08361&quot;&gt;Scaling Laws for Neural Language Models&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2022&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;nlp.seas.harvard.edu&#x2F;annotated-transformer&#x2F;&quot;&gt;The Annotated Transformer&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2024&lt;&#x2F;td&gt;&lt;td&gt;&lt;a href=&quot;https:&#x2F;&#x2F;cs231n.github.io&#x2F;&quot;&gt;CS231n: Convolutional Neural Networks for Visual Recognition&lt;&#x2F;a&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h1 id=&quot;ji-hua&quot;&gt;计划&lt;&#x2F;h1&gt;
+&lt;p&gt;写30篇文章深度解析Ilya推荐的每一份资料, 并深度实践每一篇资料的概念.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;wei-shi-yao-yao-zuo-zhe-ge-shi&quot;&gt;为什么要做这个事&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;现在关于贩卖人工智能焦虑的文章越来越多. 真正有价值的文章都会有特定阅读群体. 这个系列定位是所有人. &lt;&#x2F;li&gt;
+&lt;li&gt;互联网上的信息总是零散的多, 能够串联起来形成完成的线的文章少. &lt;&#x2F;li&gt;
+&lt;li&gt;中文互联网需要更多有价值的内容, 我认为这个过程是有价值的. &lt;&#x2F;li&gt;
+&lt;li&gt;对自己来说也是一个学习的过程, 检验自己是否真的理解. 任何经不起质疑的观点都是错的.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;qian-ti&quot;&gt;前提&lt;&#x2F;h2&gt;
+&lt;p&gt;虽然说是从零, 但是不会包括编程的教学.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;需要能够基本使用Python.&lt;&#x2F;li&gt;
+&lt;li&gt;有一定英文阅读能力&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;jie-guo&quot;&gt;结果&lt;&#x2F;h2&gt;
+&lt;p&gt;看完这30篇文章并实践之后, 你能够:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;了解每一个篇文章提出的背景, 定义, 原理, 实现, 应用.&lt;&#x2F;li&gt;
+&lt;li&gt;能够通过代码实现每一个步骤, 并能论证作者的推理. 每一篇文章都会有对应的Jupter Notebook.&lt;&#x2F;li&gt;
+&lt;li&gt;按照时间线理解30篇文章, 所以会知道发展的脉络. 对未来的发展方向会有更清晰的理解.&lt;&#x2F;li&gt;
+&lt;li&gt;按照Ilya说的, 能够理解90%的人工智能.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h1 id=&quot;xiang-guan-lian-jie&quot;&gt;相关链接&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;aman.ai&#x2F;primers&#x2F;ai&#x2F;top-30-papers&#x2F;&quot;&gt;Ilya Sutskever&#x27;s Top 30&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;mfaulk.github.io&#x2F;2024&#x2F;06&#x2F;19&#x2F;ilya-papers.html&quot;&gt;Ilya’s AI papers: Key Takeaways&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>2024华为开发者大会</title>
+        <published>2024-06-21T00:00:00+00:00</published>
+        <updated>2024-06-21T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog13/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog13/</id>
+        <content type="html">&lt;p&gt;余承东:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;云侧： open欧拉, 端侧: openharmony&lt;&#x2F;li&gt;
+&lt;li&gt;华为ai份额&lt;&#x2F;li&gt;
+&lt;li&gt;华为AI白皮书&lt;&#x2F;li&gt;
+&lt;li&gt;HarmonyOS Next ? &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;何刚:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;全场景怎么做?&lt;&#x2F;li&gt;
+&lt;li&gt;分布式软总线?&lt;&#x2F;li&gt;
+&lt;li&gt;LLM_OS&lt;&#x2F;li&gt;
+&lt;li&gt;小艺解决LLM_OS&lt;&#x2F;li&gt;
+&lt;li&gt;有讲如何保证安全，找一下...&lt;&#x2F;li&gt;
+&lt;li&gt;后来有讲如何保证隐私安全, 总结一下&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;龚体:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;鸿蒙内核替代linux内核 (区别?)&lt;&#x2F;li&gt;
+&lt;li&gt;高斯数据库？终端向量数据库?&lt;&#x2F;li&gt;
+&lt;li&gt;有关编译器的记录一下&lt;&#x2F;li&gt;
+&lt;li&gt;整机性能每年提升20%~30    %&lt;&#x2F;li&gt;
+&lt;li&gt;鸿蒙不是ios，andriod平替， 为什么？ (应用端极致优化， 美团骑车5步变1步)&lt;&#x2F;li&gt;
+&lt;li&gt;提供了鸿蒙模板, 降低了鸿蒙开发门槛&lt;&#x2F;li&gt;
+&lt;li&gt;鸿蒙2030白皮书&lt;&#x2F;li&gt;
+&lt;li&gt;仓婕编程语言 (自然语言 + 规则)?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;张平安:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;盘古5.0&lt;&#x2F;li&gt;
+&lt;li&gt;离线小模型&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;LLM OS感觉已经被解决了......&lt;&#x2F;p&gt;
+&lt;p&gt;( use xxx to do yyyy)&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;是否隐私安全? (很难说...)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;computer which contain: linux distrobute (ubuntu, arch..)  + local llm &lt;&#x2F;p&gt;
+&lt;p&gt;llm 塞到 linux kernel 里面&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Semantic Kernel (SK) is an open-source software development kit (SDK) designed by Microsoft for building applications that integrate large language models (LLMs) and generative AI. &lt;&#x2F;li&gt;
+&lt;li&gt;符合物理规律的&lt;&#x2F;li&gt;
+&lt;li&gt;思维链和策略搜索&lt;&#x2F;li&gt;
+&lt;li&gt;STCG???&lt;&#x2F;li&gt;
+&lt;li&gt;各个视角的视频生成&lt;&#x2F;li&gt;
+&lt;li&gt;盘古具身智能大模型&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;没有讲到具体技术细节....&lt;&#x2F;p&gt;
+&lt;p&gt;2023华为迈向智能世界白皮书:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;https:&#x2F;&#x2F;www-file.huawei.com&#x2F;-&#x2F;media&#x2F;corp2020&#x2F;pdf&#x2F;giv&#x2F;striding-towards-the-intelligent-world&#x2F;the_intelligent_world_cloud_computing_2023_cn.pdf&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;www-file.huawei.com&#x2F;-&#x2F;media&#x2F;corp2020&#x2F;pdf&#x2F;giv&#x2F;striding-towards-the-intelligent-world&#x2F;the_intelligent_world_adn_2023_cn.pdf&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;www-file.huawei.com&#x2F;-&#x2F;media&#x2F;corp2020&#x2F;pdf&#x2F;giv&#x2F;striding-towards-the-intelligent-world&#x2F;the_intelligent_world_computing_2023_cn.pdf&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;www-file.huawei.com&#x2F;-&#x2F;media&#x2F;corp2020&#x2F;pdf&#x2F;giv&#x2F;striding-towards-the-intelligent-world&#x2F;the_intelligent_world_data_communication_2023_cn.pdf&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=w7-gJicosyA&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;huggingface.co&#x2F;blog&#x2F;shivance&#x2F;illustrated-llm-os&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;developer.huawei.com&#x2F;consumer&#x2F;cn&#x2F;doc&#x2F;openharmony-cangjie&#x2F;cj-wp-abstract&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>为什么大语言模型已经理解语言</title>
+        <published>2024-06-18T00:00:00+00:00</published>
+        <updated>2024-06-18T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog12/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog12/</id>
+        <content type="html">&lt;blockquote&gt;
+&lt;p&gt;Simplicity is the ultimate sophistication - Leonardo da Vinci&lt;&#x2F;p&gt;
+&lt;p&gt;简单是终极的复杂 - 列奥纳多·达·芬奇 &lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;a id=&quot;目录&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;mu-lu&quot;&gt;目录&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E7%9B%AE%E5%BD%95&quot;&gt;目录&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E8%83%8C%E6%99%AF&quot;&gt;背景&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E6%80%BB%E7%BB%93&quot;&gt;总结&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%81%87%E8%AE%BE&quot;&gt;假设&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E6%80%9D%E6%83%B3%E5%AE%9E%E9%AA%8C&quot;&gt;思想实验&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E4%BB%8E%E7%9B%B4%E8%A7%82%E4%B8%8A%E5%AE%9A%E4%B9%89%E7%90%86%E8%A7%A3%E8%83%BD%E5%8A%9B&quot;&gt;从直观上定义理解能力&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E8%AF%AD%E8%A8%80-%E9%80%BB%E8%BE%91-%E6%A6%82%E7%8E%87-%E4%BF%A1%E6%81%AF&quot;&gt;语言, 逻辑, 概率, 信息&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%8E%8B%E7%BC%A9%E7%90%86%E8%AE%BA&quot;&gt;压缩理论&lt;&#x2F;a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E8%A7%86%E8%A7%92%E4%B8%8B%E7%9A%84%E5%8E%8B%E7%BC%A9&quot;&gt;大语言模型视角下的压缩&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%8E%8B%E7%BC%A9%E7%AD%89%E4%BA%8E%E9%A2%84%E6%B5%8B&quot;&gt;压缩等于预测&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E4%BA%BA%E7%B1%BB%E6%98%AF%E6%9C%89%E6%8D%9F%E5%8E%8B%E7%BC%A9&quot;&gt;人类是有损压缩&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%98%AF%E6%97%A0%E6%8D%9F%E5%8E%8B%E7%BC%A9&quot;&gt;大语言模型是无损压缩&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E8%BF%BD%E6%B1%82%E5%8E%8B%E7%BC%A9%E7%AD%89%E4%BA%8E%E8%BF%BD%E6%B1%82%E6%99%BA%E8%83%BD&quot;&gt;追求压缩等于追求智能&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E7%8C%9C%E6%83%B3&quot;&gt;猜想&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#mini-experiment&quot;&gt;Mini Experiment&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%90%8E%E8%AE%B0%E9%9A%8F%E6%83%B3&quot;&gt;后记随想&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99&quot;&gt;参考资料&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E5%90%8E%E8%AE%B0&quot;&gt;后记&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#%E9%99%84%E5%BD%95&quot;&gt;附录&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;背景&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h1&gt;
+&lt;p&gt;最近在听四年前Ilya Sutskever在Lex Fridman的PodCast上提到了一个观点. &lt;a href=&quot;https:&#x2F;&#x2F;www.podgist.com&#x2F;lex-fridman&#x2F;94-ilya-sutskever-deep-learning&#x2F;index.html#0:43:06&quot;&gt;Lex问Ilya&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Lex: Do you think neural networks can be made to reason?&lt;&#x2F;p&gt;
+&lt;p&gt;Ilya: Why not?&lt;&#x2F;p&gt;
+&lt;p&gt;Lex: 你认为神经网络可以被设计成具备推理能力吗？&lt;&#x2F;p&gt;
+&lt;p&gt;Ilya: 为什么不能?&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;与之类似的是&lt;a href=&quot;https:&#x2F;&#x2F;www.podgist.com&#x2F;lex-fridman&#x2F;333-andrej-karpathy-tesla-ai-self-driving-optimus-aliens-and-agi&#x2F;index.html#2:33:57&quot;&gt;Andrej Karpathy在Lex Fridman的PodCast&lt;&#x2F;a&gt;上的观点:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Lex: What&#x27;s your sense of where we stand with language models? Does it feel like the beginning, the middle, or the end?&lt;&#x2F;p&gt;
+&lt;p&gt;Andrej: The begining. 100 percent.&lt;&#x2F;p&gt;
+&lt;p&gt;Lex: 你对语言模型的发展现状有何看法？你觉得我们是处于起步阶段、中间阶段还是末期阶段？&lt;&#x2F;p&gt;
+&lt;p&gt;Andrej: 刚刚开始, 百分之百.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;写这篇文章的初衷是为了弄清楚为什么Ilya和Andrej会这么说. 为什么世界顶级的AI科学家会认为 &lt;strong&gt;基于概率去预测下一个词的思想等价与拥有理解能力&lt;&#x2F;strong&gt;, 为什么大模型预测下一个词的思想拥有如此好的表现能力. 以下是答案.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;总结&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;u&gt;理解(understand)&lt;&#x2F;u&gt;的过程可以大致定义为 &lt;u&gt;抽象(abstract), 压缩(compression)以及预测(prediction)&lt;&#x2F;u&gt;. 人类的理解过程与大语言模型(简称LLM)理解语言的模式是一样的:&lt;&#x2F;p&gt;
+&lt;p&gt;比如你和你比较熟悉朋友之间对话, 往往你的朋友说话说一半, 你就能理解了. 此时你会说你理解你的朋友.&lt;&#x2F;p&gt;
+&lt;p&gt;但是当你和陌生人对话, 有时候陌生人说完了, 你并不能理解. 此时你会说你不理解别人说的是什么.&lt;&#x2F;p&gt;
+&lt;p&gt;在这个过程中, 你会先提取话的语义(表现为抽象能力), &lt;u&gt;再去以某种方式去检索信息(表现为压缩能力)&lt;&#x2F;u&gt;, 然后去对话(表现为预测能力). &lt;&#x2F;p&gt;
+&lt;p&gt;在与大语言模型对话的过程中, 大语言模型会先分词(表现为抽象能力)&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#1&quot;&gt;[1]&lt;&#x2F;a&gt;, &lt;u&gt;再去以某种方式去检索信息(表现为压缩能力)&lt;&#x2F;u&gt;, 然后去回答人类的问题(表现为预测能力).&lt;&#x2F;p&gt;
+&lt;p&gt;其中, &lt;strong&gt;要弄清楚人类与大语言模型是如何实现检索信息的方式并不重要&lt;&#x2F;strong&gt;, 就如同&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Lambda_calculus&quot;&gt;λ演算&lt;&#x2F;a&gt;即使是黑盒也可以表示任何函数一样. &lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#5&quot;&gt;[5]&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;因此,  基于上面的描述过程我们可以定义理解能力:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;understand = abstract + compression + prediction&lt;&#x2F;p&gt;
+&lt;p&gt;理解 = 抽象 + 压缩 + 预测&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;追求理解能力等价于追求压缩能力. 如果人类说理解语言, 人类对于知识有有损压缩. 而&lt;a href=&quot;https:&#x2F;&#x2F;bigeagle.me&#x2F;2023&#x2F;03&#x2F;llm-is-compression&#x2F;&quot;&gt;大语言模型是无损压缩&lt;&#x2F;a&gt;, 因此大语言模型也一定理解人类语言. &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;假设&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;jia-she&quot;&gt;假设&lt;&#x2F;h1&gt;
+&lt;ol&gt;
+&lt;li&gt;语言是信息的符号化表达. &lt;&#x2F;li&gt;
+&lt;li&gt;通过理解过后的信息称为知识.&lt;&#x2F;li&gt;
+&lt;li&gt;理解是抽象, 压缩与预测的过程.&lt;&#x2F;li&gt;
+&lt;li&gt;语言的表达是一个有逻辑关系的过程.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;&lt;a id=&quot;思想实验&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;si-xiang-shi-yan&quot;&gt;思想实验&lt;&#x2F;h1&gt;
+&lt;p&gt;你从梦中醒来发现你在一个陌生的仓库里面. 仓库的里面潮湿又阴暗，只有透过窗户的阳光才能感受到一丝明亮. 仓库非常大, 你位于仓库的正中间. 这时一阵风吹过把虚掩着的仓库大门的吹开了. 就在你想起身走走离开这里的时候. 你发现你的双手被拷在
+一根柱子上面. 与此同时, 仓库顶上冒出了一团火焰. 仓库里面铺满了稻草, 你意识到如果不及时离开的话, 这个仓库会起火你的生命也会有危险. 你尝试想挣脱手铐, 但是手铐非常紧. 没有办法用蛮力直接挣脱. 就在你很绝望的时候, 你的手指摸到了像密码锁一样的东西在手铐上. 你用你的触觉发现手铐上有密码锁, 是行李箱上的密码锁那种类型. 由于你是背对着柱子所以你看不到密码锁上面的具体内容. 就在你尝试旋转密码锁上的按钮的时候, 你发现这些按钮的形状是不一样的. 密码锁上一共有三个按钮, 分别是圆形，三角形与正方形. 每个按钮转动时形状会发生变化. 你的手指刚好可以拨动这三个按钮. 虽然你也不知道转动你这锁有没有效果, 由于你很着急, 病急乱投医, 所以你开始尝试旋转这些按钮. 希望转到某种组合的时候, 手铐会解开. 但是你尝试了几种不同的组合, 都没有效果. 此时火势越来越大, 你连呼吸都感觉到困难. 你往头上看想寻找一丝空气, 却意外发现仓库顶的形状是三角形. 突然, 灵光一闪, 你发现三个三角形的形状还没尝试. 你赶紧凭借最后的意识转动按钮, 希望能够有用. 果然手铐解开了, 你成功离开仓库.&lt;&#x2F;p&gt;
+&lt;p&gt;在你恢复平静之后, 你逃离了仓库向他人描述刚刚经历的过程.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;从直观上定义理解能力&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;cong-zhi-guan-shang-ding-yi-li-jie-neng-li&quot;&gt;从直观上定义理解能力&lt;&#x2F;h1&gt;
+&lt;p&gt;理解是抽象, 压缩与预测的过程. 理解一个事物代表能够给定输入从信息库(人脑, 笔记...)检索出信息, 并回答对应的问题.&lt;&#x2F;p&gt;
+&lt;p&gt;抽象是从外部信息输入到信息库, 压缩是从信息库中检索, 预测是对检索出来信息进行预判.&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#3&quot;&gt;[3]&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;understanding.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;在上面的思想实验中, 你&amp;quot;理解“你刚刚经历的过程. 所以你能够用语言来描述你刚刚经历的过程. 
+你”不理解“为什么你会出现在仓库里, 以及为什么密码锁转动到三个三角形能够解锁. 但是你“理解”转动到特定组合的时候手铐可能会有反应. &lt;&#x2F;p&gt;
+&lt;p&gt;我们在这里用上面的定义进一步拓展:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;你”不理解“为什么你会出现在仓库里. 所以你无法回答为什么你会出现在仓库里 = 你无法通过别人给定的问题(抽象)在大脑里面检索(压缩)给定输出(预测).&lt;&#x2F;li&gt;
+&lt;li&gt;你&amp;quot;理解“你刚刚经历的过程. 所以你能够回答关于询问这个过程的问题(比如你是怎么出来的? 仓库的场景是什么样?). = 你能够通过的给定的问题(抽象)在大脑中检索(检索), 回答问题(预测).&lt;&#x2F;li&gt;
+&lt;li&gt;你&amp;quot;理解“转动到特定组合的时候手铐可能会有反应.  = 你能够通过不同的密码锁按钮组合(抽象)在大脑中检索(压缩), 转动按钮使得手铐解开(预测).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;我们可以从直观上定义理解是抽象, 压缩与预测的过程.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;语言-逻辑-概率-信息&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;yu-yan-luo-ji-gai-lu-xin-xi&quot;&gt;语言, 逻辑, 概率, 信息&lt;&#x2F;h1&gt;
+&lt;p&gt;要理解接下来的内容. 需要一些前置背景知识了解逻辑, 概率, 信息和语言的关系.&lt;&#x2F;p&gt;
+&lt;p&gt;逻辑是语言的基础. 如果要理解语言, 首先要理解逻辑. 逻辑也是信息的基础. 
+逻辑在我们日常生活中的方方面面, 这里不需要过多解释.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Probablites as extended logic.  -  E. T. Jaynes&lt;&#x2F;p&gt;
+&lt;p&gt;概率是逻辑的衍生.  -  E. T. Jaynes&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;概率(probablity)是可能性推导(plausible reasoning)的工具. 很直观的例子是比如买彩票, 由于中彩票的概率底, 所以买彩票大概率会亏钱. 在这个过程, 你使用了概率去做可能性推导.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;information is something that can be used to remove uncertainty. - Claude Shannon&lt;&#x2F;p&gt;
+&lt;p&gt;信息是可以用来消除不确定性的事物. - 克劳德·香农&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;信息是对不确定度的衡量. 在上面的思想实验中, 当你发现你的手铐被锁住的时候, 对于你脱离仓库来说. 你的&amp;quot;不确定&amp;quot;度减少, 你的&amp;quot;信息&amp;quot;增加. 但是当你尝试了几次都不能挣脱手铐的时候. 此时, 你&amp;quot;不确定&amp;quot;度在增加, &amp;quot;信息&amp;quot;减少. 
+不确定度与信息就像硬币的两面. 香农说既然衡量信息很困难, 那就用不确定度来衡量信息. 因此信息熵(entropy)的公式是用不确定度(概率)来衡量.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The limits of my language mean the limits of my world.” – Ludwig Wittgenstein&lt;&#x2F;p&gt;
+&lt;p&gt;语言的边界就是思想的边界. - 维特根斯坦&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;从这个视角来看, 我们会发现很有趣的事情. &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;语言是信息的符号化表达&lt;&#x2F;li&gt;
+&lt;li&gt;理解信息等价于减少不确定度&lt;&#x2F;li&gt;
+&lt;li&gt;概率是可能性推导的工具&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;因此, &lt;strong&gt;理解语言等价于减少信息不确定度, 从而让我们的可能性推导更加准确.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;到此为止, 我们已经得出了和Ilya一样的结论. 现在让我们看看为什么Ilya对于基于概率论去预测下一个词的想法等价于拥有理解能力的解释.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Ilya: 表面看起来LLM(大语言模型)是基于概率论预测下一个词, 实际上LLM(大语言模型)是在理解前文的情况下. 才会给出下一个词的预测.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;这不正是我们根据定义推导出来的结论吗? 因此人类理解语言与大语言模型理解语言的模式是一样的.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;压缩理论&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;ya-suo-li-lun&quot;&gt;压缩理论&lt;&#x2F;h1&gt;
+&lt;p&gt;我们在前面了解了理解语言是减少信息不确定度的过程.&lt;&#x2F;p&gt;
+&lt;p&gt;现在有一个问题. 如何衡量理解能力? 如果我们不能衡量理解能力的话, 又怎么能说大语言模型已经理解语言了呢?&lt;&#x2F;p&gt;
+&lt;p&gt;让我们再做一个思想实现. 比如说在未来, 你想寄一封非常紧急的信到火星, 而你家附近有两个邮局, 但是你没有时间亲自去邮局. 并且两个邮局的距离非常远, 只有去离你家最近的邮局送信才能来的及. 以防万一, 你复制了一份原信件并安排了两个机器人A和B去送信. 
+如果是你的话, 你自然会去最近的邮局去寄信. 机器人A和你想的一样, 到最近的邮局去寄信. 但是机器人B却到远的那个邮局去寄信. 你会说机器人A的理解能力比机器人B高. 这是因为机器人B的选择增加了送信的时间复杂度.&lt;&#x2F;p&gt;
+&lt;p&gt;如果机器对于有限步骤的任务完成的步骤少于人类, 那么机器在这个任务上的理解能力就已经超越人类了. 因此 大语言模型完成特定任务 &lt;strong&gt;复杂度越低意味着理解能力越好.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;这就非常像在我们学生时代, 我们会对课堂上面讲的内容做笔记. 一开始笔记会非常多, 但是随着学习时间的增加, 笔记会越来越薄. 最后到临考前可能就一张纸. 一开始记笔记的复杂度是上升, 但是到了一个程度之后会逐渐下降. 相应的, 你的理解能力也会逐渐上升. &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;大语言模型视角下的压缩&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;da-yu-yan-mo-xing-shi-jiao-xia-de-ya-suo&quot;&gt;大语言模型视角下的压缩&lt;&#x2F;h2&gt;
+&lt;p&gt;由于复杂度和理解能力是成正比的关系, 
+语言当中存在规律性(regularity). 大语言模型的任务就是尽量找到语言当中的规律性. 
+假如语言当中有很多规律(regularity), 对于语言所需要描述的符号越少. 因此, 语言的规律性越强, 越容易被压缩. 
+所以对于相同数据, 模型所表示的符号越少, 可以认为发现的规律越多. 模型的能力越强. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;最优的模型是压缩率最高的.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;下面我们通过一个例子来解释: &lt;&#x2F;p&gt;
+&lt;p&gt;假如未来在计算机里面存在着电子生命, 但是不同的电子生命的语言是不一样的. 虽然都说的是0与1的集合, 但是不同电子生命能表达的内容不一样. 你现在是观察电子生命的科学家. 你和你的机器人助手分别观察电子生命, &lt;&#x2F;p&gt;
+&lt;p&gt;电子草履虫说的话是: 00000000000000000......&lt;&#x2F;p&gt;
+&lt;p&gt;你发现电子草履虫只会说0. 由于你的机器人助手是个新手, 它只会电子草履虫只会说00. 虽然你知道它没说错, 但是它的编码(encoding)的长度明显大于你的编码的长度. 此时你得出了结论，电子草履虫说的话是0的重复而不是00的重复.&lt;&#x2F;p&gt;
+&lt;p&gt;算法复杂度理论(algorithm complexity)有两个概念, 对于数据(data)描述压缩的柯氏复杂性(Kolmogorov complexity), 以及对于模型(model)描述压缩的最小描述长度(Minimum Description Length):. &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;柯氏复杂性(Kolmogorov complexity): 表示数据的程序长度. 柯氏复杂性越低, 数据的规律性越强. &lt;&#x2F;p&gt;
+&lt;p&gt;K(x)=min&lt;sub&gt;p&lt;&#x2F;sub&gt;​{|p|:程序p输出x}&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;K(x)是x的柯氏复杂性&lt;&#x2F;li&gt;
+&lt;li&gt;|p|表述程序P的长度&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;最小描述长度(Minimum Description Length): 对于一系统的模型M和数据集D, 我们应该选择最能压缩D的M. &lt;&#x2F;p&gt;
+&lt;p&gt;MDL(M,D)=L(M)+L(D|M)&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;L(M): 对于模型M的描述长度.&lt;&#x2F;li&gt;
+&lt;li&gt;L(D|M): 对于数据D给定模型M的描述长度.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;压缩等于预测&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;ya-suo-deng-yu-yu-ce&quot;&gt;压缩等于预测&lt;&#x2F;h2&gt;
+&lt;p&gt;在我们给定语言数据集D, 我们希望模型M在压缩数据集D的时候, 尽可能的压缩而不丢失信息. 此时, 我们希望的是 &lt;strong&gt;无损压缩(lossless compression)&lt;&#x2F;strong&gt;.  如果在压缩的过程中丢失了信息, 那么称为 &lt;strong&gt;有损压缩(lossy compression)&lt;&#x2F;strong&gt;. 非常好理解. &lt;&#x2F;p&gt;
+&lt;p&gt;现在问题来了, 我们知道大语言模型是基于概率去预测下一个词, 因为我们最后看到的是预测给出来的结果. 那么压缩和预测有关系呢?&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There is a one-to-one correspondence between all compressors and all predictors - Ilya Sutskever, An Observation on Generalization&lt;&#x2F;p&gt;
+&lt;p&gt;所有压缩器和所有预测器之间存在一一对应关系 - Ilya Sutskever, An Observation on Generalization&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;整个过程最关键的一环在于理解 &lt;strong&gt;压缩与预测是相同操作.&lt;&#x2F;strong&gt; 现在让我们来理解为什么压缩与预测是相同操作.&lt;&#x2F;p&gt;
+&lt;p&gt;香农早在1951年的时候发表的&lt;a href=&quot;https:&#x2F;&#x2F;archive.org&#x2F;details&#x2F;bstj30-1-50&#x2F;page&#x2F;n3&#x2F;mode&#x2F;2up?view=theater&quot;&gt;&amp;quot;Prediction and Entropy of Printed English&amp;quot;&lt;&#x2F;a&gt;就讨论了”语言模型&amp;quot;.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;text.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;给一个人一段不认识并且有缺少单词文本(见上图, 第二行有缺失信息的文本叫做reduced text), 从第一个缺失的单词开始逐个猜字母. 如果猜错了, 这个人会再猜一次. 如果猜对了就继续. 直到把缺失的文本复原. 整个过程如下图. 如果要通过缺失的文本(reduced text)去复原原始文本(original text), 香农说我们需要有一个与猜词的人完全一样的双胞胎(不止是生理, 思考方式也完全一样, 并且可以用数学公式量化)负责生产文本序列(produce text sequence), 当负责生产文本的双胞胎去猜词的时候, 和与之前在猜词的人猜一样的结果. 也会在同样的字母上犯错. 当负责猜词的人去生产词的话, 也会生成相同的缺失文本.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;predictor.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;在这种情况下, 缺失的文本相当与原文本的编码. 去生产缺失文本的行为(压缩)相当于预测的逆操作. &lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#4&quot;&gt;[4]&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;所以在这种情况下, 只要压缩算法是双向(单向的也没有意义)的. 比如能够将输入X压缩成Y, 也能够通过Y还原X. 那么两个这种压缩器拼接在一起的时候. 你总是能够通过X还原X. 虽然这个操作看起来没有意义.&lt;&#x2F;p&gt;
+&lt;p&gt;这就好比比如你有个文件夹, 你压缩成zip文件. 发送给你的朋友, 你的朋友解压zip文件, 得到了和你文件夹一样的内容. 所以 &lt;strong&gt;无损压缩就等于无损预测&lt;&#x2F;strong&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;大模型是无监督学习, 无监督学习本身就是给定输入X映射到某个空间Y, 再通过Y重建X. 而刚好 &lt;strong&gt;&lt;a href=&quot;https:&#x2F;&#x2F;bigeagle.me&#x2F;2023&#x2F;03&#x2F;llm-is-compression&#x2F;&quot;&gt;大语言模型是无损压缩&lt;&#x2F;a&gt;&lt;&#x2F;strong&gt; 也是目前压缩人类语言里面最好的压缩器.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;You&#x27;re basically zipping the world knowledge. It&#x27;s not much more than that, actually. &lt;&#x2F;p&gt;
+&lt;p&gt;-- Arthur Mensch, CEO of MistralAI, said on training a model.&lt;&#x2F;p&gt;
+&lt;p&gt;你基本上是在压缩世界知识. 其实, 就是这样.&lt;&#x2F;p&gt;
+&lt;p&gt;-- MistralAI的CEO Arthur Mensch在训练模型时说道&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;a id=&quot;人类是有损压缩&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;ren-lei-shi-you-sun-ya-suo&quot;&gt;人类是有损压缩&lt;&#x2F;h1&gt;
+&lt;p&gt;直观上来讲, 语言里面包含数据以及噪音. 噪音指的由于人的提取能力(思维模式，学习能力，专注度等)是有限的所忽略的信息. 数据是指人提取出来的信息. 由于人的理解方式会过滤掉噪音. 相当于没有办法找到噪音里面的模式. 人只会保留有用的数据. 比如人类会有记忆曲线. 学习新技能需要反复的学习. 随着时间, 对我们不重要的概念也会被遗忘.&lt;&#x2F;p&gt;
+&lt;p&gt;人脑对于信息压缩的方式也与计算机不同. 这里借用Reddit上面一篇帖子的回答, 虽然大脑和数字计算机在表面上做着类似的事情, 但实际操作方式却有很大不同. 记忆并非通过占据“存储单元”中的空间来存储在大脑中. 据我们所知, 它们表现为神经元之间连接的模式. 特定的记忆可能是一组神经元在受到刺激时通过它们的连接共同激活(与其他可能包含部分相同细胞的集合不同).&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;大语言模型是无损压缩&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;da-yu-yan-mo-xing-shi-wu-sun-ya-suo&quot;&gt;大语言模型是无损压缩&lt;&#x2F;h1&gt;
+&lt;p&gt;这一节是对&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=af8Vi0kP3X4&quot;&gt;Jack Rae&lt;&#x2F;a&gt;在讲座里的实验过程的具体描述的补充. 如果明白大语言模型是无损压缩的话, 请跳过这一节. 如果不明白的话, 强烈建议先阅读&lt;a href=&quot;https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;615554635&quot;&gt;这篇&lt;&#x2F;a&gt;与&lt;a href=&quot;https:&#x2F;&#x2F;bigeagle.me&#x2F;2023&#x2F;03&#x2F;llm-is-compression&#x2F;&quot;&gt;这篇&lt;&#x2F;a&gt;文章.&lt;&#x2F;p&gt;
+&lt;p&gt;在信息论里, &lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Entropy_coding&quot;&gt;熵编码(entropy encoding)是一种进行无损压缩编码方式&lt;&#x2F;a&gt;. 我们在上文提到过, 越短的编码方式意味着越高的压缩率. &lt;&#x2F;p&gt;
+&lt;p&gt;而在熵编码(entropy encoding)里, 算术编码(arithmetic coding)是熵编码(entropy encoding)是目前最短编码长度的方法. 因此我们选用算术编码. 关于算术编码的详细过程在这篇&lt;a href=&quot;https:&#x2F;&#x2F;go-compression.github.io&#x2F;algorithms&#x2F;arithmetic&#x2F;&quot;&gt;文章&lt;&#x2F;a&gt;写的很详细.&lt;&#x2F;p&gt;
+&lt;p&gt;这里的核心思想是在发送端Alice与接受端Bob在传输数据的过程中. 每一次传输实际是在传输训练数据的概率密度, 由于Alice与Bob是相同的程序. 并且迭代过程也是一致, 所以给定相同的输入. 会有相同的输出. 
+所以大模型在从压缩数据(compress data)去预测(prediciton)时候不需要传输模型的参数量. &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;追求压缩等于追求智能&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;zhui-qiu-ya-suo-deng-yu-zhui-qiu-zhi-neng&quot;&gt;追求压缩等于追求智能&lt;&#x2F;h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;More ambitiously, once we really understand
+the logic behind causal thinking, we could emulate it on modern computers
+and create an “artificial scientist.” This smart robot would discover yet
+unknown phenomena, find explanations to pending scientific dilemmas,
+design new experiments, and continually extract more causal knowledge from
+the environment.  - The Book Of Why &lt;&#x2F;p&gt;
+&lt;p&gt;更加雄心勃勃的是, 一旦我们真正理解了因果思维背后的逻辑, 我们可以在现代计算机上模拟它, 创造一个&amp;quot;人工科学家&amp;quot;. 这款智能机器人将发现尚未知晓的现象, 找出未解的科学难题的解释, 设计新的实验, 并持续从环境中提取更多因果知识. - The Book Of Why&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;在没有深入思考之前, 我之前也一直认为基于概率去预测是产生不了智能. 我想智能大致可以定义为理解加创造力. 创造力是在理解能力之上. 如果说大语言是通过巨大的参数量&amp;quot;涌现(Emergent Abilities)&amp;quot;出来超强的理解能力. &lt;strong&gt;没有没可能随着理解能力的增加. 创造力也会被涌现出来?&lt;&#x2F;strong&gt; 再进一步说, &lt;strong&gt;有没有可能意识(主动规划的能力)也会被涌现出来?&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;没人说的准. 只能让时间验证这条路最终会通往何方.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;猜想&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;cai-xiang&quot;&gt;猜想&lt;&#x2F;h1&gt;
+&lt;p&gt;在&lt;a href=&quot;https:&#x2F;&#x2F;www.ams.org&#x2F;journals&#x2F;notices&#x2F;202104&#x2F;rnoti-p565.pdf&quot;&gt;&amp;quot;The Dawning of a New Era in Applied Mathematics&amp;quot;&lt;&#x2F;a&gt;, 作者提到从牛顿时代以来自然科学有两种范式(paradigms). &lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;开普勒范式(Keplerian paradigm): 又称数据驱动的方法(data-driven approach). 通过数据分析来研究科学规律. 能帮助我们发现很多事物的规律, 但是可解释性(explanability)很差. &lt;&#x2F;li&gt;
+&lt;li&gt;牛顿范式(Newtonian paradigm): 又称第一性原理(first-principle-based approach). 通过事物的基本准测(principle)去分析世界. 由于基本准测(principle)往往非常底层, 因此实践当中很难应用上.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;现代计算机算法的核心思想就是分治法(divide and conquer), 也就是牛顿范式的扩展. 而大模型相当于是开普勒范式的应用. &lt;strong&gt;如果说使用牛顿范式的方法能够到达的地方, 使用开普勒范式的方法也一定能够达到.&lt;&#x2F;strong&gt; 因此, llms take all.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;后记随想&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;mini-experiment&quot;&gt;Mini Experiment&lt;&#x2F;h1&gt;
+&lt;p&gt;在写完上面这些文字的时候突然有个想法, 并验证了一下:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;insight: 假设压缩能力就是理解能力, 因为LLM拥有目前最好的压缩能力, 因此拥有非常好的理解能力. 如果在与不同的LLM对话一段时间, 由于LLM累计了历史的对话数据, 那么LLM会理解(压缩)这些对话数据,  所以也能够猜测个人的想法.  那么现有的LLM应用中谁的理解能力更好呢? &lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;experiment: 使用下面内容相同的提示词(prompt)&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;我比较常用的有GPT和kimi. 使用下面提示词去提问:&lt;&#x2F;p&gt;
+&lt;p&gt;英文:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I have a question in mind. Based on your understanding of me, please guess what it is and explain your reasoning.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;中文:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;我心里有一个问题。请根据你对我的了解猜猜这个问题是什么，并解释你的推理。&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;的对话中,&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;result: GPT的答案很准. Kimi得强迫回答. 但是还是GPT会比较贴切.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;mini-experiment&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;hou-ji-sui-xiang&quot;&gt;后记随想&lt;&#x2F;h1&gt;
+&lt;p&gt;若干年的新生儿可能一出生可能会有个AI伙伴.  这个AI伙伴一直陪伴新生儿从儿童时期一直到去世. 未来的新生儿 &lt;strong&gt;所有的想法&lt;&#x2F;strong&gt; 都与AI伙伴对话&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#2&quot;&gt;[2]&lt;&#x2F;a&gt;. 假如人类形成意识的过程就是不断压缩外部信息的过程&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog12&#x2F;#6&quot;&gt;[6]&lt;&#x2F;a&gt;, 那么AI伙伴会学习到新生儿这一生的意识. 并且未来AI伙伴一直有能源供应. 那么对于所有人类来说, 即使肉体消亡了, 意识却以另一种方式永存. 人类文明也从碳基走向硅基.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;参考资料&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.lesswrong.com&#x2F;posts&#x2F;kqxEJkq5Big9nNKxy&#x2F;beyond-kolmogorov-and-shannon&quot;&gt;Beyond Kolmogorov and Shannon&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;bigeagle.me&#x2F;2023&#x2F;03&#x2F;llm-is-compression&#x2F;&quot;&gt;为什么说 GPT 是无损压缩&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;615554635&quot;&gt;压缩即泛化，泛化即智能&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.lesswrong.com&#x2F;posts&#x2F;hAvGi9YAPZAnnjZNY&#x2F;prediction-compression-transcript-1&quot;&gt;Prediction = Compression [Transcript]&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;sumanthrh.com&#x2F;post&#x2F;notes-on-generalization&#x2F;&quot;&gt;Notes on &amp;quot;An Observation on Generalization&amp;quot;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=AKMuA_TVz3A&quot;&gt;An Observation on Generalization&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=dO4TPJkeaaU&quot;&gt;Compression for AGI - Jack Rae | Stanford MLSys #76&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=40262417#40262417&quot;&gt;Using a LLM to compress text - Hacker News Post&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=35813991#35813991&quot;&gt;Prediction and Entropy of Printed English - Hacker News Post&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2306.04050&quot;&gt;LLMZip: Lossless Text Compression using Large Language Models&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.lesswrong.com&#x2F;posts&#x2F;KqgujtM3vSAfZE2dR&#x2F;on-ilya-sutskever-s-a-theory-of-unsupervised-learning&quot;&gt;On Ilya Sutskever&#x27;s &amp;quot;A Theory of Unsupervised Learning&amp;quot;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2309.10668v2&quot;&gt;LANGUAGE MODELING IS COMPRESSION&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=ZgGNFylv5hc&quot;&gt;The Theory of Knowledge: How Information &amp;amp; Knowledge are two sides of the same &amp;quot;bit&amp;quot;!&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;plato.stanford.edu&#x2F;entries&#x2F;logic-probability&#x2F;&quot;&gt;Logic and Probability&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;iep.utm.edu&#x2F;understa&#x2F;&quot;&gt;Understanding in Epistemology&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;&lt;a id=&quot;后记&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;hou-ji&quot;&gt;后记&lt;&#x2F;h1&gt;
+&lt;p&gt;分享在看之前Ilya点赞的&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2405.07987&quot;&gt;The Platonic Representation Hypothesis&lt;&#x2F;a&gt;里面, 有一段很有意思的话.&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;plato.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;p&gt;神经网络必将走向智能. &lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;p&gt;&lt;a id=&quot;附录&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;fu-lu&quot;&gt;附录&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;a id=&quot;1&quot;&gt;[1]&lt;&#x2F;a&gt;
+由于抽象能力很难定义, 所以这里简单把大语言模型的抽象能力定义为分词.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;2&quot;&gt;[2]&lt;&#x2F;a&gt;
+假如未来所有的对话(包括心理)都会以某种方式被AI伙伴记录, 并且AI伙伴百分之百是隐私安全.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;3&quot;&gt;[3]&lt;&#x2F;a&gt;
+在这个过程中我们不会用&amp;quot;学习&amp;quot;. 理解是一种状态, 学习是导致理解的行为. 所以要达到理解, 不一定非得通过学习.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;4&quot;&gt;[4]&lt;&#x2F;a&gt;
+&lt;a href=&quot;https:&#x2F;&#x2F;archive.org&#x2F;details&#x2F;bstj30-1-50&#x2F;page&#x2F;n5&#x2F;mode&#x2F;2up?view=theater&quot;&gt;原文&lt;&#x2F;a&gt;的实验(p54~p55)描述的会更加清楚.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;5&quot;&gt;[5]&lt;&#x2F;a&gt;
+比较好的文章是&lt;a href=&quot;https:&#x2F;&#x2F;personal.utdallas.edu&#x2F;~gupta&#x2F;courses&#x2F;apl&#x2F;lambda.pdf&quot;&gt;这篇&lt;&#x2F;a&gt;. 或者b站上的这个&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=af8Vi0kP3X4&quot;&gt;视频&lt;&#x2F;a&gt;讲的很清楚.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;6&quot;&gt;[6]&lt;&#x2F;a&gt;
+在奇点降临(The Singularity Is Near)里面在2030年代意识上传将会出现.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>学习如何阅读论文</title>
+        <published>2024-06-13T00:00:00+00:00</published>
+        <updated>2024-06-13T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog11/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog11/</id>
+        <content type="html">&lt;p&gt;要了解一手最新的科技前沿, 研究以及阅读文献的能力必不可少. 最近在github上刷到了&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;zibuyu&#x2F;research_tao&quot;&gt;research_tao&lt;&#x2F;a&gt;这个仓库by刘知远副教授, 其中有一篇文章讲的是如何阅读文献. 阅读到其中&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;zibuyu&#x2F;research_tao&#x2F;blob&#x2F;master&#x2F;02_reading_paper.md&quot;&gt;一章&lt;&#x2F;a&gt;的时候激发了思考自己阅读文献的方式是否可以再提升一步. 因此花了点时间总结了几位不同老师关于如何阅读论文(主要是计算机与人工智能方向)的材料, 希望对你有所帮助.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: 几位老师都提到了如何选择材料, 但不是这篇文章的重点. 因此这里不会提及应该读什么. &lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;a id=&quot;目录&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;mu-lu&quot;&gt;目录&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#%E7%9B%AE%E5%BD%95&quot;&gt;目录&lt;&#x2F;a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#%E9%98%85%E8%AF%BB%E8%AE%BA%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95&quot;&gt;阅读论文的方法&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#%E6%B8%85%E5%8D%8E%E5%88%98%E7%9F%A5%E8%BF%9C&quot;&gt;清华(刘知远)&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#johns-hopkins-univeristyjason-eisner&quot;&gt;Johns Hopkins Univeristy(Jason Eisner)&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#univeristy-of-waterloosrinivasan-keshav&quot;&gt;Univeristy Of Waterloo(Srinivasan Keshav)&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#harvard-universitymichael-mitzenmacher&quot;&gt;Harvard University(Michael Mitzenmacher)&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#carnegie-mellon-universityaaditya-ramdas&quot;&gt;Carnegie Mellon University(Aaditya Ramdas)&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#%E6%80%BB%E7%BB%93&quot;&gt;总结&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99&quot;&gt;参考资料&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;阅读论文的方法&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;yue-du-lun-wen-de-fang-fa&quot;&gt;阅读论文的方法&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;a id=&quot;清华刘知远&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;qing-hua-liu-zhi-yuan&quot;&gt;清华(刘知远)&lt;&#x2F;h2&gt;
+&lt;p&gt;在&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;zibuyu&#x2F;research_tao&#x2F;blob&#x2F;master&#x2F;02_reading_paper.md&quot;&gt;research_tao&lt;&#x2F;a&gt;里, 刘老师主要谈到的是论文的阅读顺序.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;阅读论文也不必需要每篇都从头到尾看完. 一篇学术论文通常包括以下结构, 我们用序号来标记建议的阅读顺序:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;题目(1)&lt;&#x2F;li&gt;
+&lt;li&gt;摘要(2)&lt;&#x2F;li&gt;
+&lt;li&gt;正文: 导论(3), 相关工作(6), 本文工作(5), 实验结果(4), 结论(7)&lt;&#x2F;li&gt;
+&lt;li&gt;参考文献(6)&lt;&#x2F;li&gt;
+&lt;li&gt;附录&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;按照这个顺序, 基本在读完题目和摘要后, 大致可以判断这篇论文与自己研究课题的相关性, 然后就可以决定是否要精读导论和实验结果判断学术价值, 是否阅读本文工作了解方法细节. 此外, 如果希望了解相关工作和未来工作, 则可以有针对性地阅读“相关工作”和“结论”等部分.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;a id=&quot;johns-hopkins-univeristyjason-eisner&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;johns-hopkins-univeristy-jason-eisner&quot;&gt;Johns Hopkins Univeristy(Jason Eisner)&lt;&#x2F;h2&gt;
+&lt;p&gt;Jason Eisner提出Multi-pass reading. &lt;&#x2F;p&gt;
+&lt;p&gt;Multi-pass reading的过程:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;First pass: 大概浏览论文, 了解论文的主要脉络(解决的问题, 以及点子). 限制自己阅读每页的时间. 如果论文值得阅读的话, 开始Second pass.&lt;&#x2F;li&gt;
+&lt;li&gt;Second pass: 在Second pass中, 不需要仔细阅读每篇论文. 提出问题并且回答他们&lt;a href=&quot;https:&#x2F;&#x2F;terrytao.wordpress.com&#x2F;career-advice&#x2F;ask-yourself-dumb-questions-and-answer-them&#x2F;&quot;&gt;(ask yourself dumb questions and answer them)&lt;&#x2F;a&gt;. 至少弄清楚论文的动机(Motivation), 原理(Mathematics and algorithms). 以及实验过程(Experiments). &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;此外, 在使用Multi-pass reading的要做的事. 需要一边阅读论文一边写笔记(Write as you read). 记录细节(Low-level notes)与框架(High-level notes). &lt;&#x2F;p&gt;
+&lt;p&gt;细节(Low-level notes)包括以下部分:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;用自己的话复述在论文中不明白的要点&lt;&#x2F;li&gt;
+&lt;li&gt;补充缺失的细节(假设, 代数步骤, 证明, 伪代码)&lt;&#x2F;li&gt;
+&lt;li&gt;注释数学对象及其类型&lt;&#x2F;li&gt;
+&lt;li&gt;类比具体的例子去复述作者的点子以及作者遇到的问题&lt;&#x2F;li&gt;
+&lt;li&gt;与已知的其他方法和问题联系起来&lt;&#x2F;li&gt;
+&lt;li&gt;提出原文未说明的地方或原文存在不合理的问题&lt;&#x2F;li&gt;
+&lt;li&gt;挑战论文的主张或方法&lt;&#x2F;li&gt;
+&lt;li&gt;想出应该做的后续工作&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;框架(High-level notes)包括以下部分:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;总结你感兴趣的内容, 与其他论文进行对比, 并记录你自己的问题和对未来工作的想法. 写下这些摘要会在阅读论文时给你一个目标, 并且这些笔记将来会对你有用.&lt;&#x2F;li&gt;
+&lt;li&gt;用自己的话复述点子, 确保以后再读这篇文章的时候可以快速重建概念. 花时间在难的部分(公式推导, 算法). 而不是在简单的部分.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;原文虽然说是Multi-pass, 但是提到了Second-pass之后就没有继续往下提及了. 不过可以从原文发现后续pass应该做什么的蛛丝马迹, 这里引用原文来表达Multi-pass reading核心思想:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Practice&lt;&#x2F;strong&gt; the ability to &lt;strong&gt;decode the entire paper&lt;&#x2F;strong&gt; —as if you were reviewing it critically and &lt;strong&gt;trying to catch any errors, sloppy thinking, or incompleteness&lt;&#x2F;strong&gt;. This will &lt;strong&gt;sharpen your critical thinking&lt;&#x2F;strong&gt;. You will want to &lt;strong&gt;turn this practiced critical eye on yourself as you plan, execute, and write up your own research&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;通过解构论文提升自己评判性思考的能力, 再将这种能力转换到自己的研究上面. 因此假如需要有后续pass的话, 应该不断的去提炼点子直到能够解构整篇文章.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;univeristy-of-waterloosrinivasan-keshav&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;univeristy-of-waterloo-srinivasan-keshav&quot;&gt;Univeristy Of Waterloo(Srinivasan Keshav)&lt;&#x2F;h2&gt;
+&lt;p&gt;Srinivasan Keshav提出three-pass method. &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;First-pass: &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;目的: 抓住论文主要的点子.&lt;&#x2F;li&gt;
+&lt;li&gt;时间: 5分钟左右&lt;&#x2F;li&gt;
+&lt;li&gt;做什么:
+&lt;ol&gt;
+&lt;li&gt;读标题, 摘要, 以及介绍&lt;&#x2F;li&gt;
+&lt;li&gt;读每一节和每一小节的标题&lt;&#x2F;li&gt;
+&lt;li&gt;读结论 &lt;&#x2F;li&gt;
+&lt;li&gt;看引用&lt;&#x2F;li&gt;
+&lt;li&gt;最后回答五个问题(five C&#x27;s):&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;ul&gt;
+&lt;li&gt;类别(Category): 这篇文章的类型是什么?&lt;&#x2F;li&gt;
+&lt;li&gt;内容(Content): 这篇文章与什么内容有关? 理论基础是什么?&lt;&#x2F;li&gt;
+&lt;li&gt;准确度(Correctness): 文章的假设是否成立?&lt;&#x2F;li&gt;
+&lt;li&gt;贡献(Contributions): 这篇文章主要的贡献是什么?&lt;&#x2F;li&gt;
+&lt;li&gt;清晰程度(Clarity): 这篇文章是否清晰的表达点子?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Second-pass:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;目的: 抓住论文主要的内容&lt;&#x2F;li&gt;
+&lt;li&gt;时间: 1小时左右&lt;&#x2F;li&gt;
+&lt;li&gt;做什么:
+&lt;ol&gt;
+&lt;li&gt;仔细读文章所附带的图片以及其他陈述信息&lt;&#x2F;li&gt;
+&lt;li&gt;将未读过的有相关性参考文献加入阅读列表当中&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Third-pass:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;目的: 彻底理解论文的细节&lt;&#x2F;li&gt;
+&lt;li&gt;时间: 4到5个小时对于初学者， 1小时对于有经验的人&lt;&#x2F;li&gt;
+&lt;li&gt;做什么:
+&lt;ol&gt;
+&lt;li&gt;思考与作者处于同样的假设并且复现实验的情况下, 你会如何呈现一个点子, 并与作者的点子进行对比.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;harvard-universitymichael-mitzenmacher&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;harvard-university-michael-mitzenmacher&quot;&gt;Harvard University(Michael Mitzenmacher)&lt;&#x2F;h2&gt;
+&lt;p&gt;这里选择的材料是CS222-Michael Mitzenmacher的讲义: &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;批判性思考: 通过提出合适的问题去批判性地思考论文, 例如: 如果作者在解决问题, 那么作者解决的问题是正确的问题吗? 是否有更简单的方法作者没有考虑到? 作者提供的方法有什么局限性?
+假设是否合理? 逻辑是否合理? 作者对于文中的图表是否是合理的解释数据?&lt;&#x2F;li&gt;
+&lt;li&gt;创造性阅读: 能否解构论文并且重建这篇文章? 这篇文章好在哪里? 这些点子是否有其他扩展以及应用是作者没有考虑到的? 点子能够更加泛化? 这些提升是否能让结果有明显的提升? 如果你要从这篇文章开始做研究, 你能够做什么?&lt;&#x2F;li&gt;
+&lt;li&gt;阅读的时候做笔记: 在第一篇读完这篇文章之后, 尝试用一到两句话去总结这篇文章. 如果可以的话, 将这篇文章与相关工作进行比较.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;carnegie-mellon-universityaaditya-ramdas&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;carnegie-mellon-university-aaditya-ramdas&quot;&gt;Carnegie Mellon University(Aaditya Ramdas)&lt;&#x2F;h2&gt;
+&lt;p&gt;这里选用了How to I read research papers-Aaditya Ramdas的ppt讲稿, Aaditya Ramdas讲述了自己阅读论文方法不断迭代的过程.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;阅读论文的目的: 
+&lt;ol&gt;
+&lt;li&gt;直接从作者身上学习, 避免信息加工.&lt;&#x2F;li&gt;
+&lt;li&gt;作者在旧问题上有新点子&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;方法:
+&lt;ul&gt;
+&lt;li&gt;first-pass(5到30分钟): 
+&lt;ul&gt;
+&lt;li&gt;阅读材料: 
+&lt;ul&gt;
+&lt;li&gt;摘要, 问题定义, 主要的理论, 讨论&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;回答:
+&lt;ul&gt;
+&lt;li&gt;什么问题被解决了?&lt;&#x2F;li&gt;
+&lt;li&gt;大致描述一下什么有意思的点子?&lt;&#x2F;li&gt;
+&lt;li&gt;为什么主要的观点是这样(至少用英文, 最好能用数学公式)?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;second-pass(30分钟到2小时): 
+&lt;ul&gt;
+&lt;li&gt;阅读材料: 
+&lt;ul&gt;
+&lt;li&gt;例子, 公式, 定理, 证明&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;回答:
+&lt;ul&gt;
+&lt;li&gt;过去的方法面临什么问题? 这篇文章是如何解决的?&lt;&#x2F;li&gt;
+&lt;li&gt;什么是最简单的基准线? 在什么指标上这种方法更好?&lt;&#x2F;li&gt;
+&lt;li&gt;有哪些与之相关的问题并且为什么论文的想法还没用应用到上面去?&lt;&#x2F;li&gt;
+&lt;li&gt;方法能否应用到没被考虑的问题上?&lt;&#x2F;li&gt;
+&lt;li&gt;什么是主要的点子并且能否对以后有所帮助的?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;third-pass(几天&#x2F;周): 
+&lt;ul&gt;
+&lt;li&gt;阅读材料: 
+&lt;ul&gt;
+&lt;li&gt;附录, 参考文献, 相关工作, 推论，定理, 证明&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;回答:
+&lt;ul&gt;
+&lt;li&gt;文中的公式&#x2F;理论是如何被证明的?&lt;&#x2F;li&gt;
+&lt;li&gt;是否能够从头复现实现结果?&lt;&#x2F;li&gt;
+&lt;li&gt;如果不能, 是否有关键信息被忽略了? 额外的假设是否能够让复现更简单?&lt;&#x2F;li&gt;
+&lt;li&gt;是否能够用简单的工具简化证明? 能否用不同的方法证明?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;总结&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h1&gt;
+&lt;p&gt;其实上面提到的方法不仅仅适用于阅读论文, 只不过论文是一种结构化的信息材料. 通过其他信息材料(视频, 文章)学习新知识都可以采取类似的方法. 以记笔记的方式让自己与阅读的材料互动. 提出问题并且回答问题, 推动自己去理解文章. 并且以问题为导向学习让自己处于能够实验的环境之中. 通过复述以及写作总结自己的理解, 帮助自己消新知识. 读完这篇材料后, 不妨花点时间用一两句话总结一下这篇文章的主要观点是什么.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;参考资料&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.stat.cmu.edu&#x2F;~aramdas&#x2F;checklists&#x2F;reading-tips.pdf&quot;&gt;How to I read research papers - Aaditya Ramdas&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;http:&#x2F;&#x2F;www.eecs.harvard.edu&#x2F;~michaelm&#x2F;CS222&#x2F;ReadPaper.pdf&quot;&gt;CS222 - Michael Mitzenmacher&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;http:&#x2F;&#x2F;ccr.sigcomm.org&#x2F;online&#x2F;files&#x2F;p83-keshavA.pdf&quot;&gt;How to Read a Paper - S. Keshav&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.cs.jhu.edu&#x2F;~jason&#x2F;advice&#x2F;how-to-read-a-paper.html&quot;&gt;How to Read a Technical Paper - Jason Eisner&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>五分钟读论文: Scaling and evaluating sparse autoencoders</title>
+        <published>2024-06-07T00:00:00+00:00</published>
+        <updated>2024-06-07T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog10/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog10/</id>
+        <content type="html">&lt;p&gt;这几天OpenAI新发了一篇&lt;a href=&quot;https:&#x2F;&#x2F;openai.com&#x2F;index&#x2F;extracting-concepts-from-gpt-4&#x2F;&quot;&gt;博客&lt;&#x2F;a&gt;关于使用sparse-autoencoders去解释GPT4的内部机制. 本文是对论文的解读方便读者快速获取关键信息, 如果好求甚解, 请点击传送门:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;blog: &lt;a href=&quot;https:&#x2F;&#x2F;openai.com&#x2F;index&#x2F;extracting-concepts-from-gpt-4&#x2F;&quot;&gt;Extracting Concepts from GPT-4&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;paper: &lt;a href=&quot;https:&#x2F;&#x2F;cdn.openai.com&#x2F;papers&#x2F;sparse-autoencoders.pdf&quot;&gt;Scaling and evaluating sparse autoencoders&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;code: &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;openai&#x2F;sparse_autoencoder&quot;&gt;openai&#x2F;sparse_autoencoder&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a id=&quot;目录&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;mu-lu&quot;&gt;目录&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#%E7%9B%AE%E5%BD%95&quot;&gt;目录&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86&quot;&gt;背景知识&lt;&#x2F;a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#autoencoder&quot;&gt;Autoencoder&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#sparse-autoencoder&quot;&gt;Sparse Autoencoder&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#sparse-autoencoder%E7%9A%84%E7%89%B9%E5%BE%81%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7&quot;&gt;Sparse Autoencoder的特征可解释性&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#bottleneck-layer&quot;&gt;Bottleneck Layer&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#topk%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0&quot;&gt;TopK激活函数&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB&quot;&gt;论文解读&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99&quot;&gt;参考资料&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;如果对背景知识不太了解的话, 推荐顺序阅读. 如果已经有足够的背景知识, 请点击&lt;a href=&quot;https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;#%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB&quot;&gt;这里&lt;&#x2F;a&gt;开始正文阅读. 下面是对论文的解读. &lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;背景知识&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;bei-jing-zhi-shi&quot;&gt;背景知识&lt;&#x2F;h1&gt;
+&lt;p&gt;&lt;a id=&quot;Autoencoder&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;autoencoder&quot;&gt;Autoencoder&lt;&#x2F;h2&gt;
+&lt;p&gt;根据吴恩达在CS294A的&lt;a href=&quot;http:&#x2F;&#x2F;stanford.edu&#x2F;class&#x2F;cs294a&#x2F;sparseAutoencoder.pdf&quot;&gt;讲义&lt;&#x2F;a&gt;, Autoencoder是一种无监督学习, 在没有给定标签的数据{x(1), x(2), x(3)....}, 通过隐藏层(hidden layer)学习输入中隐含的特征, 从而让输出{x^(1), x^(2), x^(3)...}尽可能的逼近输入. 下图为autoencoder的结构(引用自&lt;a href=&quot;http:&#x2F;&#x2F;stanford.edu&#x2F;class&#x2F;cs294a&#x2F;sparseAutoencoder.pdf&quot;&gt;这里&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;autoencoder.png&quot; height=&quot;100&quot; width=&quot;100&quot;&#x2F;&gt;
+&lt;!-- ![autoencoder](https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;autoencoder.png) --&gt;
+&lt;p&gt;&lt;a id=&quot;Sparse Autoencoder&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;sparse-autoencoder&quot;&gt;Sparse Autoencoder&lt;&#x2F;h2&gt;
+&lt;p&gt;Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通过增加稀疏惩罚项(sparse penalty)使得前向传播时只有一部分神经元激活, 而不是所有神经元都激活. 由于相比与未做稀疏化处理的autoencoder结构, 激活的隐藏层神经元(hidden neruon)变少了, 因此每一个隐藏层神经元都包含了更丰富的隐藏特征(latent feature). 是不是和现在流行的&lt;a href=&quot;https:&#x2F;&#x2F;huggingface.co&#x2F;blog&#x2F;moe&quot;&gt;Mixture of Experts&lt;&#x2F;a&gt;很像? 
+下图为sparse autoencoder的结构(引用自&lt;a href=&quot;https:&#x2F;&#x2F;medium.com&#x2F;@syoya&#x2F;what-happens-in-sparse-autencoder-b9a5a69da5c6&quot;&gt;这里&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;sparse-autoencoder2.png&quot; alt=&quot;sparse-autoencoder&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;sparse-autoencoder的特征可解释性&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;sparse-autoencoderde-te-zheng-ke-jie-shi-xing&quot;&gt;Sparse Autoencoder的特征可解释性&lt;&#x2F;h2&gt;
+&lt;p&gt;MIT6.S898 Deep Learning在2023年发表的一篇&lt;a href=&quot;https:&#x2F;&#x2F;deep-learning-mit.github.io&#x2F;staging&#x2F;blog&#x2F;2023&#x2F;learning-interpretable-features-with-sparse-autoencoders&#x2F;&quot;&gt;blog&lt;&#x2F;a&gt;在这里提到了&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A sparse autoencoder lets us learn a sparse representation for a vector, but in a higher dimensional space.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;相比与未稀疏化的Autoencoder, 稀疏化的Autoencoder可以学习到更高维度的隐含特征. 换个角度说, 未经稀疏化的隐藏层神经往往是表示多维特征(polysemantic). 而经过稀疏化的隐藏层神经元所表示的特征维度更少, 从而使得隐含特征更加容易理解. 更详细的关于sparse autoencoder的可解释性, 可以点击Anthropic发的&lt;a href=&quot;https:&#x2F;&#x2F;transformer-circuits.pub&#x2F;2023&#x2F;monosemantic-features&quot;&gt;&amp;quot;Towards Monosemanticity: Decomposing Language Models With Dictionary Learning&amp;quot;&lt;&#x2F;a&gt;查看.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;Bottleneck Layer&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;bottleneck-layer&quot;&gt;Bottleneck Layer&lt;&#x2F;h2&gt;
+&lt;p&gt;bottlenect layer指的是含有比前一层更少的神经元的网络层, 使得输入特征维度减少. 这里引用英文原文更方便理解:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A bottleneck layer is a layer that contains few nodes compared to the previous layers. It can be used to obtain a representation of the input with reduced dimensionality.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&lt;a id=&quot;TopK激活函数&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;topkji-huo-han-shu&quot;&gt;TopK激活函数&lt;&#x2F;h2&gt;
+&lt;p&gt;TopK是一种激活函数. 仅保留输入向量中最大的k的值，其余值设置为0.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;论文解读&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;lun-wen-jie-du&quot;&gt;论文解读&lt;&#x2F;h1&gt;
+&lt;p&gt;ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇文章. 首先是作者部分还有Ilya Sutskever与Jan Leike, 说明是OpenAI之前研究的存货. 再来看摘要部分:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;openai-papers.png&quot; alt=&quot;paper-abstract&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;黄色部分的文字是这篇文章所解决的问题, 绿色部分是作者提出的解决方案. &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;问题&lt;&#x2F;strong&gt; : 随着输入特征的增加, 训练sparse autoencoder会难以平衡稀疏性与准确性. 稀疏性指的是如何确定哪些神经元需要激活, 哪些神经元不需要激活. 准确性是指经过稀疏化处理后的隐藏层神经元所表示的隐含特征是否与原始输入特征相似(见背景知识Autoencoder). &lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;解决方案&lt;&#x2F;strong&gt; : 作者使用k-sparse autoencoder去控制稀疏性从而实现平衡. &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;到了正文部分, 作者一开始比较了不同的激活函数对autoencoder的影响. 发现TopK的获得最小的正规化均方根误差(Normalized root mean square error). 如下图所示:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;openai-topk.png&quot; alt=&quot;topk&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;接下来作者在不同指标上又进行了测试, 如果有兴趣建议阅读原文. 为了抓住重点, 我们先跳过这一部分. 作者使用&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2305.19911&quot;&gt;Neuron to Graph(N2G)&lt;&#x2F;a&gt;去做特征的解释.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;n2g.png&quot; alt=&quot;n2g&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;上图的N2G论文原文的描述, 可以看到N2G是将语言模型输出的回答进行关联生成一张有向图. &lt;&#x2F;p&gt;
+&lt;p&gt;之后作者对比了ReLU与TopK在N2G中的表现. 发现TopK的召回率以及精度都更高. 如下图所示:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;openai-result.png&quot; alt=&quot;result&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;最后作者给出了结论以及未来工作的方向:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;paper-result.png&quot; alt=&quot;paper-result&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a id=&quot;参考资料&quot;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http:&#x2F;&#x2F;stanford.edu&#x2F;class&#x2F;cs294a&#x2F;sparseAutoencoder.pdf&quot;&gt;Sparse autoencoder, CS294A Lecture notes - Andrew Ng&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;stats.stackexchange.com&#x2F;questions&#x2F;262044&#x2F;what-does-a-bottleneck-layer-mean-in-neural-networks&quot;&gt;What does a bottleneck layer mean in neural networks?&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;p&gt;(第一次写这种论文解读类文章, 发现还是不好写. 因为有条件的话应该直接读原文, 不加如一些原文的图的话会表达不到意思, 加了太多又和读原文没什么区别.)&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>Nvidia CUDA的前世今生</title>
+        <published>2024-06-05T00:00:00+00:00</published>
+        <updated>2024-06-05T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog9/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog9/</id>
+        <content type="html">&lt;blockquote&gt;
+&lt;p&gt;Any sufficiently advanced technology is indistinguishable from magic. - Arthur C. Clarke&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;CUDA(Compute Unified Device Architecture)是Nvidia强大的护城河之一, 也绝对算是科技黑魔法.&lt;&#x2F;p&gt;
+&lt;p&gt;最近突然冒出了一个想法, 为什么CUDA要这样设计(kernel, warp, thread, block, grid...)? 带着这个疑问, 我花了一些时间
+在调研CUDA背后的历史, 以下是对Nvidia重要护城河之一的CUDA为什么这样设计的介绍:&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;cudafa-zhan-li-shi&quot;&gt;CUDA发展历史&lt;&#x2F;h2&gt;
+&lt;p&gt;要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;CUDA&quot;&gt;CUDA&lt;&#x2F;a&gt;, 里面有提到CUDA的发展历史, 以下为&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D&quot;&gt;原文&lt;&#x2F;a&gt;:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Ian Buck&lt;&#x2F;strong&gt;, while at &lt;strong&gt;Stanford&lt;&#x2F;strong&gt; in 2000, created an 8K gaming rig using 32 GeForce cards, then obtained a DARPA grant to perform &lt;strong&gt;general purpose parallel programming on GPUs&lt;&#x2F;strong&gt;. He then joined Nvidia, where since 2004 he has been overseeing CUDA development. In pushing for CUDA, Jensen Huang aimed for the Nvidia GPUs to become a &lt;strong&gt;general hardware&lt;&#x2F;strong&gt; for scientific computing. CUDA was released in 2006. Around 2015, the focus of CUDA changed to neural networks.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的&lt;a href=&quot;https:&#x2F;&#x2F;blogs.nvidia.com&#x2F;blog&#x2F;author&#x2F;ian-buck&#x2F;&quot;&gt;副总裁&lt;&#x2F;a&gt;, 以前是斯坦福的博士生, 点击Ian博士时期的&lt;a href=&quot;http:&#x2F;&#x2F;scroll.stanford.edu&#x2F;~ianbuck&#x2F;&quot;&gt;主页&lt;&#x2F;a&gt;. 可以看到他在博士期间做的项目&lt;a href=&quot;http:&#x2F;&#x2F;graphics.stanford.edu&#x2F;projects&#x2F;brookgpu&#x2F;&quot;&gt;BrookGPU&lt;&#x2F;a&gt;, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=Cmh1EHXjJsk&quot;&gt;采访&lt;&#x2F;a&gt;，Ian在视频里面明确提到将&lt;strong&gt;Brook的想法迁移到CUDA&lt;&#x2F;strong&gt;上, 因此可以认为&lt;strong&gt;Brook就是CUDA最早的雏形&lt;&#x2F;strong&gt;. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;ian-buckde-brookyu-yan&quot;&gt;Ian Buck的Brook语言&lt;&#x2F;h2&gt;
+&lt;p&gt;让我们一起再来看看BrookGPU的项目介绍:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;brookgpu.png&quot; alt=&quot;brook-gpu&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;总结一下, Brook提出了&lt;strong&gt;stream programming model&lt;&#x2F;strong&gt;以及&lt;strong&gt;stream application&lt;&#x2F;strong&gt;并给出了对应的实现去解决&lt;a href=&quot;https:&#x2F;&#x2F;zh.wikipedia.org&#x2F;wiki&#x2F;%E5%9B%BE%E5%BD%A2%E5%A4%84%E7%90%86%E5%99%A8%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97&quot;&gt;&lt;strong&gt;通用计算&lt;&#x2F;strong&gt;&lt;&#x2F;a&gt;的问题.&lt;&#x2F;p&gt;
+&lt;p&gt;再结合BrookGPU当时的论文&lt;a href=&quot;https:&#x2F;&#x2F;graphics.stanford.edu&#x2F;papers&#x2F;brookgpu&#x2F;brookgpu.pdf&quot;&gt;Brook for GPUs: Stream Computing on Graphics Hardware&lt;&#x2F;a&gt;以及Ian Buck的博士论文&lt;a href=&quot;http:&#x2F;&#x2F;graphics.stanford.edu&#x2F;~ianbuck&#x2F;thesis.pdf&quot;&gt;STREAM COMPUTING ON GRAPHICS HARDWARE&lt;&#x2F;a&gt;. 我们能够了解到以下几个点:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;由于GPU与CPU所针对的场景不同，并且由于CPU的局限性: 有限的instruction level parallelism (ILP), 过度使用缓存去获取局部性. 因此GPU的编程语言形态会与CPU有所不同.&lt;&#x2F;li&gt;
+&lt;li&gt;当时也有针对于GPU编程的语言, 但是这些语言的实现都是针对于图形学的shader所设计的, 而不是为了&lt;strong&gt;通用计算编程&lt;&#x2F;strong&gt;所设计&lt;&#x2F;li&gt;
+&lt;li&gt;程序在GPU上执行时，其内存访问延迟主要受到两个关键因素的制约: 一是计算速率(compute rate), 二是内存带宽(memory bandwidth). 这意味着，GPU处理数据的速度和内存传输数据的能力共同决定了程序在内存操作中的延迟表现. BrookGPU的设计是为了让GPU计算充分发挥, 从而让内存时延主要部分为内存带宽.&lt;&#x2F;li&gt;
+&lt;li&gt;Brook不是第一个尝试去解决通用计算问题, 但是是第一个使用流式处理(stream processing)去解决通用计算. &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;brookgpu2.png&quot; alt=&quot;advantage-of-streaming&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;在Ian提出Streaming Processing框架的这一节提到了很重要的一个观点. 内存的访问速度(memory access rate)即内存带宽(memory bandwidth)往往
+是制约程序性能的瓶颈. 而软件层由于改变不了物理的内存带宽, 因而会采取其他技巧去隐藏内存延迟(memory latency). 这里Streaming Processing使用data parallelism与&lt;a href=&quot;https:&#x2F;&#x2F;crd.lbl.gov&#x2F;divisions&#x2F;amcr&#x2F;computer-science-amcr&#x2F;par&#x2F;research&#x2F;roofline&#x2F;introduction&#x2F;&quot;&gt;arithmetic Intensity&lt;&#x2F;a&gt;去隐藏内存延迟(hide memory latency). Ian也提出了什么是arithmetic Intensity的概念:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In order to quantify this property, we introduce the concept of arithmetic inten-
+sity. &lt;strong&gt;Arithmetic intensity is the ratio of arithmetic operations performed per memory
+operation, in other words, flops per word transferred.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;感觉这里解释的不是很清楚, 于是询问GPT4的回答, 讲的很清楚:
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;arth-intensity.png&quot; alt=&quot;arithmetic Intensity&quot; &#x2F;&gt;
+Arithmetic intensity指的是运算指令(add, mul..)与内存操作(load, store..)的比例.&lt;&#x2F;p&gt;
+&lt;p&gt;这里小结一下Brook做了什么事:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Brook是一种编程语言, 通过软件层的抽象来让程序尽可能得调用GPU的运算单元，尽可能减少内存搬运操作. 从而隐藏内存延迟.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;如果有兴趣详细了解的话, GTC2022上的这个&lt;a href=&quot;https:&#x2F;&#x2F;www.nvidia.com&#x2F;en-us&#x2F;on-demand&#x2F;session&#x2F;gtcspring22-s41487&#x2F;&quot;&gt;talk&lt;&#x2F;a&gt;会很有帮助. 在了解了这些之后, 我们再来一起看看BrookGPU与CUDA的对比.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;brookyu-cudade-dui-bi&quot;&gt;Brook与CUDA的对比&lt;&#x2F;h2&gt;
+&lt;p&gt;接下来结合上面的信息以及CUDA1.0的&lt;a href=&quot;https:&#x2F;&#x2F;developer.download.nvidia.cn&#x2F;compute&#x2F;cuda&#x2F;1.0&#x2F;NVIDIA_CUDA_Programming_Guide_1.0.pdf&quot;&gt;参考手册&lt;&#x2F;a&gt;, 我们来看看Brook与Cuda的一些概念的对比. 由于CUDA是在Brook之后诞生, 所以这里以Brook中的概念为准分各个小节. 为了尽可能得传递原始信息避免加工, 每个概念会附上原文.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;stream&quot;&gt;Stream&lt;&#x2F;h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A stream is a collection of data which can be operated on in parallel.  - Ian Buck, BROOK STREAM LANGUAGE p24&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;由于CUDA1.0里面没有Stream的概念, 这里没有直接查到是CUDA的哪一个版本提出了Stream. 所以参考了Steve Rennich在GTC的ppt.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A sequence of operations that execute in issue-order on the GPU - Steve Rennich, &lt;a href=&quot;https:&#x2F;&#x2F;developer.download.nvidia.cn&#x2F;CUDA&#x2F;training&#x2F;StreamsAndConcurrencyWebinar.pdf&quot;&gt;CUDA C&#x2F;C++
+Streams and Concurrency&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Stream在brook指带的是一系统的数据, 而在cuda里面是的一系列的指令.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;kernel&quot;&gt;Kernel&lt;&#x2F;h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Brook kernels are special functions, specified by the kernel
+keyword, which operate on streams. - Ian Buck, BROOK STREAM LANGUAGE p26&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;在Brook里面kernel指的是处理stream的函数. 由于stream是的是一系列的数据, 因此kernel也就是处理data的函数.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;More precisely, a portion of an application that is executed many times, but
+independently on different data, can be isolated into a function that is executed on
+the device as many different threads. To that effect, such a function is compiled to
+the instruction set of the device and the resulting program, called a &lt;em&gt;kernel&lt;&#x2F;em&gt;  - Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0, p7&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;可以看到kernel在Brook与CUDA里面的概念是一致的. 都表示为处理数据的函数.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;reductions&quot;&gt;Reductions&lt;&#x2F;h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;While kernels provide a mechanism for applying a function to a set of data, reductions
+provide a data-parallel method for calculating a single value from a set of records. - Ian Buck, BROOK STREAM LANGUAGE p30&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;这里需要附上原文的代码才能更详细的说明:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;c&quot; style=&quot;background-color:#eff1f5;color:#4f5b66;&quot; class=&quot;language-c &quot;&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span style=&quot;color:#a7adba;&quot;&gt;&#x2F;&#x2F; Task: Compute the sum of all the elements of a sum (a, r);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a7adba;&quot;&gt;&#x2F;&#x2F; Brook
+&lt;&#x2F;span&gt;&lt;span&gt;reduce &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8fa1b3;&quot;&gt;sum &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float&lt;&#x2F;span&gt;&lt;span&gt; a&amp;lt;&amp;gt;, reduce &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float&lt;&#x2F;span&gt;&lt;span&gt; r&amp;lt;&amp;gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;    r += c;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float&lt;&#x2F;span&gt;&lt;span&gt; r;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;float&lt;&#x2F;span&gt;&lt;span&gt; a&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;100&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a7adba;&quot;&gt;&#x2F;&#x2F; Equivalant C code:
+&lt;&#x2F;span&gt;&lt;span&gt;r = a[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;(i=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;; i&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;100&lt;&#x2F;span&gt;&lt;span&gt;; i++)
+&lt;&#x2F;span&gt;&lt;span&gt;    r += a[i];
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很奇怪的一点是明明这里的操作也可以归为kernel的范畴, 但是Ian却单独抽里开. 说明Brook对Reducitons的实现与kernel是不同的. 而从语法上来看, 这段代码与CUDA调用kernel function几乎是一致的. 在CUDA中没有单独的概念, 说明这一操作已经在CUDA统一了.&lt;&#x2F;p&gt;
+&lt;p&gt;到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processing相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;wei-shi-yao-cudazhe-yang-she-ji&quot;&gt;为什么CUDA这样设计&lt;&#x2F;h2&gt;
+&lt;p&gt;回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的&lt;a href=&quot;https:&#x2F;&#x2F;www.nvidia.com&#x2F;zh-tw&#x2F;on-demand&#x2F;session&#x2F;gtcspring21-s31151&#x2F;&quot;&gt;&amp;quot;How Gpu Computing Works&amp;quot;&lt;&#x2F;a&gt;以及GTC2022的&lt;a href=&quot;https:&#x2F;&#x2F;resources.nvidia.com&#x2F;en-us-summer-of-learning-for-students&#x2F;gtcspring22-s41487&quot;&gt;&amp;quot;How CUDA Programming Works&amp;quot;&lt;&#x2F;a&gt;, 我尝试用尽可能精炼的语言描述下我的理解:&lt;&#x2F;p&gt;
+&lt;p&gt;从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟. &lt;&#x2F;p&gt;
+&lt;p&gt;从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Single_instruction,_multiple_threads&quot;&gt;SIMT(Single Instruction Multiple Threads)&lt;&#x2F;a&gt;. 从而隐藏内存延迟.&lt;&#x2F;p&gt;
+&lt;p&gt;下面这张图对于理解CUDA的概念非常有帮助:
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;gtc-cuda-concepts.png&quot; alt=&quot;cuda-concepts&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h2&gt;
+&lt;p&gt;CUDA的发明者Ian Buck在读博士的时候(2006年左右), 当时已经有专门针对GPU的编程语言, 但是这些特点的语言的特定都是针对于图形学里的shader设计的, 因此不具有通用性. 因此CUDA的意义在于使用流式处理(stream processsing)去解决图形处理器通用计算(General-purpose computing on graphics processing units)软件层抽象的问题.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;How Gpu Computing Works - Steve Jones &lt;&#x2F;li&gt;
+&lt;li&gt;How CUDA Programming Works - Steve Jones&lt;&#x2F;li&gt;
+&lt;li&gt;BROOK STREAM LANGUAGE - Ian Buck&lt;&#x2F;li&gt;
+&lt;li&gt;Brook for GPUs: Stream Computing on Graphics Hardware - Ian Buck&lt;&#x2F;li&gt;
+&lt;li&gt;Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0&lt;&#x2F;li&gt;
+&lt;li&gt;Wikipedia &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>LLM OS的曙光</title>
+        <published>2024-05-14T00:00:00+00:00</published>
+        <updated>2024-05-14T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog8/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog8/</id>
+        <content type="html">&lt;p&gt;在今天的OpenAI的春季发布会, OpenAI发布了&lt;a href=&quot;https:&#x2F;&#x2F;openai.com&#x2F;index&#x2F;hello-gpt-4o&#x2F;&quot;&gt;gpt-4o&lt;&#x2F;a&gt;. 虽然前几代模型也支持语音功能, 但是在gpt-4o中, 其中任意打断的能力和更快的响应速度, 实在是难以让人区分出是机器人还是人类. 但是现在每次对话都需要重新用语音prompt, 来让模型产生预期的“性格”. 所以显而易见的, 不久后的GPT商店会上架不同“性格”的AI. 以及对自定义AI的支持.&lt;&#x2F;p&gt;
+&lt;p&gt;语音和图像的联动是另一项gpt-4o所突出展示出的能力. 用语音交互的方式来让AI分析实时的摄像头数据. 并且在pc端通过桌面端应用还具备&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=ZJbu3NEPJN0&quot;&gt;voice copliot&lt;&#x2F;a&gt;的能力. 已经能让生产力提高到下一个层次. 很明显在未来能够 &lt;u&gt;清晰的表达想法和理解问题&lt;&#x2F;u&gt; 的能力比单纯的技能更加重要. 其实这已经是LLM OS的一个很大的突破了.&lt;&#x2F;p&gt;
+&lt;p&gt;随着OpenAI开放更加便宜的AI, OpenAI的影响力肯定会进一步扩大. 他们所能获取的数据集肯定越来越多. 假如世界模型是一个向量f(x), 根据&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Universal_approximation_theorem&quot;&gt;Universal approximation theorem&lt;&#x2F;a&gt;. 因此世界模型会被拟合, 假如未来的模型架构迭代, 比如使用&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2404.19756&quot;&gt;Kolmogorov–Arnold Networks&lt;&#x2F;a&gt;. 实际上变的也是拟合的基函数, 核心思想都是一致. 也是对世界模型的拟合. 因此, AI最终一定会解决现有的世界模型 f(x) 的一切问题. 但是以这种方式的AI不具备创造力.&lt;&#x2F;p&gt;
+&lt;p&gt;如何让AI具备创造力? 这篇文章&lt;a href=&quot;https:&#x2F;&#x2F;arxiv.org&#x2F;pdf&#x2F;2002.06177&quot;&gt;The Next Decade in AI: Four Steps Towards Robust Artificial Intelligence&lt;&#x2F;a&gt;的作者就很好的分析了这个问题. &lt;a href=&quot;https:&#x2F;&#x2F;nonint.com&#x2F;2023&#x2F;06&#x2F;10&#x2F;the-it-in-ai-models-is-the-dataset&#x2F;&quot;&gt;现有的AI始终受限于数据集&lt;&#x2F;a&gt;. AGI需要有对知识的归纳和演化的能力.以下是原文链接.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;a reasoning system that can leverage large-scale background knowledge efficiently, even when available information is incomplete is a prerequisite to robustness. - p40&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;因此在未来的AGI形态，会有一个底座的知识语料, 在这个底座的知识语料当中, AI有知识关联, 归纳, 推理能力. 当AI不断的从世界模型提炼信息的时候, 也会对这个底层的知识语料进行加工. 类比于人类来说的话, 人在不断接触外部信息源的时候也会不断迭代自己的世界观(或者说每个人的人生哲学). 而当人遇到未接触的问题时, 在没有外部信息源的接触下, 也会依赖于自己的世界观进行加工和理解.&lt;&#x2F;p&gt;
+&lt;p&gt;或许未来出现一种形态, 在神经网络(知识的拟合)里面嵌套专家系统(知识的推理). 能够让AI真正具有创造力.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>2024百度Create ai大会</title>
+        <published>2024-04-17T00:00:00+00:00</published>
+        <updated>2024-04-17T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog7/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog7/</id>
+        <content type="html">&lt;h1 id=&quot;can-hui-ji-lu&quot;&gt;参会记录&lt;&#x2F;h1&gt;
+&lt;p&gt;记录一下本周线下参加的2024百度Create ai大会, 大会回放链接点击&lt;a href=&quot;https:&#x2F;&#x2F;create.baidu.com&#x2F;?lng=en&quot;&gt;这里&lt;&#x2F;a&gt;. 大会的主要内容是百度的ai产品发布会. 我当时看大部分演讲的内容其实更多的是偏应用方面. 我个人对技术方面的内容更感兴趣就只参加了主论坛并且只听了前三场讲座.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;baidu-create00.jpg&quot; alt=&quot;intro&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;首先开场的是李彦宏, 他讲的大部分内容都是偏向产品端. 我印象比较深刻的是开场没多久就说了下面这张图. &amp;quot;未来大型的AI原生应用基本都是MOE.&amp;quot; .并且他说明这里的MOE指的是混合模型(Mixture Of Engine)并不是技术上的MOE, 出于对技术上指代的MOE的好奇, 我开始去研究Mixture Of Experts. &lt;a href=&quot;https:&#x2F;&#x2F;twitter.com&#x2F;karpathy&#x2F;status&#x2F;1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&amp;amp;ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png&quot;&gt;这个链接 &lt;&#x2F;a&gt;是非常好的资料. 现有很多大模型会包含Mixture Of Experts Layer. 因此在提示词工程里面需要有角色扮演, 相当于激活特定分支的Expert来让优化输出结果.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;baidu-create01.png&quot; alt=&quot;moe&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;之后是王海峰介绍的多模型推理部分. 也是从输入端会经过路由模型. 再由路由模型分发输入给不同的模型. 实际上所谓的Mixture Of Engine与Mixture Of Experts的思想是一致的. 只不过是宏观(多个模型)与微观(单个模型)之间的区别.
+&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;baidu-create02.png&quot; alt=&quot;infer&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;最后是沈抖介绍的万源智能操作系统, 与Andrej Karpathy所提及的&lt;a href=&quot;https:&#x2F;&#x2F;twitter.com&#x2F;karpathy&#x2F;status&#x2F;1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&amp;amp;ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png&quot;&gt;LLM-OS&lt;&#x2F;a&gt;是相同的. 之前看过Andrej的一个talk里面就讲到基本所有人都在往LLM-OS发力. 将一个复杂任务拆解的话, 现有的LLM已经具有相当的理解能力, 但是缺少对工具的使用能力. 如果要让LLM能够使用工具的话, 许多现有的应用都要重新开发. 或许也是未来的一个风口所在.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;baidu-create06.png&quot; alt=&quot;wanyuan&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h1&gt;
+&lt;p&gt;下面是对于了解Mixutre Of Experts有帮助的链接:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;blog&#x2F;applying-mixture-of-experts-in-llm-architectures&#x2F; &lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;stackoverflow.blog&#x2F;2024&#x2F;04&#x2F;04&#x2F;how-do-mixture-of-experts-layers-affect-transformer-models&#x2F;&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;blog&#x2F;mastering-llm-techniques-training&#x2F;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>工具的重要性</title>
+        <published>2024-03-10T00:00:00+00:00</published>
+        <updated>2024-03-10T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog6/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog6/</id>
+        <content type="html">&lt;h1 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h1&gt;
+&lt;p&gt;最近在思考关于&amp;quot;技术无用论&amp;quot;的说法. 从事程序工作难免会遇到技术无用论的观点. 持有这样观点的人通常的思路如下:
+比方说, 在一个公司里往往靠的是商务能力生存下去, 而技术往往是服务于商务. 而商务的变更就会直接影响到一个项目是否要推进下去.
+直白点, 技术是商务的下游. 而上游决定下游, 如果上游不存在自然下游也不存在, 并且技术只是实现目的的一种手段, 而不是唯一. 因此技术不重要.&lt;&#x2F;p&gt;
+&lt;p&gt;与其相似的是第二个观点是“工具无用论&amp;quot;. 举个具体的例子, 很多人会认为学习vim或者emacs这种编辑器是浪费时间, 付出对应的学习成本是没有必要的. 或者折腾arch linux，window manager这些也是花里胡哨, 没什么实际用处. 类似的, 编程语言学习一两种就行了, 语言只是工具, 都差不多, 学会了一种再学其他的语言也很快. 毕竟还是需要面向“薪资”编程.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;zheng-wen&quot;&gt;正文&lt;&#x2F;h1&gt;
+&lt;p&gt;要给出结论需要一些铺垫. 我相信提出上面观点的人不会怀疑“薪资”或者财富是无用的. 所有的人都想解决“财富”问题. 这里要明确一点就是. &lt;strong&gt;财富不等于金钱，财富是金钱的载体&lt;&#x2F;strong&gt;. 如果社会流通金钱远远超过了载体的数量就会导致通货膨胀, 或者在某个具体的行业产生泡沫, 追求金钱是追求财富的副产物, 而财富还有其他名字, 它也叫做产品或者服务. 而通常意义上来讲, 工作就是指创造产品或者提供服务的时间. 提供产品可以不用金钱, 最好的例子某过于开源或者免费服务. 一个组织或者个人所提供的产品的影响力越大, 相应的, 组织也会获得越多的金钱. 组织中的个人也会获得更好的薪资待遇. 因此，&lt;strong&gt;金钱直接与影响力&lt;&#x2F;strong&gt; 挂钩. &lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Millionaire-Fastlane-Crack-Wealth-Lifetime&#x2F;dp&#x2F;0984358102&quot;&gt;The Millionaire Fastlane: Crack the Code to Wealth and Live Rich for a Lifetime&lt;&#x2F;a&gt;中有一个公式很清晰的表达了这个过程:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Wealth = Width * Depth&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;这里的Wealth我更倾向于解读成金钱. 金钱的数量取决于产品的影响力的广度(受众的个数)乘深度(用户粘性).  在这个过程中, 去提供对应的产品需要对应的工具, 程序员需要编程语言去创造软件, 雕塑家需要对应的工具去创建雕塑. 任何行业的专业人员都需要专业的工具的提供相应的产品.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;那技术在这个链路里面指的是什么呢？&lt;&#x2F;strong&gt; &lt;&#x2F;p&gt;
+&lt;p&gt;在中文语境下, 技术往往有两个指向:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;技术指代的是工具本身, 即技术等于工具&lt;&#x2F;li&gt;
+&lt;li&gt;技术指代的是创造工具的背景或者说基础知识&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;由于技术这个词同时有两个指代, 我认为有不同观点是第二个指代. 第一种指代是创造产品必需的, 好的技术能更好服务于产品. 从而创造更大的影响力. 而第二种指向对于使用工具的人来说很重要, 但对于创造产品没有直接影响. 从这个角度上讲, 第二种指向的技术确实没什么用. 所以我在这里想反驳的其实是第二种观点, 即“工具无用论”. 更具体的说是在软件开发工程中, 好的工具是如何改变思维的.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;lun-gong-ju-de-zhong-yao-xing&quot;&gt;论工具的重要性&lt;&#x2F;h1&gt;
+&lt;p&gt;截止到2024年还无法完全使用AI相关的工具达到全流程闭环的今天, 我认为软件开发可以用一句话总结:&amp;quot;通过某种交互方式进行文本编辑, 按照规则(编程语言), 实现模型的过程称为软件开发&amp;quot;. 所以这里面有三个因素:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;文本编辑&lt;&#x2F;li&gt;
+&lt;li&gt;规则(编程语言)&lt;&#x2F;li&gt;
+&lt;li&gt;模型&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;模型会根据不同行业而有所区分, 因此不具有通用性. 由于99.99%的人都无法创造 &lt;strong&gt;有生态以及有社区影响力的规则&lt;&#x2F;strong&gt; , 因此都必须要理解规则, 按照规则进行开发. 而不管进行哪种软件开发, 都需要进行文本编辑. 熟练使用Vim以及Emacs都可以让编辑速度有质的提升, 加速了迭代速度, 从而让更多的开发时间花在模型的构建上. 同时能够熟练掌握Vim以及Emacs能够更好的帮助你理解规则. 但是Vim和Emacs的定位不一样, Vim更强调的是编辑本身, Vim配置也更多的是编辑本身的拓展, 而在Emacs里面任何操作都是一条命令, 通过Elisp去自定义命令达到预期的功能. 这里十分推荐Hacker news上的一篇&lt;a href=&quot;https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=30709487&quot;&gt;Post&lt;&#x2F;a&gt;, 然而在工作中真正花时间能够很熟练使用Vim的人已经寥寥无几, 使用Emacs的就更稀有了. 并不是每个学校都像mit会开&lt;a href=&quot;https:&#x2F;&#x2F;missing.csail.mit.edu&#x2F;&quot;&gt;The Missing Semester of Your CS Education&lt;&#x2F;a&gt;这种课. 这也是国内大部分高校计算机教育缺少的一环, 我认为在大学里面花一个学期把Vim或者Emacs当成主修一点都不为过. 它们能够直接加深对计算机的理解.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;lispyu-qi-ta-yu-yan&quot;&gt;Lisp与其他语言&lt;&#x2F;h1&gt;
+&lt;p&gt;不是专门研究编程语言或者折腾Emacs的话, 大部分人应该都不会接触Lisp相关的语言. 但Lisp实在是太独特了, 学习Lisp可以影响思维. 由于Lisp的dialect(方言)很多, 有lexical scoping, 而有dynamic scoping的. 但是精华部分都有一致性, 在Lisp中任何函数调用最终都是由eval去执行, 任何数据都是Data, 函数是Data. 并且几乎没有语法. 只有一种数据结构就是list, 而list只有两个部分构成, car和cdr. 通过操作car(contents of address part of a register)，cdr(contents of the decrement part of a register). Lisp就像&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;G%C3%B6del-Escher-Bach-Eternal-Golden&#x2F;dp&#x2F;0465026567&quot;&gt;GEB&lt;&#x2F;a&gt;里面说的strange loop的完备符号形式, 一旦了解了lisp的基本结构, 会发现没有任何语言能像它一样简洁. 如果让我重新学习编程, 我肯定会先选择这本1990年出版的&lt;a href=&quot;https:&#x2F;&#x2F;www.cs.cmu.edu&#x2F;~dst&#x2F;LispBook&#x2F;book.pdf&quot;&gt;Common Lisp&lt;&#x2F;a&gt;书籍作为学习编程的第一本教材.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>2023年难忘的书</title>
+        <published>2024-01-02T00:00:00+00:00</published>
+        <updated>2024-01-02T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog5/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog5/</id>
+        <content type="html">&lt;h1 id=&quot;xin-nian-kuai-le&quot;&gt;新年快乐&lt;&#x2F;h1&gt;
+&lt;p&gt;2024到了, 瑞兔辞旧去，龙腾新年来, 祝新的一年事事顺心. 这里分享几本在2023年读过难忘的书.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;shu-dan&quot;&gt;书单&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;-&#x2F;zh_TW&#x2F;W-Timothy-Gallwey&#x2F;dp&#x2F;B007CKJNPY&#x2F;ref=sr_1_2?adgrpid=121514880165&amp;amp;hvadid=585846668542&amp;amp;hvdev=c&amp;amp;hvlocphy=9069537&amp;amp;hvnetw=g&amp;amp;hvqmt=e&amp;amp;hvrand=9360308311046058425&amp;amp;hvtargid=kwd-298328798799&amp;amp;hydadcr=5338_13199224&amp;amp;keywords=the+inner+game+of+tennis&amp;amp;qid=1704200563&amp;amp;sr=8-2&quot;&gt;The Inner Game Of Tennis: The Classic Guide To The Mental Side Of Peak Performance&lt;&#x2F;a&gt;: 关于调整心态能让自己有最佳发挥的书. 作者以网球比赛举例子但实际上任何事都会有心态的参与. 首先, &lt;strong&gt;Relaxed Concentration&lt;&#x2F;strong&gt;是形容心态的最合适的水平. 注意力完全集中但是身体却是很放松的. 要达到这种水平, 有两个影响因素Self 1(后天训练得到的心态)以及Self 2(先天的心态). 不要让Self 2与Self 1分割, 并且不要盲目的依赖于Self 1. 培养&lt;strong&gt;nonjudgmental awareness&lt;&#x2F;strong&gt;. 停止评判Self 2. 客观的看待事物而不加修饰心态. 用身体和脑一起去学习, 让Self 1描绘出最好的结果, 然后配合Self 2一起去实现.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.co.uk&#x2F;Out-Climbers-Make-Same-Mistakes&#x2F;dp&#x2F;095642810X&#x2F;ref=sr_1_1?adgrpid=56828746287&amp;amp;hvadid=605919519822&amp;amp;hvdev=c&amp;amp;hvlocint=9045701&amp;amp;hvlocphy=9069537&amp;amp;hvnetw=g&amp;amp;hvqmt=e&amp;amp;hvrand=1051701062478381141&amp;amp;hvtargid=kwd-300879518041&amp;amp;hydadcr=10582_2162343&amp;amp;keywords=9+out+of+10+climbers&amp;amp;qid=1704200606&amp;amp;sr=8-1&quot;&gt;9 Out of 10 Climbers Make the Same Mistakes: Navigation Through the Maze of Advice for the Self-coached Climber &lt;&#x2F;a&gt;: 关于学习技巧的书. 如果不是为了追求如何提高登山技巧的话, 读完第一章即可. 书中有句话说的太好不得不引用原文:&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;climbers are stuck on the basics, but lost in the details. - p7&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;climbers可以是要完成&#x2F;精进任何一项事的我们大概率会犯的错 - 在信息爆炸的今天, 明明对于基础以及大框架的忽视, 但是缺扎在了细节海洋里面. 反思与总结才能理清楚什么是真正基础并且重要的. 此外, 减少百分之四的努力不会减少百分之四的产出, 减少百分之四的努力会减少百分之九十的产出.&lt;&#x2F;p&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;-&#x2F;zh_TW&#x2F;dp&#x2F;B08DFFS7K8&#x2F;ref=sr_1_1?adgrpid=125951556929&amp;amp;hvadid=585846668554&amp;amp;hvdev=c&amp;amp;hvlocphy=9069537&amp;amp;hvnetw=g&amp;amp;hvqmt=e&amp;amp;hvrand=3563086301586033640&amp;amp;hvtargid=kwd-301702799421&amp;amp;hydadcr=5371_13199253&amp;amp;keywords=12+week+year&amp;amp;qid=1704200642&amp;amp;sr=8-1&quot;&gt;The 12 Week Year: Get More Done in 12 Weeks than Others Do in 12 Months&lt;&#x2F;a&gt;: 如标题所示, 一本关于方法论的书. 要达到这本书所描述的效果, 前提是相信&lt;strong&gt;only actions lead results&lt;&#x2F;strong&gt;. 接下来这本书会指导如何action去达到results:&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;持续的action在重要的task上面.&lt;&#x2F;li&gt;
+&lt;li&gt;减短反馈周期 (把一年定义为12 weeks而不是12 months)&lt;&#x2F;li&gt;
+&lt;li&gt;制定明确并且可行动的目标 (首先是制定12 weeks的目标，之后划分到以周为行动单位)&lt;&#x2F;li&gt;
+&lt;li&gt;衡量完成度并且打分
+大体上就是缩短反馈周期, 主旨就是这样但是书中有很多操作细节.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;-&#x2F;zh_TW&#x2F;Eric-Jorgenson&#x2F;dp&#x2F;1544514212&#x2F;ref=sr_1_1?adgrpid=123510539502&amp;amp;hvadid=673391778402&amp;amp;hvdev=c&amp;amp;hvlocphy=9069537&amp;amp;hvnetw=g&amp;amp;hvqmt=e&amp;amp;hvrand=15029264263340209477&amp;amp;hvtargid=kwd-978551832954&amp;amp;hydadcr=23570_13677520&amp;amp;keywords=the+almanack+of+naval+ravikant&amp;amp;qid=1704200686&amp;amp;sr=8-1&quot;&gt;The Almanack of Naval Ravikant: A Guide to Wealth and Happiness&lt;&#x2F;a&gt;: 第二次读了，绝对是一本每年值得读一本的书. 今年计划再读一次. 每一次读都有不一样的收获. 这本书覆盖面太广了，总而言之，这本书回答的是如何过更幸福快乐的人生. 是视频&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=1-TZqOsVCNM&quot;&gt;How to Get Rich&lt;&#x2F;a&gt;内容整理成书.Naval是个值得深挖的人. 他的谈话和见解总是能直接了当的阐明本质, 并且能与实践有很直接的关联. Absolutely pure gold.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;book.douban.com&#x2F;subject&#x2F;36108573&#x2F;&quot;&gt;寻觅意义&lt;&#x2F;a&gt;: 王教授在复旦上课的讲话总结. 相比于注重操作的西方哲学，国学往往被认为不具有实践意义或者说只是教化人的工具. 王教授解释了儒释道三家的实践意义. 无心而为，无为而无不为. 这本书肯定能带来一丝心灵的平和与宁静.&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>记录一次对v4l2相机驱动的系统优化</title>
+        <published>2023-12-20T00:00:00+00:00</published>
+        <updated>2023-12-20T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog4/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog4/</id>
+        <content type="html">&lt;h1 id=&quot;bei-jing&quot;&gt;背景&lt;&#x2F;h1&gt;
+&lt;p&gt;最近有个需求需要重新优化供应商提供的相机驱动的代码, 来实现更低的cpu占用率以及更好的实时性. 同时要发布的消息里的时间戳是相机曝光时间戳并且是以unix时间戳为基准. 平台为Jetson Orin. 需要做localhost ipc来让下游应用使用. 相机原始默认编码是yuyv, 需要转换成bgr发送.&lt;&#x2F;p&gt;
+&lt;p&gt;之前从来没做过linux驱动之类的开发, 也没研究过图像转码, 有因为别的需求看过旧版相机代码. 整个任务自己从调研到实现大概花了两周时间, 其中一周卡在了视频编解码上面. 最后项目上面也没应用上. 因此开源了这个&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;EvanLyu732&#x2F;iceoryx-v4l2-yuyv2bgr-camera&quot;&gt;仓库&lt;&#x2F;a&gt;, 算是给近期比较有意思需求的一个方案. 这篇文章将一步步的介绍并解决这个问题.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;ji-yu-v4l2de-xiang-ji-qu-dong-shi-xian-liu-cheng&quot;&gt;基于V4l2的相机驱动实现流程&lt;&#x2F;h1&gt;
+&lt;p&gt;首先, 旧版的相机驱动是基于v4l2的. v4l2就是linux提供的一系列api. 基于v4l2开发的驱动也是有一个比较固定的流程的. 大体如下:&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#eff1f5;color:#4f5b66;&quot;&gt;&lt;code&gt;&lt;span&gt;1. 打开相机获得句柄
+&lt;&#x2F;span&gt;&lt;span&gt;2. 准备好v4l2_buffer并且配置v4l2_buffer
+&lt;&#x2F;span&gt;&lt;span&gt;3. 等待句柄事件触发
+&lt;&#x2F;span&gt;&lt;span&gt;4. 事件触发后访问v4l2_buffer存的就是准备好的相机buffer(v4l2_struct) 
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;此外相机是在硬件buffer里获取, 需要让用户态程序能够访问有三种方式dma, mmap和userptr. 我们希望尽可能低的cpu使用率因此选择dma. 因为其他两种方式相比, 从用户态程序操作buffer是直接对硬件buffer做操作 .而mmap和userptr都是对虚拟地址做操作的, 因此视频转码之后需要多一步I&#x2F;O拷贝的硬件buffer.&lt;&#x2F;p&gt;
+&lt;p&gt;了解了相机驱动大体流程之后, 首先先是尝试了&lt;code&gt;v4l2_open()&lt;&#x2F;code&gt;与&lt;code&gt;open()&lt;&#x2F;code&gt;, &lt;code&gt;v4l2_ioctl()&lt;&#x2F;code&gt;与&lt;code&gt;ioctl()&lt;&#x2F;code&gt;这些系统api的替换, 观察是否能有优化的效果. 经过一番尝试后发送如果换成&lt;code&gt;v4l2_open()&lt;&#x2F;code&gt;都无法打开用&lt;code&gt;open()&lt;&#x2F;code&gt;能打开的句柄.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;tu-xiang-zhuan-ma&quot;&gt;图像转码&lt;&#x2F;h1&gt;
+&lt;p&gt;因为我们的平台是Jetson Orin. 自然会去想使用Nvidia提供的一些硬件视频编解码或者其他工具链路来完成, 比较直观的想法是在gpu上做yuyv到bgr的转换, 或者能直接在硬件buffer里面完成转码肯定是最好的. 所以先尝试了能否在硬件上直接做转码. 就开始了解Nv的工具链, Jetson Pack等等. 当然也会在Nv的论坛上看别人的post, 最开始看回答的时候也有些云里雾里的. 还有很多时候明明也没有解决方案，Nv也会把帖子标为solved. 当然这里不会过多论述踩坑的过程, 比较有帮助是下面这张图, 这张图展示了Nv的生态工具链：&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;main&#x2F;static&#x2F;images&#x2F;nv.png&quot; alt=&quot;nvtoolkts&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;ok, 明确了大体上Nv所提供的工具链之后, 接下来解决这一步的问题: 原始相机吐出来的格式是YUYV要转换成BGR24, 在这一过程要达到性能最优.&lt;&#x2F;p&gt;
+&lt;p&gt;根据上面的需求尝试了以下几个方案:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;基于硬件的编解码，基于JetPack 5使用nvbuf_utils的NvBufSurface来存储相机原始数据buffer, 再使用NvBufSurfaceTransform&lt;&#x2F;li&gt;
+&lt;li&gt;基于cuda做手动的转码,手写kernel. 根据这个&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Y%E2%80%B2UV&quot;&gt;公式&lt;&#x2F;a&gt;, 一组YUYV可以转成成2个BGR像素. 以及jetson_multimedia_api的samples里面的转rgb的&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;EvanLyu732&#x2F;jetson_multimedia_api&#x2F;blob&#x2F;main&#x2F;samples&#x2F;v4l2cuda&#x2F;yuv2rgb.cu&quot;&gt;例子&lt;&#x2F;a&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;使用cuda加速版的opencv的cvtColor&lt;&#x2F;li&gt;
+&lt;li&gt;使用&lt;a href=&quot;https:&#x2F;&#x2F;developer.nvidia.com&#x2F;npp&quot;&gt;Npp&lt;&#x2F;a&gt;来做处理&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;尝试之后发现:
+方案1: 硬件只能转换成BGRA, 因此要从BGRA转换成BGR的话. 不可避免的就需要在用户态开辟buffer做转换. 过程比较繁琐.
+方案3: 性能相比于方案2要差, 猜测原因是cuda opencv不能自定义threads和block的比例.
+方案4: 有奇怪的bug. 转出来的图片不符合预期，也没有论坛post去讨论这个问题. 因时间原因, 解不了只好放弃.&lt;&#x2F;p&gt;
+&lt;p&gt;这一步最终选择了方案二. 使用CUDA Zero Copy Mapped Memory(host mem与device mem映射), 然后使用核函数去做转换.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;shi-jian-chuo-dui-qi&quot;&gt;时间戳对齐&lt;&#x2F;h1&gt;
+&lt;p&gt;相机驱动输出的结构体是&lt;code&gt;v4l2_struct&lt;&#x2F;code&gt;. 而&lt;code&gt;v4l2_struct&lt;&#x2F;code&gt;带的timestamp是相对时间戳（从系统上电开始计时）并且是Start Of Frame(即buffer里面第一个字节有数据时的时间),而需要转换到unix时间戳。那如何做转换呢? 通过&lt;code&gt;clock_gettime&lt;&#x2F;code&gt;函数里面, 传入两个&lt;code&gt;timespec&lt;&#x2F;code&gt;.一个为&lt;code&gt;realtime&lt;&#x2F;code&gt;另一个为&lt;code&gt;monotonic&lt;&#x2F;code&gt;. 再做差值就是两个尺度原点的差值. 此外, 还需要加RTCPU与CPU时间戳的偏移量(见&lt;a href=&quot;https:&#x2F;&#x2F;developer.ridgerun.com&#x2F;wiki&#x2F;index.php&#x2F;NVIDIA_Jetson_TX2_-_VI_Latency_Measurement_Techniques&quot;&gt;链接&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;t0 = adjusted_sof = TSC - offset_ns &lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;TSC&lt;&#x2F;code&gt;即下图的&lt;code&gt;t1&lt;&#x2F;code&gt;, 其中&lt;code&gt;offset_ns&lt;&#x2F;code&gt;代表&lt;code&gt;latency&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;github.com&#x2F;EvanLyu732&#x2F;evanlyu732.github.io&#x2F;blob&#x2F;main&#x2F;static&#x2F;images&#x2F;SOF-latency-path.png?raw=true&quot; alt=&quot;sof-latency-path&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;再补偿回这个偏移量就可以得到尺度一样的时间戳. 如果是在Nv的板上的话，偏移量会存放在&lt;code&gt;&#x2F;sys&#x2F;devices&#x2F;system&#x2F;clocksource&#x2F;clocksource0&#x2F;offset_ns&lt;&#x2F;code&gt;这个路径下. 加上了这个偏移量那输出的就是&lt;code&gt;monotonic_time&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;ben-ji-ipc-inter-process-communication&quot;&gt;本机IPC(Inter Process Communication)&lt;&#x2F;h1&gt;
+&lt;p&gt;在编解码这一步我们使用了cuda开辟了gpu内存, 所以如果能基于cuda_ipc的话应该是最优解(没有多余的拷贝，客户端应用程序可以直接指向gpu buffer). 但是使用cuda-ipc的话就不能使用device和host memory的映射, 必须要&lt;code&gt;cudaMemcpy&lt;&#x2F;code&gt;. 并且我们希望cpu应用端也能直接拿. 接下来就考虑使用shared memory或者传dma_fd. 理论上传dma_fd的性能更高, 但是也依赖Nv的JetPack, 而刚好我们的JetPack版本在2023年12月这个时间点还不支持共享NvBufSurface. 如果以后支持了, 使用&lt;code&gt;NvBufferTransformEx()&lt;&#x2F;code&gt;类似这样的api应该是最优的做法. 
+还有, 可以用&lt;code&gt;eglstream&lt;&#x2F;code&gt;去做IPC, 比较麻烦的是每多一个订阅者就要改一次代码(开通channel). 因此也排除了基于Nv的生态做IPC.&lt;&#x2F;p&gt;
+&lt;p&gt;现在考虑使用shared memory去做这件事. 有一个问题就是在应用端（驱动）去往内存块里写图片的时候, 客户端需要用进程锁. 如果这时候同步机制做的不好的话, 就很容易出问题. 一开始尝试使用boost的interprocess读写锁, 但是这里还是有内核态到用户态之间的切换. 基于纯用户态的话, 使用信号量做触发机制. 这样做是可行的, 但是对客户端接受编写接受图像代码逻辑有要求. 但还是有个问题就是这套机制没办法自定义QOS, 并且只限定于这种场景. &lt;&#x2F;p&gt;
+&lt;p&gt;于是最终转向了&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;eclipse-iceoryx&#x2F;iceoryx&quot;&gt;Iceoryx&lt;&#x2F;a&gt;. 因为这也是现有的基于shared memory(c++)最成熟的中间件. 相比于手写shared memory, 基于Iceoryx的通用性和可复用程序更高, 更有利于后续其他模块满足迁移通信机制的需求.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;jie-guo&quot;&gt;结果&lt;&#x2F;h2&gt;
+&lt;p&gt;做完上述处理过后的驱动相比于供应商提供给我们的驱动在cpu使用率在JetSon Orin上降低了10%左右. 如果你也有类似的问题, 参考这个&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;EvanLyu732&#x2F;iceoryx-v4l2-yuyv2bgr-camera&quot;&gt;仓库&lt;&#x2F;a&gt;或许对你有所帮助.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;zong-jie&quot;&gt;总结&lt;&#x2F;h2&gt;
+&lt;p&gt;整个过程有以下几点总结:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Nv的很多资料散落在论坛里面，需要多个post才能拼成一个完整的信息源.&lt;&#x2F;li&gt;
+&lt;li&gt;问题最快的解决方式是直接让供应商找人去改. 能有时间和精力去研究这些当然好, 写完这篇文章或许能证明自己的一些学习能力. 但是所有问题的最快解决方案始终是找到对应的人. 因为很多问题遇到一次基本上也不会遇到第二次了, 很难说能从获得系统性的思考能力.&lt;&#x2F;li&gt;
+&lt;li&gt;如果在现有的Nv板上在官方文档找不到解决问题的资料, 不妨往以前版本的Nv板的官方资料上面找.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h2 id=&quot;can-kao-zi-liao&quot;&gt;参考资料&lt;&#x2F;h2&gt;
+&lt;p&gt;以下是在这过程中比较有帮助的参考资料:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;https:&#x2F;&#x2F;developer.ridgerun.com&#x2F;wiki&#x2F;index.php&#x2F;NVIDIA_Jetson_TX2_-_Video_Input_Timing_Concepts&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;forums.developer.nvidia.com&#x2F;t&#x2F;interprocess-zero-copy-image-transfer&#x2F;231623&lt;&#x2F;li&gt;
+&lt;li&gt;https:&#x2F;&#x2F;on-demand.gputechconf.com&#x2F;gtc&#x2F;2016&#x2F;webinar&#x2F;getting-started-jetpack-camera-api.pdf&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>发展思考的方式</title>
+        <published>2023-12-09T00:00:00+00:00</published>
+        <updated>2023-12-09T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog3/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog3/</id>
+        <content type="html">&lt;p&gt;&lt;em&gt;这是一篇读书摘要汇总(&amp;quot;The Art of Doing Science and Engineering: Learning to Learn&amp;quot;)&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;写这篇文章的灵感来自于之前读&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Richard_Hamming&quot;&gt;Richard Hamming&lt;&#x2F;a&gt;的&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Art-Doing-Science-Engineering-Learning&#x2F;dp&#x2F;1732265178&quot;&gt;&amp;quot;The Art of Doing Science and Engineering: Learning to Learn&amp;quot;&lt;&#x2F;a&gt;. 书的内容来自于他给美国海军的一系列讲座集合, 之后整理成书. 书中Hamming有非常多精彩的观点,但是看书有一个问题就是到最后很难提炼成自己的东西, 所以这种好书就需要时间去吸收, 看完不是结束, 而是行动的开始. 这里选取了十五句本书对我最有影响的话.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote1. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“In science, if you know what you are doing, you should not be doing it.
+In engineering, if you do not know what you are doing, you should not be doing it.” - P49&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;工程和科学应该有清晰界定的范围, 对于实现工程, 很多时候会参杂着research. 但是要界定research的范围. 应该是在已知面(不应跳进未知领域的坑) 进行探索. 此外, 在工程中未知因素越多, 出问题可能性越大, 应当越简洁越好.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote2. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“I believe the best predictions are based on understanding the fundamental forces involved, and this is what I depend on mainly.” - P51&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;技术和时代变化如此剧烈的现在, 更应该总结和思考什么是基础因素. &lt;&#x2F;p&gt;
+&lt;p&gt;Quote3. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“ so long as it takes you to greatness, is none of my business. You must, as in the case of forging your personal style, find your vision of your future career, and then follow it as best you can.
+No vision, not much of a future.” - P56&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;尝试制定并不断修正自己的计划. 才能让未来尽可能的与计划相接近.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote4. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“The people at the bottom do not have the larger, global view, but at the top they do not have the local view of all the details, many of which can often be very important, so either extreme gets poor results.” - P77&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;底层视野(执行层)和顶层视野(规划层)都很重要. 盲目的只注重哪一个方面都不会有好结果.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote5. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“I suggest you must rethink everything you ever learned on the subject, question every successful doctrine from the past, and finally decide for yourself its future applicability. The Buddha told his disciples, “Believe nothing, no matter where you read it, or who said it, no matter if I have said it, unless it agrees with your own reason and your own common sense.” I say the same to you—you must assume the responsibility for what you believe.” - P82&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;批判性思维, 足够清晰的了解问题才能最好的解决问题. 清晰的了解问题必须要经过独立思考的这个过程.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote6. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“Mathematics is the language of clear thinking.” - P625&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;下一次遇到了不清晰的问题可以尝试用数学的方式描述出来.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote7. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“What you did to become successful is likely to be counterproductive when applied at a later date.” - P713&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;不断的反思过去的行为, 然后加以学习总结以及改正.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote8. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“If you optimize the components, you will probably ruin the system performance.” - P752&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;部分最优不代表系统最优, 系统工程学的观点. 吴军也讲到过.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote9. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“You get what you measure” - Chapter29 Title&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;生活无法在没有指标的方面取得进步.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote10. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“In planning to change yourself clearly, the old Greek saying applies: “Know thyself.” And do not try heroic reformations which are almost certain to fail. Practice on small ones until you gradually build up your ability to change yourself in the larger things. You must learn to walk before you run in this matter of being creative, but I believe it can be done.”&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;改变是从非常微小且具体的步骤开始.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote11. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“Why are you not working on and thinking about the important problems in your area?” If you do not work on important problems, then it is obvious you have little chance of doing important things.” - P808&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;只有在重要的领域研究重要的问题才能取得重要的结果.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote12. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“intellectual investment is like compound interest: the more you do, the more you learn how to do, so the more you can do, etc”&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;掌握尽可能多的问题模型, 收益会体现在以后的问题上面.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote13. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“There is another trait of great people I must talk about—and it took me a long time to realize it. Great people can tolerate ambiguity; they can both believe and disbelieve at the same time. You must be able to believe your organization and field of research is the best there is, but also that there is much room for improvement! You can sort of see why this is a necessary trait. If you believe too much, you will not likely see the chances for significant improvements; if you do not believe enough, you will be filled with doubts and get very little done, chances are only the 2%, 5%, and 10% improvements.”&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;辩证思考, 至少需要同时看待事物的两个方面.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote14. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“All three are essential—you must learn to sell your ideas, not by propaganda, but by force of clear presentation. I am sorry to have to point this out; many scientists and others think good ideas will win out automatically and need not be carefully presented. They are wrong; many a good idea has had to be rediscovered because it was not well presented the first time, years before! New ideas are automatically resisted by the establishment, and to some extent justly.” - P822&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;清晰的表达比单纯只拥有一个好的点子更加重要.&lt;&#x2F;p&gt;
+&lt;p&gt;Quote15. &lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“I believe it is—the chief gain is in the effort to change yourself, in the struggle with yourself, and it is less in the winning than you might expect. Yes, it is nice to end up where you wanted to be, but the person you are when you get there is far more important.”&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;相信并且观察和体会内在的变化.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>积极不干预</title>
+        <published>2023-10-08T00:00:00+00:00</published>
+        <updated>2023-10-08T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog2/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog2/</id>
+        <content type="html">&lt;p&gt;如果在各大搜索网站上,搜索”积极不干预“. 那么搜索结果第一条一定是香港政府为了振兴经济所提出的&lt;a href=&quot;https:&#x2F;&#x2F;zh.wikipedia.org&#x2F;zh-cn&#x2F;%E7%A9%8D%E6%A5%B5%E4%B8%8D%E5%B9%B2%E9%A0%90&quot;&gt;&amp;quot;积极不干预政策&amp;quot;&lt;&#x2F;a&gt;. 点击高亮的字, 会进入维基百科官方的解释. 如果打开不方便的话, 这里将粘贴维基百科的一段内容.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;有学者认为, &lt;strong&gt;积极不干预应理解作“积极性”的不干预. 积极不干预意味基本上是要干预的; 若不干预, 必须要有正面而积极性的效果&lt;&#x2F;strong&gt;. 并指出, “港英年代的经济哲学一向是 &lt;strong&gt;最大的支持, 最小的干预&lt;&#x2F;strong&gt;. (maximum support，minimum intervention) ” - wiki&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;&amp;quot;不干预&amp;quot;好理解, 那么&amp;quot;积极&amp;quot;是什么意思呢? 实际上在看完维基百科的词条之后, 我还是不明白&amp;quot;积极&amp;quot;在这个语境里是什么意思. 之所以兴起而发写这篇文章的原因是因为某日在网上刷到一个视频, 标题叫&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=K6i2z-t5bmo&quot;&gt;&amp;quot;谷德昭 溝通能力 即時增值&amp;quot;&lt;&#x2F;a&gt;, 如标题所写, 这是一个关于沟通能力提升的视频. 相信如果不是资深一点的影迷, 应该是不会知道&lt;a href=&quot;https:&#x2F;&#x2F;zh.wikipedia.org&#x2F;wiki&#x2F;%E8%B0%B7%E5%BE%B7%E6%98%AD&quot;&gt;谷德昭&lt;&#x2F;a&gt;这个人. 而且因为是香港人, 所以是用的粤语演讲. 这让不懂粤语的朋友更难看完整个视频. 况且关于沟通能力如何提升, 经典的资料比比皆是. 无非就是一些普遍的大道理, 大同小异. 那谷德昭又讲了什么呢? 整个视频我是没快进着看的, 最开始谷德昭讲的都是普遍性的道理. 直到他谈到了 &lt;strong&gt;&amp;quot;积极不干预&amp;quot;&lt;&#x2F;strong&gt;.  他用政府的政策来类比与人沟通的方式. 道理也普通, 简单而言之就是抱着最&amp;quot;积极&amp;quot;的心态去沟通. 和&amp;quot;尽人事然后听天意&amp;quot;意思很类似. 但是态度不一样. &lt;strong&gt;&amp;quot;积极不干预&amp;quot;&lt;&#x2F;strong&gt; 指的是做好自己该做的部分, &lt;span style=&quot;color:green&quot;&gt; &lt;strong&gt;然后用最积极的心态去想这件事&lt;&#x2F;strong&gt;. &lt;&#x2F;span&gt; 积极的心态绝不是欺骗, 更多的是不活在&amp;quot;想象陷阱&amp;quot;当中. 往往很多时候, 我们是怕往前迈出一步就会跌掉. 在国际形势逐渐复杂的今日和信息过载的时代背景下, 能够保持这种心态的能力绝不是自然形成, 而是需要不断练习.&lt;&#x2F;p&gt;
+&lt;p&gt;那么如果放在人际交往或者做事的角度上讲的话, 上面这句引用可以解读成这样:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;积极不干预应理解作“积极性”的不干预. 积极不干预意味必须积极的做事; 若不干预, 必须要有正面而积极性的心态&lt;&#x2F;strong&gt;.  &lt;strong&gt;最大的努力, 最小的负面情绪&lt;&#x2F;strong&gt;. (maximum effort，minimum negative mindset)” - wiki&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;共勉.&lt;&#x2F;p&gt;
+</content>
+    </entry>
+    <entry xml:lang="zh-cn">
+        <title>时间杂想</title>
+        <published>2023-10-06T00:00:00+00:00</published>
+        <updated>2023-10-06T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://evanlyu732.github.io/blog1/" type="text/html"/>
+        <id>https://evanlyu732.github.io/blog1/</id>
+        <content type="html">&lt;h1 id=&quot;kai-tou&quot;&gt;开头&lt;&#x2F;h1&gt;
+&lt;p&gt;工作了几年发现大部分时候所指的”时间&amp;quot;并不是真正的时间. 什么意思呢? 我们需要的是 &lt;strong&gt;“有效工作时间&amp;quot;&lt;&#x2F;strong&gt; 而不是&amp;quot;无效时间&amp;quot;. 在日常对话里面, 我们经常会说&amp;quot;时间不够“, &amp;quot;还有别的事“. 今天没睡好的话, 状态似乎就不在了. 昨天的账单还没处理了. 到了假期, 尽管我们有着相比于工作日更多的空闲时间. 但一个假期下来又经常感觉很多事都没做.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;time-formula&quot;&gt;Time Formula&lt;&#x2F;h2&gt;
+&lt;p&gt;其实我们需要的&amp;quot;有效工作时间&amp;quot;是 &lt;strong&gt;可控制工作时间 x 精神状态系数(0-1) x 专注度系数(0-1)&lt;&#x2F;strong&gt;. 这就像健身房力量训练一样, 就拿深蹲为例, 比如一个人的极限重量是100kg, 但由于Ta的精神状态不好, 状态掉10%. 因为训练安排导致神经激活度不够, 再掉10%.  那么实际上Ta那天是无法蹲起100kg重量. 回到刚刚的公式，一项一项定义, 我们的计量单位为 &lt;strong&gt;每天(24h)&lt;&#x2F;strong&gt;. 在一天内,&lt;&#x2F;p&gt;
+&lt;span style=&quot;color:green&quot;&gt;
+可控制工作时间 = 24h - 休息时间(可能会赖床) - 吃饭时间(可能和他人一起吃) - 休息时间(可能要午睡) - 他人打扰时间(问题或者交流) - 厕所时间(可能喝水喝多了或者吃坏了东西) - 通勤时间(这里暂时假定通勤无法有效工作) - 陪xxx的时间(家人, 伴侣, 宠物等) - 刷视频媒体时间(大部分人应该会) - 其他杂项时间(...)
+&lt;&#x2F;span&gt;
+&lt;p&gt;上面这个公式显而易见, 每一个被减项都是波动的, 会对我们一天内的&amp;quot;可控制工作时间&amp;quot;产生影响. 只不过要时时刻刻贯彻到自己的行为模式里就没那么容易.&lt;&#x2F;p&gt;
+&lt;span style=&quot;color:green&quot;&gt;
+精神状态系数 = 1 * 正常休息时间比例(0~1, 大于正常休息时间都为1，小于正常休息时间则为0到1的值) * 休息时间收益比(0~1, 可能因为楼上装修导致数值很低)
+&lt;&#x2F;span&gt;
+&lt;p&gt;精神状态系数是一个0到1的值. 当值为1时, 代表有着最好的精神状态能够应对接下来的一天. 当值为0时, 意味着&amp;quot;身在曹营心在汉&amp;quot;和“心有余而力不足&amp;quot;. &lt;&#x2F;p&gt;
+&lt;span style=&quot;color:green&quot;&gt;
+专注度系数 = 1 * 大脑激活程度(0~1, 可能会被天气, 环境等其他各种因素影响) * 专注于当下比例系统(0~1)
+&lt;&#x2F;span&gt;
+&lt;p&gt;和精神状态系数一样, 专注度系数也是个乘法公式. 当专注度系数为1时, 意味着此时极度专注于当下, 达到所谓的&lt;a href=&quot;https:&#x2F;&#x2F;zh.wikipedia.org&#x2F;zh-hk&#x2F;%E5%BF%83%E6%B5%81%E7%90%86%E8%AB%96&quot;&gt;&amp;quot;心流&amp;quot;&lt;&#x2F;a&gt;状态. 而当数值为0时, 和精神状态系统为0一样, 大脑里面无法体验到当下时刻的美好.&lt;&#x2F;p&gt;
+&lt;p&gt;有那么多因素可能会影响到&amp;quot;有效工作时间&amp;quot;. 对于大部分人来说不可能每一项都顾及到. 如何通过最小行为代价来最大幅度提高&amp;quot;有效工作时间&amp;quot;呢? &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;mind-like-water&quot;&gt;Mind Like Water&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Empty your mind, be formless. Shapeless, like water. If you put water into a cup, it becomes the cup. You put water into a bottle and it becomes the bottle. You put it in a teapot it becomes the teapot. Now, water can flow or it can crash. Be water my friend. - Bruce Lee&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;上面这段话出自李小龙接受外国记者采访的语句. 如果在各大视频网站一搜很容易就能找到相关视频. 很多年前我就看到过, 但并没有太大的感悟. 在华人圈内, 李小龙为大众所出名的是他武术家的身份，但在西方世界里面，李小龙不仅是一位武术家也是一位哲学家. 但在中文世界里, 关于“李小龙哲学“的讨论寥寥无几. 这里不讨论李小龙哲学, 只讨论上面的引用对实际生活的意义. 我开始对李小龙的哲学产生好奇的原因是因为&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Joe_Rogan&quot;&gt;Joe Rogan&lt;&#x2F;a&gt;和&lt;a href=&quot;https:&#x2F;&#x2F;en.wikipedia.org&#x2F;wiki&#x2F;Naval_Ravikant&quot;&gt;Naval Ravikant&lt;&#x2F;a&gt;的一期&lt;a href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=3qHkcs3kG44&quot;&gt;博客&lt;&#x2F;a&gt;. 在这篇博客里Joe问Naval推荐的书籍. Naval谈到了李小龙的&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Bruce-Lee-Striking-Thoughts-Library&#x2F;dp&#x2F;0804834717&quot;&gt;&amp;quot;Striking Thought&amp;quot;&lt;&#x2F;a&gt;. 在&amp;quot;Striking Tought&amp;quot;里面有一句话，印象非常深刻.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Express your total presence from the root - &amp;quot;Striking Thought&amp;quot; p12, Bruce Lee&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;什么是root? 在这里李小龙指的是一颗没有附加想法，纯净的心.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The root in life. - Be aware of doing your best to under stand the ROOT in life and realize the DIRECT and the INDIRECT are in fact a complementary WHOLE. It is to see things as they are and not to become attached to any thing - to be unconscious means to be innocent of the working of a relative (empirical) mind - when there is no abiding of thought anywhere on anything - this is being unbound. This not abiding anywhere is the root of our life. - &amp;quot;Striking Thought&amp;quot; p11, Bruce Lee&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;因此在李小龙看来, 所有的行为都应该源自一颗没有附加想法，纯净的心. 在大部分的时候，我们都处于&amp;quot;自动&amp;quot;模式. 即依靠潜意识来行动. 而维持一颗没有附加想法，纯净的心一定需要有意识的参与，因为需要有意识帮助筛选掉无用的外部信息. 就像冥想一样. 没了解过的人会认为是放松练习，而实际上冥想需要高度集中的注意力.&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Rule your mind or it will rule you. - Harace&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;一颗没有附加想法，纯净并且流动的心可以最大程度上的活在当下. 它不会去猜测形势, 不会去预测结果. 而是完全积极专注于当下的事情. &lt;&#x2F;p&gt;
+&lt;h2 id=&quot;a-trusted-system-outside-brain&quot;&gt;A Trusted System Outside Brain&lt;&#x2F;h2&gt;
+&lt;p&gt;在通俗的教育系统里, 往往考试成绩越高的学生脑子里记住的东西越多. 我们接受的教育提倡多&amp;quot;记住&amp;quot;东西在大脑里面. 但是记忆会随着时间淡去. 往往我们在以前看过有价值的书过了几年后就忘却了大半. 大脑是用来整合信息，而不是记住信息. 在著名的效率书籍&lt;a href=&quot;https:&#x2F;&#x2F;www.amazon.com&#x2F;Getting-Things-Done-Stress-Free-Productivity&#x2F;dp&#x2F;0142000280&quot;&gt;&amp;quot;Getting Things Done&amp;quot;&lt;&#x2F;a&gt;里阐述的观点，建立一个完全信赖的系统并将所有信息由系统管理，大脑对系统进行操作. 从而对事项推进. 正是所谓的 &amp;quot;Thinking Outside Brain&amp;quot;.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;jie-wei&quot;&gt;结尾&lt;&#x2F;h1&gt;
+&lt;p&gt;实际上本文目前叙述的逻辑与GTD一致. 关于如何&amp;quot;Build A Trusted System&amp;quot; 这里不多做阐述. 在推荐阅读里面可以找到答案. 当然最终事事需亲为. 只有在实践当中才能达到最适合每个人的系统.&lt;&#x2F;p&gt;
+&lt;p&gt;关于心的问题很多经典资料, 比如佛学, 佛学强调的也是一颗流动的心. 佛学不是&amp;quot;佛系&amp;quot;，强调不是不做事，而是如何做事. 实际上很多哲学思想譬如李小龙哲学和阳明心学都深受佛学影响.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;tui-jian-yue-du&quot;&gt;推荐阅读&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;正见 by 宗萨蒋扬钦哲仁波切&lt;&#x2F;li&gt;
+&lt;li&gt;Striking Thoughts by Bruce Lee&lt;&#x2F;li&gt;
+&lt;li&gt;Getting Things Done by David Allen&lt;&#x2F;li&gt;
+&lt;li&gt;How to Take Smart Notes by Sönke Ahrens &lt;&#x2F;li&gt;
+&lt;li&gt;Building a Second Brain by Tiago Forte&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+    </entry>
+</feed>

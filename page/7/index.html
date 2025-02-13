@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="current-menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<section class="posts">
+    
+    <article class="post">
+        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog11&#x2F;" class="post-title-link">学习如何阅读论文</a></div>
+        <div class="post-content">
+            
+                <p>要了解一手最新的科技前沿, 研究以及阅读文献的能力必不可少. 最近在github上刷到了<a href="https://github.com/zibuyu/research_tao">research_tao</a>这个仓库by刘知远副教授, 其中有一篇文章讲的是如何阅读文献. 阅读到其中<a href="https://github.com/zibuyu/research_tao/blob/master/02_reading_paper.md">一章</a>的时候激发了思考自己阅读文献的方式是否可以再提升一步. 因此花了点时间总结了几位不同老师关于如何阅读论文(主要是计算机与人工智能方向)的材料, 希望对你有所帮助.</p>
+<blockquote>
+<p>Note: 几位老师都提到了如何选择材料, 但不是这篇文章的重点. 因此这里不会提及应该读什么. </p>
+</blockquote>
+<p><a id="目录"></a></p>
+<h1 id="mu-lu">目录</h1>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog11/#%E7%9B%AE%E5%BD%95">目录</a>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog11/#%E9%98%85%E8%AF%BB%E8%AE%BA%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95">阅读论文的方法</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#%E6%B8%85%E5%8D%8E%E5%88%98%E7%9F%A5%E8%BF%9C">清华(刘知远)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#johns-hopkins-univeristyjason-eisner">Johns Hopkins Univeristy(Jason Eisner)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#univeristy-of-waterloosrinivasan-keshav">Univeristy Of Waterloo(Srinivasan Keshav)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#harvard-universitymichael-mitzenmacher">Harvard University(Michael Mitzenmacher)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#carnegie-mellon-universityaaditya-ramdas">Carnegie Mellon University(Aaditya Ramdas)</a></li>
+</ul>
+</li>
+<li><a href="https://evanlyu732.github.io/blog11/#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+<p><a id="阅读论文的方法"></a></p>
+<h2 id="yue-du-lun-wen-de-fang-fa">阅读论文的方法</h2>
+<p><a id="清华刘知远"></a></p>
+<h2 id="qing-hua-liu-zhi-yuan">清华(刘知远)</h2>
+<p>在<a href="https://github.com/zibuyu/research_tao/blob/master/02_reading_paper.md">research_tao</a>里, 刘老师主要谈到的是论文的阅读顺序.</p>
+<blockquote>
+<p>阅读论文也不必需要每篇都从头到尾看完. 一篇学术论文通常包括以下结构, 我们用序号来标记建议的阅读顺序:</p>
+<ul>
+<li>题目(1)</li>
+<li>摘要(2)</li>
+<li>正文: 导论(3), 相关工作(6), 本文工作(5), 实验结果(4), 结论(7)</li>
+<li>参考文献(6)</li>
+<li>附录</li>
+</ul>
+<p>按照这个顺序, 基本在读完题目和摘要后, 大致可以判断这篇论文与自己研究课题的相关性, 然后就可以决定是否要精读导论和实验结果判断学术价值, 是否阅读本文工作了解方法细节. 此外, 如果希望了解相关工作和未来工作, 则可以有针对性地阅读“相关工作”和“结论”等部分.</p>
+</blockquote>
+<p><a id="johns-hopkins-univeristyjason-eisner"></a></p>
+<h2 id="johns-hopkins-univeristy-jason-eisner">Johns Hopkins Univeristy(Jason Eisner)</h2>
+<p>Jason Eisner提出Multi-pass reading. </p>
+<p>Multi-pass reading的过程:</p>
+<ul>
+<li>First pass: 大概浏览论文, 了解论文的主要脉络(解决的问题, 以及点子). 限制自己阅读每页的时间. 如果论文值得阅读的话, 开始Second pass.</li>
+<li>Second pass: 在Second pass中, 不需要仔细阅读每篇论文. 提出问题并且回答他们<a href="https://terrytao.wordpress.com/career-advice/ask-yourself-dumb-questions-and-answer-them/">(ask yourself dumb questions and answer them)</a>. 至少弄清楚论文的动机(Motivation), 原理(Mathematics and algorithms). 以及实验过程(Experiments). </li>
+</ul>
+<p>此外, 在使用Multi-pass reading的要做的事. 需要一边阅读论文一边写笔记(Write as you read). 记录细节(Low-level notes)与框架(High-level notes). </p>
+<p>细节(Low-level notes)包括以下部分:</p>
+<ul>
+<li>用自己的话复述在论文中不明白的要点</li>
+<li>补充缺失的细节(假设, 代数步骤, 证明, 伪代码)</li>
+<li>注释数学对象及其类型</li>
+<li>类比具体的例子去复述作者的点子以及作者遇到的问题</li>
+<li>与已知的其他方法和问题联系起来</li>
+<li>提出原文未说明的地方或原文存在不合理的问题</li>
+<li>挑战论文的主张或方法</li>
+<li>想出应该做的后续工作</li>
+</ul>
+<p>框架(High-level notes)包括以下部分:</p>
+<ul>
+<li>总结你感兴趣的内容, 与其他论文进行对比, 并记录你自己的问题和对未来工作的想法. 写下这些摘要会在阅读论文时给你一个目标, 并且这些笔记将来会对你有用.</li>
+<li>用自己的话复述点子, 确保以后再读这篇文章的时候可以快速重建概念. 花时间在难的部分(公式推导, 算法). 而不是在简单的部分.</li>
+</ul>
+<p>原文虽然说是Multi-pass, 但是提到了Second-pass之后就没有继续往下提及了. 不过可以从原文发现后续pass应该做什么的蛛丝马迹, 这里引用原文来表达Multi-pass reading核心思想:</p>
+<blockquote>
+<p><strong>Practice</strong> the ability to <strong>decode the entire paper</strong> —as if you were reviewing it critically and <strong>trying to catch any errors, sloppy thinking, or incompleteness</strong>. This will <strong>sharpen your critical thinking</strong>. You will want to <strong>turn this practiced critical eye on yourself as you plan, execute, and write up your own research</strong>.</p>
+</blockquote>
+<p>通过解构论文提升自己评判性思考的能力, 再将这种能力转换到自己的研究上面. 因此假如需要有后续pass的话, 应该不断的去提炼点子直到能够解构整篇文章.</p>
+<p><a id="univeristy-of-waterloosrinivasan-keshav"></a></p>
+<h2 id="univeristy-of-waterloo-srinivasan-keshav">Univeristy Of Waterloo(Srinivasan Keshav)</h2>
+<p>Srinivasan Keshav提出three-pass method. </p>
+<ul>
+<li>
+<p>First-pass: </p>
+<ul>
+<li>目的: 抓住论文主要的点子.</li>
+<li>时间: 5分钟左右</li>
+<li>做什么:
+<ol>
+<li>读标题, 摘要, 以及介绍</li>
+<li>读每一节和每一小节的标题</li>
+<li>读结论 </li>
+<li>看引用</li>
+<li>最后回答五个问题(five C's):</li>
+</ol>
+<ul>
+<li>类别(Category): 这篇文章的类型是什么?</li>
+<li>内容(Content): 这篇文章与什么内容有关? 理论基础是什么?</li>
+<li>准确度(Correctness): 文章的假设是否成立?</li>
+<li>贡献(Contributions): 这篇文章主要的贡献是什么?</li>
+<li>清晰程度(Clarity): 这篇文章是否清晰的表达点子?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Second-pass:</p>
+<ul>
+<li>目的: 抓住论文主要的内容</li>
+<li>时间: 1小时左右</li>
+<li>做什么:
+<ol>
+<li>仔细读文章所附带的图片以及其他陈述信息</li>
+<li>将未读过的有相关性参考文献加入阅读列表当中</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Third-pass:</p>
+<ul>
+<li>目的: 彻底理解论文的细节</li>
+<li>时间: 4到5个小时对于初学者， 1小时对于有经验的人</li>
+<li>做什么:
+<ol>
+<li>思考与作者处于同样的假设并且复现实验的情况下, 你会如何呈现一个点子, 并与作者的点子进行对比.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="harvard-universitymichael-mitzenmacher"></a></p>
+<h2 id="harvard-university-michael-mitzenmacher">Harvard University(Michael Mitzenmacher)</h2>
+<p>这里选择的材料是CS222-Michael Mitzenmacher的讲义: </p>
+<ul>
+<li>批判性思考: 通过提出合适的问题去批判性地思考论文, 例如: 如果作者在解决问题, 那么作者解决的问题是正确的问题吗? 是否有更简单的方法作者没有考虑到? 作者提供的方法有什么局限性?
+假设是否合理? 逻辑是否合理? 作者对于文中的图表是否是合理的解释数据?</li>
+<li>创造性阅读: 能否解构论文并且重建这篇文章? 这篇文章好在哪里? 这些点子是否有其他扩展以及应用是作者没有考虑到的? 点子能够更加泛化? 这些提升是否能让结果有明显的提升? 如果你要从这篇文章开始做研究, 你能够做什么?</li>
+<li>阅读的时候做笔记: 在第一篇读完这篇文章之后, 尝试用一到两句话去总结这篇文章. 如果可以的话, 将这篇文章与相关工作进行比较.</li>
+</ul>
+<p><a id="carnegie-mellon-universityaaditya-ramdas"></a></p>
+<h2 id="carnegie-mellon-university-aaditya-ramdas">Carnegie Mellon University(Aaditya Ramdas)</h2>
+<p>这里选用了How to I read research papers-Aaditya Ramdas的ppt讲稿, Aaditya Ramdas讲述了自己阅读论文方法不断迭代的过程.</p>
+<ul>
+<li>阅读论文的目的: 
+<ol>
+<li>直接从作者身上学习, 避免信息加工.</li>
+<li>作者在旧问题上有新点子</li>
+</ol>
+</li>
+<li>方法:
+<ul>
+<li>first-pass(5到30分钟): 
+<ul>
+<li>阅读材料: 
+<ul>
+<li>摘要, 问题定义, 主要的理论, 讨论</li>
+</ul>
+</li>
+<li>回答:
+<ul>
+<li>什么问题被解决了?</li>
+<li>大致描述一下什么有意思的点子?</li>
+<li>为什么主要的观点是这样(至少用英文, 最好能用数学公式)?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>second-pass(30分钟到2小时): 
+<ul>
+<li>阅读材料: 
+<ul>
+<li>例子, 公式, 定理, 证明</li>
+</ul>
+</li>
+<li>回答:
+<ul>
+<li>过去的方法面临什么问题? 这篇文章是如何解决的?</li>
+<li>什么是最简单的基准线? 在什么指标上这种方法更好?</li>
+<li>有哪些与之相关的问题并且为什么论文的想法还没用应用到上面去?</li>
+<li>方法能否应用到没被考虑的问题上?</li>
+<li>什么是主要的点子并且能否对以后有所帮助的?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>third-pass(几天/周): 
+<ul>
+<li>阅读材料: 
+<ul>
+<li>附录, 参考文献, 相关工作, 推论，定理, 证明</li>
+</ul>
+</li>
+<li>回答:
+<ul>
+<li>文中的公式/理论是如何被证明的?</li>
+<li>是否能够从头复现实现结果?</li>
+<li>如果不能, 是否有关键信息被忽略了? 额外的假设是否能够让复现更简单?</li>
+<li>是否能够用简单的工具简化证明? 能否用不同的方法证明?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="总结"></a></p>
+<h1 id="zong-jie">总结</h1>
+<p>其实上面提到的方法不仅仅适用于阅读论文, 只不过论文是一种结构化的信息材料. 通过其他信息材料(视频, 文章)学习新知识都可以采取类似的方法. 以记笔记的方式让自己与阅读的材料互动. 提出问题并且回答问题, 推动自己去理解文章. 并且以问题为导向学习让自己处于能够实验的环境之中. 通过复述以及写作总结自己的理解, 帮助自己消新知识. 读完这篇材料后, 不妨花点时间用一两句话总结一下这篇文章的主要观点是什么.</p>
+<p><a id="参考资料"></a></p>
+<h1 id="can-kao-zi-liao">参考资料</h1>
+<ul>
+<li><a href="https://www.stat.cmu.edu/~aramdas/checklists/reading-tips.pdf">How to I read research papers - Aaditya Ramdas</a></li>
+<li><a href="http://www.eecs.harvard.edu/~michaelm/CS222/ReadPaper.pdf">CS222 - Michael Mitzenmacher</a></li>
+<li><a href="http://ccr.sigcomm.org/online/files/p83-keshavA.pdf">How to Read a Paper - S. Keshav</a></li>
+<li><a href="https://www.cs.jhu.edu/~jason/advice/how-to-read-a-paper.html">How to Read a Technical Paper - Jason Eisner</a></li>
+</ul>
+
+            
+        </div>
+        <div class="post-meta">
+            
+                
+
+
+二〇二四年六月十三日
+
+            
+        </div>
+    </article>
+    
+    <article class="post">
+        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog10&#x2F;" class="post-title-link">五分钟读论文: Scaling and evaluating sparse autoencoders</a></div>
+        <div class="post-content">
+            
+                <p>这几天OpenAI新发了一篇<a href="https://openai.com/index/extracting-concepts-from-gpt-4/">博客</a>关于使用sparse-autoencoders去解释GPT4的内部机制. 本文是对论文的解读方便读者快速获取关键信息, 如果好求甚解, 请点击传送门:</p>
+<ul>
+<li>blog: <a href="https://openai.com/index/extracting-concepts-from-gpt-4/">Extracting Concepts from GPT-4</a></li>
+<li>paper: <a href="https://cdn.openai.com/papers/sparse-autoencoders.pdf">Scaling and evaluating sparse autoencoders</a></li>
+<li>code: <a href="https://github.com/openai/sparse_autoencoder">openai/sparse_autoencoder</a></li>
+</ul>
+<p><a id="目录"></a></p>
+<h1 id="mu-lu">目录</h1>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog10/#%E7%9B%AE%E5%BD%95">目录</a></li>
+<li><a href="https://evanlyu732.github.io/blog10/#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86">背景知识</a>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog10/#autoencoder">Autoencoder</a></li>
+<li><a href="https://evanlyu732.github.io/blog10/#sparse-autoencoder">Sparse Autoencoder</a></li>
+<li><a href="https://evanlyu732.github.io/blog10/#sparse-autoencoder%E7%9A%84%E7%89%B9%E5%BE%81%E5%8F%AF%E8%A7%A3%E9%87%8A%E6%80%A7">Sparse Autoencoder的特征可解释性</a></li>
+<li><a href="https://evanlyu732.github.io/blog10/#bottleneck-layer">Bottleneck Layer</a></li>
+<li><a href="https://evanlyu732.github.io/blog10/#topk%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0">TopK激活函数</a></li>
+</ul>
+</li>
+<li><a href="https://evanlyu732.github.io/blog10/#%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB">论文解读</a></li>
+<li><a href="https://evanlyu732.github.io/blog10/#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+<p>如果对背景知识不太了解的话, 推荐顺序阅读. 如果已经有足够的背景知识, 请点击<a href="https://evanlyu732.github.io/blog10/#%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB">这里</a>开始正文阅读. 下面是对论文的解读. </p>
+<p><a id="背景知识"></a></p>
+<h1 id="bei-jing-zhi-shi">背景知识</h1>
+<p><a id="Autoencoder"></a></p>
+<h2 id="autoencoder">Autoencoder</h2>
+<p>根据吴恩达在CS294A的<a href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">讲义</a>, Autoencoder是一种无监督学习, 在没有给定标签的数据{x(1), x(2), x(3)....}, 通过隐藏层(hidden layer)学习输入中隐含的特征, 从而让输出{x^(1), x^(2), x^(3)...}尽可能的逼近输入. 下图为autoencoder的结构(引用自<a href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">这里</a>):</p>
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png" height="100" width="100"/>
+<!-- ![autoencoder](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png) -->
+<p><a id="Sparse Autoencoder"></a></p>
+<h2 id="sparse-autoencoder">Sparse Autoencoder</h2>
+<p>Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通过增加稀疏惩罚项(sparse penalty)使得前向传播时只有一部分神经元激活, 而不是所有神经元都激活. 由于相比与未做稀疏化处理的autoencoder结构, 激活的隐藏层神经元(hidden neruon)变少了, 因此每一个隐藏层神经元都包含了更丰富的隐藏特征(latent feature). 是不是和现在流行的<a href="https://huggingface.co/blog/moe">Mixture of Experts</a>很像? 
+下图为sparse autoencoder的结构(引用自<a href="https://medium.com/@syoya/what-happens-in-sparse-autencoder-b9a5a69da5c6">这里</a>):</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/sparse-autoencoder2.png" alt="sparse-autoencoder" /></p>
+<p><a id="sparse-autoencoder的特征可解释性"></a></p>
+<h2 id="sparse-autoencoderde-te-zheng-ke-jie-shi-xing">Sparse Autoencoder的特征可解释性</h2>
+<p>MIT6.S898 Deep Learning在2023年发表的一篇<a href="https://deep-learning-mit.github.io/staging/blog/2023/learning-interpretable-features-with-sparse-autoencoders/">blog</a>在这里提到了</p>
+<blockquote>
+<p>A sparse autoencoder lets us learn a sparse representation for a vector, but in a higher dimensional space.</p>
+</blockquote>
+<p>相比与未稀疏化的Autoencoder, 稀疏化的Autoencoder可以学习到更高维度的隐含特征. 换个角度说, 未经稀疏化的隐藏层神经往往是表示多维特征(polysemantic). 而经过稀疏化的隐藏层神经元所表示的特征维度更少, 从而使得隐含特征更加容易理解. 更详细的关于sparse autoencoder的可解释性, 可以点击Anthropic发的<a href="https://transformer-circuits.pub/2023/monosemantic-features">&quot;Towards Monosemanticity: Decomposing Language Models With Dictionary Learning&quot;</a>查看.</p>
+<p><a id="Bottleneck Layer"></a></p>
+<h2 id="bottleneck-layer">Bottleneck Layer</h2>
+<p>bottlenect layer指的是含有比前一层更少的神经元的网络层, 使得输入特征维度减少. 这里引用英文原文更方便理解:</p>
+<blockquote>
+<p>A bottleneck layer is a layer that contains few nodes compared to the previous layers. It can be used to obtain a representation of the input with reduced dimensionality.</p>
+</blockquote>
+<p><a id="TopK激活函数"></a></p>
+<h2 id="topkji-huo-han-shu">TopK激活函数</h2>
+<p>TopK是一种激活函数. 仅保留输入向量中最大的k的值，其余值设置为0.</p>
+<p><a id="论文解读"></a></p>
+<h1 id="lun-wen-jie-du">论文解读</h1>
+<p>ok, 我们已经了解了所有的前置知识, 接下来我们开始看这篇文章. 首先是作者部分还有Ilya Sutskever与Jan Leike, 说明是OpenAI之前研究的存货. 再来看摘要部分:</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/openai-papers.png" alt="paper-abstract" /></p>
+<p>黄色部分的文字是这篇文章所解决的问题, 绿色部分是作者提出的解决方案. </p>
+<ul>
+<li><strong>问题</strong> : 随着输入特征的增加, 训练sparse autoencoder会难以平衡稀疏性与准确性. 稀疏性指的是如何确定哪些神经元需要激活, 哪些神经元不需要激活. 准确性是指经过稀疏化处理后的隐藏层神经元所表示的隐含特征是否与原始输入特征相似(见背景知识Autoencoder). </li>
+<li><strong>解决方案</strong> : 作者使用k-sparse autoencoder去控制稀疏性从而实现平衡. </li>
+</ul>
+<p>到了正文部分, 作者一开始比较了不同的激活函数对autoencoder的影响. 发现TopK的获得最小的正规化均方根误差(Normalized root mean square error). 如下图所示:</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/openai-topk.png" alt="topk" /></p>
+<p>接下来作者在不同指标上又进行了测试, 如果有兴趣建议阅读原文. 为了抓住重点, 我们先跳过这一部分. 作者使用<a href="https://arxiv.org/pdf/2305.19911">Neuron to Graph(N2G)</a>去做特征的解释.</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/n2g.png" alt="n2g" /></p>
+<p>上图的N2G论文原文的描述, 可以看到N2G是将语言模型输出的回答进行关联生成一张有向图. </p>
+<p>之后作者对比了ReLU与TopK在N2G中的表现. 发现TopK的召回率以及精度都更高. 如下图所示:</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/openai-result.png" alt="result" /></p>
+<p>最后作者给出了结论以及未来工作的方向:</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/paper-result.png" alt="paper-result" /></p>
+<p><a id="参考资料"></a></p>
+<h1 id="can-kao-zi-liao">参考资料</h1>
+<ul>
+<li><a href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">Sparse autoencoder, CS294A Lecture notes - Andrew Ng</a></li>
+<li><a href="https://stats.stackexchange.com/questions/262044/what-does-a-bottleneck-layer-mean-in-neural-networks">What does a bottleneck layer mean in neural networks?</a></li>
+</ul>
+<hr />
+<br>
+<br>
+<p>(第一次写这种论文解读类文章, 发现还是不好写. 因为有条件的话应该直接读原文, 不加如一些原文的图的话会表达不到意思, 加了太多又和读原文没什么区别.)</p>
+
+            
+        </div>
+        <div class="post-meta">
+            
+                
+
+
+二〇二四年六月七日
+
+            
+        </div>
+    </article>
+    
+    <article class="post">
+        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog9&#x2F;" class="post-title-link">Nvidia CUDA的前世今生</a></div>
+        <div class="post-content">
+            
+                <blockquote>
+<p>Any sufficiently advanced technology is indistinguishable from magic. - Arthur C. Clarke</p>
+</blockquote>
+<p>CUDA(Compute Unified Device Architecture)是Nvidia强大的护城河之一, 也绝对算是科技黑魔法.</p>
+<p>最近突然冒出了一个想法, 为什么CUDA要这样设计(kernel, warp, thread, block, grid...)? 带着这个疑问, 我花了一些时间
+在调研CUDA背后的历史, 以下是对Nvidia重要护城河之一的CUDA为什么这样设计的介绍:</p>
+<h2 id="cudafa-zhan-li-shi">CUDA发展历史</h2>
+<p>要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索<a href="https://en.wikipedia.org/wiki/CUDA">CUDA</a>, 里面有提到CUDA的发展历史, 以下为<a href="https://en.wikipedia.org/wiki/CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D">原文</a>:</p>
+<blockquote>
+<p><strong>Ian Buck</strong>, while at <strong>Stanford</strong> in 2000, created an 8K gaming rig using 32 GeForce cards, then obtained a DARPA grant to perform <strong>general purpose parallel programming on GPUs</strong>. He then joined Nvidia, where since 2004 he has been overseeing CUDA development. In pushing for CUDA, Jensen Huang aimed for the Nvidia GPUs to become a <strong>general hardware</strong> for scientific computing. CUDA was released in 2006. Around 2015, the focus of CUDA changed to neural networks.</p>
+</blockquote>
+<p>谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的<a href="https://blogs.nvidia.com/blog/author/ian-buck/">副总裁</a>, 以前是斯坦福的博士生, 点击Ian博士时期的<a href="http://scroll.stanford.edu/~ianbuck/">主页</a>. 可以看到他在博士期间做的项目<a href="http://graphics.stanford.edu/projects/brookgpu/">BrookGPU</a>, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的<a href="https://www.youtube.com/watch?v=Cmh1EHXjJsk">采访</a>，Ian在视频里面明确提到将<strong>Brook的想法迁移到CUDA</strong>上, 因此可以认为<strong>Brook就是CUDA最早的雏形</strong>. </p>
+<h2 id="ian-buckde-brookyu-yan">Ian Buck的Brook语言</h2>
+<p>让我们一起再来看看BrookGPU的项目介绍:</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu.png" alt="brook-gpu" /></p>
+<p>总结一下, Brook提出了<strong>stream programming model</strong>以及<strong>stream application</strong>并给出了对应的实现去解决<a href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E5%A4%84%E7%90%86%E5%99%A8%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97"><strong>通用计算</strong></a>的问题.</p>
+<p>再结合BrookGPU当时的论文<a href="https://graphics.stanford.edu/papers/brookgpu/brookgpu.pdf">Brook for GPUs: Stream Computing on Graphics Hardware</a>以及Ian Buck的博士论文<a href="http://graphics.stanford.edu/~ianbuck/thesis.pdf">STREAM COMPUTING ON GRAPHICS HARDWARE</a>. 我们能够了解到以下几个点:</p>
+<ul>
+<li>由于GPU与CPU所针对的场景不同，并且由于CPU的局限性: 有限的instruction level parallelism (ILP), 过度使用缓存去获取局部性. 因此GPU的编程语言形态会与CPU有所不同.</li>
+<li>当时也有针对于GPU编程的语言, 但是这些语言的实现都是针对于图形学的shader所设计的, 而不是为了<strong>通用计算编程</strong>所设计</li>
+<li>程序在GPU上执行时，其内存访问延迟主要受到两个关键因素的制约: 一是计算速率(compute rate), 二是内存带宽(memory bandwidth). 这意味着，GPU处理数据的速度和内存传输数据的能力共同决定了程序在内存操作中的延迟表现. BrookGPU的设计是为了让GPU计算充分发挥, 从而让内存时延主要部分为内存带宽.</li>
+<li>Brook不是第一个尝试去解决通用计算问题, 但是是第一个使用流式处理(stream processing)去解决通用计算. </li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu2.png" alt="advantage-of-streaming" /></p>
+<p>在Ian提出Streaming Processing框架的这一节提到了很重要的一个观点. 内存的访问速度(memory access rate)即内存带宽(memory bandwidth)往往
+是制约程序性能的瓶颈. 而软件层由于改变不了物理的内存带宽, 因而会采取其他技巧去隐藏内存延迟(memory latency). 这里Streaming Processing使用data parallelism与<a href="https://crd.lbl.gov/divisions/amcr/computer-science-amcr/par/research/roofline/introduction/">arithmetic Intensity</a>去隐藏内存延迟(hide memory latency). Ian也提出了什么是arithmetic Intensity的概念:</p>
+<blockquote>
+<p>In order to quantify this property, we introduce the concept of arithmetic inten-
+sity. <strong>Arithmetic intensity is the ratio of arithmetic operations performed per memory
+operation, in other words, flops per word transferred.</strong></p>
+</blockquote>
+<p>感觉这里解释的不是很清楚, 于是询问GPT4的回答, 讲的很清楚:
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/arth-intensity.png" alt="arithmetic Intensity" />
+Arithmetic intensity指的是运算指令(add, mul..)与内存操作(load, store..)的比例.</p>
+<p>这里小结一下Brook做了什么事:</p>
+<p><em>Brook是一种编程语言, 通过软件层的抽象来让程序尽可能得调用GPU的运算单元，尽可能减少内存搬运操作. 从而隐藏内存延迟.</em></p>
+<p>如果有兴趣详细了解的话, GTC2022上的这个<a href="https://www.nvidia.com/en-us/on-demand/session/gtcspring22-s41487/">talk</a>会很有帮助. 在了解了这些之后, 我们再来一起看看BrookGPU与CUDA的对比.</p>
+<h2 id="brookyu-cudade-dui-bi">Brook与CUDA的对比</h2>
+<p>接下来结合上面的信息以及CUDA1.0的<a href="https://developer.download.nvidia.cn/compute/cuda/1.0/NVIDIA_CUDA_Programming_Guide_1.0.pdf">参考手册</a>, 我们来看看Brook与Cuda的一些概念的对比. 由于CUDA是在Brook之后诞生, 所以这里以Brook中的概念为准分各个小节. 为了尽可能得传递原始信息避免加工, 每个概念会附上原文.</p>
+<h3 id="stream">Stream</h3>
+<blockquote>
+<p>A stream is a collection of data which can be operated on in parallel.  - Ian Buck, BROOK STREAM LANGUAGE p24</p>
+</blockquote>
+<p>由于CUDA1.0里面没有Stream的概念, 这里没有直接查到是CUDA的哪一个版本提出了Stream. 所以参考了Steve Rennich在GTC的ppt.</p>
+<blockquote>
+<p>A sequence of operations that execute in issue-order on the GPU - Steve Rennich, <a href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">CUDA C/C++
+Streams and Concurrency</a></p>
+</blockquote>
+<p>Stream在brook指带的是一系统的数据, 而在cuda里面是的一系列的指令.</p>
+<h3 id="kernel">Kernel</h3>
+<blockquote>
+<p>Brook kernels are special functions, specified by the kernel
+keyword, which operate on streams. - Ian Buck, BROOK STREAM LANGUAGE p26</p>
+</blockquote>
+<p>在Brook里面kernel指的是处理stream的函数. 由于stream是的是一系列的数据, 因此kernel也就是处理data的函数.</p>
+<blockquote>
+<p>More precisely, a portion of an application that is executed many times, but
+independently on different data, can be isolated into a function that is executed on
+the device as many different threads. To that effect, such a function is compiled to
+the instruction set of the device and the resulting program, called a <em>kernel</em>  - Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0, p7</p>
+</blockquote>
+<p>可以看到kernel在Brook与CUDA里面的概念是一致的. 都表示为处理数据的函数.</p>
+<h3 id="reductions">Reductions</h3>
+<blockquote>
+<p>While kernels provide a mechanism for applying a function to a set of data, reductions
+provide a data-parallel method for calculating a single value from a set of records. - Ian Buck, BROOK STREAM LANGUAGE p30</p>
+</blockquote>
+<p>这里需要附上原文的代码才能更详细的说明:</p>
+<pre data-lang="c" style="background-color:#eff1f5;color:#4f5b66;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#a7adba;">// Task: Compute the sum of all the elements of a sum (a, r);
+</span><span>
+</span><span style="color:#a7adba;">// Brook
+</span><span>reduce </span><span style="color:#8fa1b3;">sum </span><span>(</span><span style="color:#b48ead;">float</span><span> a&lt;&gt;, reduce </span><span style="color:#b48ead;">float</span><span> r&lt;&gt;) {
+</span><span>    r += c;
+</span><span>}
+</span><span style="color:#b48ead;">float</span><span> r;
+</span><span style="color:#b48ead;">float</span><span> a&lt;</span><span style="color:#d08770;">100</span><span>&gt;;
+</span><span>
+</span><span style="color:#a7adba;">// Equivalant C code:
+</span><span>r = a[</span><span style="color:#d08770;">0</span><span>];
+</span><span style="color:#b48ead;">for </span><span>(i=</span><span style="color:#d08770;">1</span><span>; i&lt;</span><span style="color:#d08770;">100</span><span>; i++)
+</span><span>    r += a[i];
+</span></code></pre>
+<p>Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很奇怪的一点是明明这里的操作也可以归为kernel的范畴, 但是Ian却单独抽里开. 说明Brook对Reducitons的实现与kernel是不同的. 而从语法上来看, 这段代码与CUDA调用kernel function几乎是一致的. 在CUDA中没有单独的概念, 说明这一操作已经在CUDA统一了.</p>
+<p>到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processing相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.</p>
+<h2 id="wei-shi-yao-cudazhe-yang-she-ji">为什么CUDA这样设计</h2>
+<p>回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的<a href="https://www.nvidia.com/zh-tw/on-demand/session/gtcspring21-s31151/">&quot;How Gpu Computing Works&quot;</a>以及GTC2022的<a href="https://resources.nvidia.com/en-us-summer-of-learning-for-students/gtcspring22-s41487">&quot;How CUDA Programming Works&quot;</a>, 我尝试用尽可能精炼的语言描述下我的理解:</p>
+<p>从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟. </p>
+<p>从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了<a href="https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads">SIMT(Single Instruction Multiple Threads)</a>. 从而隐藏内存延迟.</p>
+<p>下面这张图对于理解CUDA的概念非常有帮助:
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/gtc-cuda-concepts.png" alt="cuda-concepts" /></p>
+<h2 id="zong-jie">总结</h2>
+<p>CUDA的发明者Ian Buck在读博士的时候(2006年左右), 当时已经有专门针对GPU的编程语言, 但是这些特点的语言的特定都是针对于图形学里的shader设计的, 因此不具有通用性. 因此CUDA的意义在于使用流式处理(stream processsing)去解决图形处理器通用计算(General-purpose computing on graphics processing units)软件层抽象的问题.</p>
+<h2 id="can-kao-zi-liao">参考资料</h2>
+<ul>
+<li>How Gpu Computing Works - Steve Jones </li>
+<li>How CUDA Programming Works - Steve Jones</li>
+<li>BROOK STREAM LANGUAGE - Ian Buck</li>
+<li>Brook for GPUs: Stream Computing on Graphics Hardware - Ian Buck</li>
+<li>Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0</li>
+<li>Wikipedia </li>
+</ul>
+
+            
+        </div>
+        <div class="post-meta">
+            
+                
+
+
+二〇二四年六月五日
+
+            
+        </div>
+    </article>
+    
+
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        var Home = location.href,
+        xhr,
+        xhrUrl = '';
+    
+        var Diaspora = {
+            L: function(url, f, err) {
+                if (url == xhrUrl) {
+                    return false;
+                }
+                xhrUrl = url;
+                if (xhr) {
+                    xhr.abort();
+                }
+                xhr = $.ajax({
+                    type: 'GET',
+                    url: url,
+                    timeout: 10000,
+                    success: function(data) {
+                        f(data);
+                        xhrUrl = '';
+                    },
+                    error: function(a, b, c) {
+                        if (b == 'abort') {
+                            err && err()
+                        } else {
+                            window.location.href = url;
+                        }
+                        xhrUrl = '';
+                    }
+                });
+            },
+            loading: function() {
+                var w = window.innerWidth;
+                var css = '<style class="loaderstyle" id="loaderstyle'+ w +'">'+
+                    '@-moz-keyframes loader'+ w +'{100%{background-position:'+ w +'px 0}}'+
+                    '@-webkit-keyframes loader'+ w +'{100%{background-position:'+ w +'px 0}}'+
+                    '.loader'+ w +'{-webkit-animation:loader'+ w +' 3s linear infinite;-moz-animation:loader'+ w +' 3s linear infinite;}'+
+                    '</style>';
+                $('.loaderstyle').remove()
+                $('head').append(css)
+                $('#loader').removeClass().addClass('loader'+ w).show()
+            },
+            loaded: function() {
+                $('#loader').removeClass().hide()
+            }
+        };
+    
+        $(function() {
+            $('body').on('click', function(e) {
+                var tag = $(e.target).attr('class') || '',
+                    rel = $(e.target).attr('rel') || '';
+                if (!tag && !rel) return;
+                switch (true) {
+                    // next page
+                    case (tag.indexOf('more') != -1):
+                        tag = $('.more');
+                        if (tag.data('status') == 'loading') {
+                            return false
+                        }
+                        var num = parseInt(tag.data('page')) || 1;
+                        if (num == 1) {
+                            tag.data('page', 1)
+                        }
+                        tag.html("旧文").data('status', 'loading')
+                        Diaspora.loading()
+                        Diaspora.L(tag.attr('href'), function(data) {
+                            tag.hide();
+                            $('.license').hide();
+                            var link = $(data).find('.more').attr('href');
+                            if (link) {
+                                tag.attr('href', link).html("旧文").data('status', 'loaded')
+                                tag.data('page', parseInt(tag.data('page')) + 1)
+                            }
+
+                            var tempScrollTop = $(window).scrollTop();
+                            $('body').append($(data).find('.posts'))
+                            $(window).scrollTop(tempScrollTop + 100);
+                            Diaspora.loaded()
+                            //$('html,body').animate({ scrollTop: tempScrollTop + 400 }, 500);
+                            if (link !== '/' && link != '') {
+                                $('body').append($(data).find('.page-nav'))
+                            }
+                        }, function() {
+                            tag.html("旧文").data('status', 'loaded')
+                        })
+                        return false;
+                        break;
+                    default:
+                        return true;
+                        break;
+                }
+            });
+        })
+    </script>
+    
+    <nav class="page-nav">
+      <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;page&#x2F;8&#x2F;" class="more">旧文</a>
+    </nav>
+
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>

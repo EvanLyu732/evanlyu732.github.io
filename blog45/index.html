@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>春节后开工LLM学习记录 - evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="春节后开工LLM学习记录 - evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<article class="post">
+    <div class="post-title">
+        <h1 class="title">春节后开工LLM学习记录</h1>
+    </div>
+    <div class="post-content">
+        <p>春节期间手机完全被DeepSeek-R1刷屏了, 无论是海内外媒体都疯狂讨论DeepSeek-R1. 趁着假期返工花了一整天大致了解了DeepSeek-R1的实现主体. 之后刚好同一天Andrej Karpathy发了<a href="https://www.youtube.com/watch?v=7xTGNNLPyMI">Deep Dive into LLMs like ChatGPT</a>. 查阅了一天资料, 有些心得. 写下此文, 也是记录自己如何了解新的技术.</p>
+<h1 id="ji-lu">记录</h1>
+<pre data-lang="txt" style="background-color:#eff1f5;color:#4f5b66;" class="language-txt "><code class="language-txt" data-lang="txt"><span>20250206:0910 早上到公司 
+</span><span>目标: 了解DeepSeek-R1以及为什么R1会这么火 
+</span><span>背景: 无任何关于DeepSeek-R1的资料阅读, 没读过论文
+</span><span>
+</span><span>20250206:0932 动作: 刷hacker news关于deepseek的post, 看各个thread的观点
+</span><span>    * 动作: 跟着Simon Willison的blog(DeepSeek-R1 and exploring DeepSeek-R1-Distill-Llama-8B)实现本地ollama跑DeepSeek-R1-Distill-Llama-8B-GGUF
+</span><span>    * 收获: 了解了DeepSeek-R1-Zero, DeepSeek-R1以及DeepSeek蒸馏模型的关系.
+</span><span>
+</span><span>20240206:1014 动作: 看yt视频# DeepSeek R1 Theory Overview | GRPO + RL + SFT
+</span><span>    * 收获: 
+</span><span>      * 整个DS-R1被训练出来的脉络, 博主画了个图, 表达很清楚, 见附录[1]
+</span><span>      * 什么是GRPO以及GRPO公式大概的含义
+</span><span>      * 相比于OpenAI闭源的COT推理能力[2], DS开源了如何实现推理模型
+</span><span>      * 知道了GRPO是R1的重点
+</span><span>
+</span><span>20240206:1030 动作: 看yt视频: # Group Relative Policy Optimization (GRPO) - Formula and Code
+</span><span>    * 衍生动作: 
+</span><span>      * 看yt video视频 # Proximal Policy Optimization (PPO) - How to train Large Language Models
+</span><span>      * 看了看知乎上关于GRPO的讨论和解析
+</span><span>	* 收获: 
+</span><span>        * 了解了PPO的大致流程
+</span><span>        * 大致了解了GRPO, 但还是不懂, 需要找个场景实现一下. #TODO 
+</span><span>        * 刷到了王兴兴关于GRPO的讨论和解析[3], 深入研究下GRPO在机器人控制的应用中 #TODO
+</span><span>
+</span><span>20240206:1414 动作: 看yt视频 # Building a fully local &quot;deep researcher&quot; with DeepSeek-R1
+</span><span>	* 收获: 
+</span><span>        * 了解了如何用langchain使用r1达到像openai deep research类似的效果, 以后可以考录用api部署一个试下 #TODO
+</span><span>
+</span><span>20240206:1442: 动作: 看yt视频 # Paper: DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning
+</span><span>	* 收获: 
+</span><span>        *  自回归模型的输出可以被看成是一个RL的过程
+</span><span>        *  大致跟着视频过了一遍论文, 没仔细看
+</span><span>        *  这个视频长度大概一个小时, 百分之80的时间都在讲GRPO, 所以GRPO一定是R1的重点.
+</span><span>
+</span><span>20240206:16:00 - 20240207:11:30:  动作: 看yt视频 # Deep Dive into LLMs like ChatGPT
+</span><span>	* 收获(这个视频是我看到关于LLM最干的视频, 强烈推荐观看原版3个小时): 
+</span><span>        *  LLM的训练流程为预训练(Pre-Training)产生基座模型(Base Model),
+</span><span>           但是Base Model不具有对话的能力, 因此要通过后训练(Post Training),
+</span><span>           通过SFT(Supervised Fine-Tuning)的方式, 输入多轮对话的数据, 来让
+</span><span>           模型有对话的能力. 最后通过Post Training RL, 来让模型有推理能力.
+</span><span>        * PreTraining阶段, 数据集和分词过程决定了Base Model的效果
+</span><span>        * PreTraining阶段, 通过不断改变context size, 模型能够实现in context learning能力
+</span><span>        * 由于Base Model本质上根据互联网数据的词语接龙, 因此幻觉一定会存在
+</span><span>        * 幻觉可以通过改变post training SFT的数据集, 或者使用tool use能够减少
+</span><span>        * 模型需要更多的token去做思考
+</span><span>        * 模型不擅长做in memory computing
+</span><span>        * 要让模型能在post training中实现tool use的能力,就是在SFT中加入pre training没见过的token
+</span><span>        * knowledge in the parameters =&gt; vague recollection 
+</span><span>        * knowledge in the token of context window =&gt; working memory 
+</span><span>        * 以人阅读一本教材进行学习为例, 训练模型学习书中的背景知识就是pre training, 学会书中的例题称为post training. 而完成课后习题就是post training with RL 
+</span><span>        * 在最后一个阶段post training with RL, 需要喂模型课后题(prompt), 并且人类给出打分. 由于这个过程需要进行很多次, RLHF通过拟合人类回答的偏好. 来实现自动训练.
+</span><span>        * RLHF不算RL, 而是微调模型来达到人类偏好
+</span><span>        * DeepSeek R1的aha moment和AlphaGo Zero的Aha moment很像, 训练效果都是非线性的, 一开始上升非常缓慢, 到了某一刻急速上升.
+</span><span>        * 通过[4]可以了解AI的最新动态
+</span><span>        * 通过[5]可以了解AI的排名
+</span></code></pre>
+<h1 id="zong-jie">总结</h1>
+<p>之前我也在别的地方刷到R1实现了更低成本的训练, 例如使用PTX而不是raw cuda等, 这算infra层的创新. 但是我看的视频下来 <strong>开源的推理模型, 以及纯RL而不用SFT(DeepSeek-R1-Zero)</strong> 或许是R1更大的意义.</p>
+<h1 id="sheng-xia-de-todo">剩下的TODO</h1>
+<ul>
+<li>找一个场景复现PPO以及GRPO</li>
+<li>刚好在2月7号, o3-mini开源了思维链的过程, 对比一下</li>
+<li>了解下RL-LLM的现状, 输出一篇文章</li>
+<li>阅读R1原文, 自己总结一下, 并对比这篇<a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247545512&amp;idx=1&amp;sn=3826ae3f788e8b90ffeb8fb3cc908c6e&amp;chksm=e8eafcecde166feebab4345c2d027cca4c9574c6058f90df5fe4513cefae17180f2344507e31&amp;mpshare=1&amp;srcid=0207SpaQkGmiF7zHxsYYVcxv&amp;sharer_shareinfo=72ac166e2fd073a2d05195fba0d13c61&amp;sharer_shareinfo_first=72ac166e2fd073a2d05195fba0d13c61&amp;from=singlemessage&amp;scene=1&amp;subscene=10000&amp;sessionid=1738908596&amp;clicktime=1738912215&amp;enterid=1738912215&amp;ascene=1&amp;fasttmpl_type=0&amp;fasttmpl_fullversion=7592104-zh_CN-zip&amp;fasttmpl_flag=0&amp;realreporttime=1738912215423&amp;devicetype=android-34&amp;version=28003855&amp;nettype=WIFI&amp;abtest_cookie=AAACAA%3D%3D&amp;lang=zh_CN&amp;countrycode=AD&amp;exportkey=n_ChQIAhIQysgSGGYJ6guKNuOW3xqwIBLnAQIE97dBBAEAAAAAAMNIGcR4l2MAAAAOpnltbLcz9gKNyK89dVj0BWdk0ar1sZ1xZJAIx0fAVnhfktWB%2Fz8itbQaTOFkU4h7gQp9odCzk1ocQAS2AUeWAu3HuMOHuo%2B%2FRg4fqobn1Sj%2FGrp4kC2%2FwnQlidKKe9rC6DG9QskGXu%2Bd98s3PWSu9KCdhFPBcrHoj4jUqJQ5Kz7qS%2BImYs1u3W1vlhbKXcsLlzKIyFwXeDEPA4g8M3ykfYORxphxXaIw3Pf%2Bk6zjwSjkWZGQXrWe8KOI6k6kgOm2EZ4zt7jgZZ1WwC3xAUzQXA%3D%3D&amp;pass_ticket=Qc%2FprbYOLQVh%2BBnvnYJVgLdkqVNLBJx%2BkqpS%2FYUP3njk1%2BHNc0IUwJ%2BW1jQKEFwe&amp;wx_header=3">文章</a>, 了解更多的技术细节.</li>
+<li>pi0开源了, 研究下pi0</li>
+<li>借助xxx平台提供的api, 实现一个属于自己的deep research. 也算是往agentic ai迈了一步.</li>
+<li>总结下DS的发展路线, 输出一篇文章</li>
+</ul>
+<h1 id="fu-lu">附录</h1>
+<p>[1] <a href="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdf800d6c-7a41-49b0-b5d8-5e13620cb6f1_1043x1200.png">(yt video # DeepSeek R1 Theory Overview | GRPO + RL + SFT)各个模型关系图</a></p>
+<p>[2] <a href="https://openai.com/index/learning-to-reason-with-llms/">Hiding the Chains of Thought - OpenAI</a></p>
+<p>[3] <a href="https://zhuanlan.zhihu.com/p/21131372654">DeepSeek GRPO在简单控制系统上和PPO的对比</a></p>
+<p>[4] <a href="https://buttondown.com/ainews">AI News</a></p>
+<p>[5] <a href="https://lmarena.ai/">LM Arena for model rankings</a></p>
+<hr />
+<h1 id="20240208geng-xin">20240208更新</h1>
+<p>接着上片文章, 在2月7日的时候, 我一直在找如何请求deepseek-r1 api的方式. 因此现在ds大火, 服务器一直繁忙. 想找个渠道试一下r1都难. 也尝试了<a href="https://www.silicon-flow.com/">硅基流动</a>以及一些其他的api提供商. 因为是尝试, 不太想直接往api服务商充钱. 于是, 截至到今日(20250208), 我试下来有两种免费方式可以请求deepseek-r1.</p>
+<ol>
+<li><a href="https://console.bce.baidu.com/qianfan/ais/console/onlineTest/LLM/DeepSeek-V3">百度千帆</a></li>
+<li><a href="https://cloud.infini-ai.com/genstudio/experience">无问苍穹</a></li>
+</ol>
+<p>目前这两个平台的api请求是免费的, 无问苍穹会快很多, 并且api的速度远比不上playground. 并且两个平台的api稳定性都不太好, 会有请求失败的问题. 之后, 我用cursor写了一个适配于百度千帆的命令行工具. 效果如下.</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/refs/heads/main/static/images/tui.gif" alt="bd_llm_tui demo" /></p>
+<p>顺便试了下百度的其他免费的模型, 响应速度还行.
+仓库链接点击<a href="https://github.com/EvanLyu732/bd_llm_tui">这里</a></p>
+
+    </div>
+    <div class="post-meta">
+        <span class="post-time">
+        
+            
+
+
+二〇二五年二月七日
+
+        
+        </span>
+    </div>
+</article>
+
+<div class="prev_next">
+<nav id="prev_next">
+    <div class="prev">
+        
+    </div>
+    <div class="next">
+        
+    </div>
+</nav>
+</div>
+
+<div class="post-comment">
+
+
+
+
+</div>
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>

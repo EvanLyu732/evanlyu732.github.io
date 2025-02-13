@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evan's Reading List</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            max-width: 1400px;  /* 增加宽度以适应封面列 */
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .stars {
+            color: #ffd700;
+            font-size: 1.2em;
+        }
+        .half-star {
+            position: relative;
+            display: inline-block;
+        }
+        .half-star::after {
+            content: "☆";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            width: 50%;
+            overflow: hidden;
+        }
+        .half-star::before {
+            content: "★";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            width: 50%;
+            overflow: hidden;
+        }
+        .book-cover {
+            width: 100px;  /* 封面列宽度 */
+        }
+        .book-cover img {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .book-cover img:hover {
+            transform: scale(1.1);
+        }
+        .book-title {
+            min-width: 200px;
+            width: 20%;
+        }
+        .date {
+            width: 100px;
+        }
+        .rating {
+            width: 80px;
+        }
+        .review {
+            width: 35%;
+        }
+        .review-content {
+            line-height: 1.6;
+            color: #333;
+        }
+        .review-zh {
+            margin-bottom: 8px;
+        }
+        .review-en {
+            color: #666;
+            font-style: italic;
+        }
+        .language-switch {
+            margin-bottom: 20px;
+        }
+        .language-btn {
+            padding: 8px 16px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+        }
+        .language-btn.active {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        <span class="zh">Evan的阅读清单</span>
+        <span class="en" style="display: none">Evan's Reading List</span>
+    </h1>
+    <div class="language-switch">
+        <button class="language-btn active" onclick="switchLanguage('zh')">中文</button>
+        <button class="language-btn" onclick="switchLanguage('en')">English</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th class="book-cover">
+                    <span class="zh">封面</span>
+                    <span class="en" style="display: none">Cover</span>
+                </th>
+                <th class="book-title">
+                    <span class="zh">书名</span>
+                    <span class="en" style="display: none">Title</span>
+                </th>
+                <th class="date">
+                    <span class="zh">完成日期</span>
+                    <span class="en" style="display: none">Completion Date</span>
+                </th>
+                <th class="rating">
+                    <span class="zh">评分</span>
+                    <span class="en" style="display: none">Rating</span>
+                </th>
+                <th class="review">
+                    <span class="zh">书评</span>
+                    <span class="en" style="display: none">Review</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1427665815i/905.jpg" alt="The Inner Game of Tennis">
+                </td>
+                <td>The Inner Game of Tennis</td>
+                <td>2023-12-25</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">关于调整心态能让自己有最佳发挥的书。作者以网球比赛举例子但实际上任何事都会有心态的参与。首先，Relaxed Concentration是形容心态的最合适的水平。注意力完全集中但是身体却是很放松的。要达到这种水平，有两个影响因素Self 1(后天训练得到的心态)以及Self 2(先天的心态)。不要让Self 2与Self 1分割，并且不要盲目的依赖于Self 1。培养nonjudgmental awareness。停止评判Self 2。客观的看待事物而不加修饰心态。用身体和脑一起去学习，让Self 1描绘出最好的结果，然后配合Self 2一起去实现。</div>
+                        <div class="review-en">A book about mental adjustment for peak performance. The author uses tennis as an example but the principles apply to any activity involving mindset. "Relaxed Concentration" is described as the optimal mental state, where focus is complete but the body remains relaxed. Two factors influence this state: Self 1 (trained mindset) and Self 2 (innate mindset). Don't separate Self 2 from Self 1, and don't blindly rely on Self 1. Cultivate nonjudgmental awareness. Stop judging Self 2. View things objectively without embellishment. Learn with both body and mind, let Self 1 envision the best outcome, then work together with Self 2 to achieve it.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388180508i/598506.jpg" alt="How to think like Leonardo Da Vinci">
+                </td>
+                <td>How to think like Leonardo Da Vinci</td>
+                <td>2024-11-15</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">这本书是取了看似没什么营养的名字，但是讲了非常多能够帮助你解决问题并且可以实际操作的事项。举个例子，书中的第一章是关于达芬奇是如何好奇身边的事物的。那如何变的好奇呢？书中有提到写100个能够帮助你的问题。我尝试了一下写20个问题就写不出来了。提出的问题越多说明发现了不同的细节。书中拆解了达芬奇七种不同的品质，并且安排了合理可操作的练习来培养这些品质。强烈推荐。</div>
+                        <div class="review-en">This book, despite its seemingly simplistic title, offers numerous practical and actionable insights for problem-solving. For example, the first chapter discusses how da Vinci cultivated curiosity about his surroundings. How does one become more curious? The book suggests writing 100 questions that could help you. I tried and could barely write 20. The more questions you can pose, the more details you've discovered. The book breaks down Leonardo's seven distinct qualities and provides practical exercises to develop these traits. Highly recommended.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1686584529i/174710711.jpg" alt="The Second Law">
+                </td>
+                <td>The Second Law: Resolving the Mystery of the Second Law of Thermodynamics</td>
+                <td>2024-01-10</td>
+                <td class="stars">★★★★<span class="half-star">☆</span></td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">这本书是关于热力学第二定律的起源以及从计算复杂性的视角去解读。我在24年的读完这本书时候写过一篇文章。作者Stephen Wolfram非常博学，看完本书能够让你从不一样的视角了解热力学第二定律。</div>
+                        <div class="review-en">This book explores the origins of the Second Law of Thermodynamics and interprets it from a computational complexity perspective. I wrote an article about it after finishing the book in 2024. Author Stephen Wolfram's erudition offers a unique perspective on understanding the Second Law of Thermodynamics.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1347723119i/567189.jpg" alt="Language in Thought and Action">
+                </td>
+                <td>Language in Thought and Action</td>
+                <td>2024-10-30</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">这本书是关于语言是如何形成和如何影响我们的想法的。更重要的这是一本关于"抽象"的书籍。"抽象"是如何形成的？语言和抽象之间有什么关系？为什么有些事情无法达成共识？这本书很好的回答了这些问题。非常值得推荐。</div>
+                        <div class="review-en">This book examines how language shapes and influences our thoughts. More importantly, it's a book about "abstraction". How is "abstraction" formed? What's the relationship between language and abstraction? Why is consensus difficult to achieve on certain matters? This book excellently answers these questions. Highly recommended.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1175565523i/530415.jpg" alt="The Art of Doing Science and Engineering">
+                </td>
+                <td>The Art of Doing Science and Engineering: Learning to Learn</td>
+                <td>2023-12-09</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">书的内容来自于他给美国海军的一系列讲座集合，之后整理成书。书中Hamming有非常多精彩的观点，但是看书有一个问题就是到最后很难提炼成自己的东西，所以这种好书就需要时间去吸收，看完不是结束，而是行动的开始。</div>
+                        <div class="review-en">The book is a collection of lectures given to the US Navy, later compiled into a book. Hamming presents many brilliant insights, but one challenge with such books is that it's difficult to internalize everything by the end. Therefore, good books like this need time for absorption - finishing the book is not the end, but the beginning of action.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1513007476i/37419698.jpg" alt="Control Theory and Scientific Methodology">
+                </td>
+                <td>控制论与科学方法论</td>
+                <td>2024-12-21</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">很少有书籍在看完之后能让人有方法论提升的感觉。如果你还没看过这本书，这本书值得放到你的书单里面。里面有非常多精彩的观点和例子。这本书值得被翻译成英文版。其中关于"曹冲称象"的例子令人印象深刻。</div>
+                        <div class="review-en">Few books can provide such a methodological improvement after reading. If you haven't read this book yet, it deserves a place on your reading list. It contains many brilliant insights and examples. This book deserves an English translation. The example of "Cao Chong Weighing the Elephant" is particularly impressive.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1348791936i/7489836.jpg" alt="9 Out of 10 Climbers Make the Same Mistakes">
+                </td>
+                <td>9 Out of 10 Climbers Make the Same Mistakes: Navigation Through the Maze of Advice for the Self-coached Climber</td>
+                <td>2023-12-20</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">关于学习技巧的书。如果不是为了追求如何提高登山技巧的话，读完第一章即可。书中有句话说的太好："climbers are stuck on the basics, but lost in the details."。climbers可以是要完成/精进任何一项事的我们大概率会犯的错 - 在信息爆炸的今天，明明对于基础以及大框架的忽视，但是缺扎在了细节海洋里面。反思与总结才能理清楚什么是真正基础并且重要的。此外，减少百分之四的努力不会减少百分之四的产出，减少百分之四的努力会减少百分之九十的产出。</div>
+                        <div class="review-en">A book about learning techniques. If you're not pursuing climbing skills specifically, the first chapter is sufficient. The book makes an excellent point: "climbers are stuck on the basics, but lost in the details." This applies to anyone trying to master any skill - in today's information overload, we often neglect the fundamentals while getting lost in details. Reflection and summary help clarify what's truly fundamental and important. Moreover, reducing effort by 4% doesn't reduce output by 4%, but by 90%.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1715995571i/18961505.jpg" alt="The 12 Week Year">
+                </td>
+                <td>The 12 Week Year: Get More Done in 12 Weeks than Others Do in 12 Months</td>
+                <td>2023-12-15</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">如标题所示，一本关于方法论的书。要达到这本书所描述的效果，前提是相信only actions lead results。接下来这本书会指导如何action去达到results：1. 持续的action在重要的task上面。2. 减短反馈周期（把一年定义为12 weeks而不是12 months）3. 制定明确并且可行动的目标（首先是制定12 weeks的目标，之后划分到以周为行动单位）4. 衡量完成度并且打分。大体上就是缩短反馈周期，主旨就是这样但是书中有很多操作细节。</div>
+                        <div class="review-en">As the title suggests, this is a book about methodology. The prerequisite for achieving the book's described effects is believing that "only actions lead to results." The book guides how to take action to achieve results: 1. Sustained action on important tasks. 2. Shortened feedback cycles (defining a year as 12 weeks instead of 12 months). 3. Setting clear and actionable goals (first setting 12-week goals, then breaking down into weekly action units). 4. Measuring completion and scoring. The main theme is shortening feedback cycles, with many operational details in the book.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1598011736i/54898389.jpg" alt="The Almanack of Naval Ravikant">
+                </td>
+                <td>The Almanack of Naval Ravikant: A Guide to Wealth and Happiness</td>
+                <td>2023-11-30</td>
+                <td class="stars">★★★★★</td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">第二次读了，绝对是一本每年值得读一本的书。今年计划再读一次。每一次读都有不一样的收获。这本书覆盖面太广了，总而言之，这本书回答的是如何过更幸福快乐的人生。是视频How to Get Rich内容整理成书。Naval是个值得深挖的人。他的谈话和见解总是能直接了当的阐明本质，并且能与实践有很直接的关联。Absolutely pure gold。</div>
+                        <div class="review-en">Reading it for the second time, this is definitely a book worth reading every year. Planning to read it again this year. Each reading brings different insights. The book covers extensive ground, but essentially answers how to live a happier life. It's compiled from the "How to Get Rich" video content. Naval is worth studying deeply. His talks and insights always directly clarify essentials and have direct practical applications. Absolutely pure gold.</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="book-cover">
+                    <img src="https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1675680222i/102191841.jpg" alt="寻觅意义">
+                </td>
+                <td>寻觅意义</td>
+                <td>2023-11-20</td>
+                <td class="stars">★★★★<span class="half-star">☆</span></td>
+                <td>
+                    <div class="review-content">
+                        <div class="review-zh">王教授在复旦上课的讲话总结。相比于注重操作的西方哲学，国学往往被认为不具有实践意义或者说只是教化人的工具。王教授解释了儒释道三家的实践意义。无心而为，无为而无不为。这本书肯定能带来一丝心灵的平和与宁静。</div>
+                        <div class="review-en">A compilation of Professor Wang's lectures at Fudan University. Compared to action-oriented Western philosophy, Chinese studies are often considered impractical or merely tools for moral education. Professor Wang explains the practical significance of Confucianism, Buddhism, and Taoism. Acting without intention, achieving everything by doing nothing. This book certainly brings a sense of mental peace and tranquility.</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function sortBooksByDate() {
+            const tbody = document.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            
+            rows.sort((a, b) => {
+                const dateA = new Date(a.children[2].textContent);
+                const dateB = new Date(b.children[2].textContent);
+                return dateB - dateA;  // 从新到旧排序
+            });
+            
+            // 清空并重新填充tbody
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        function switchLanguage(lang) {
+            // 切换书评显示
+            const reviews = document.querySelectorAll('.review-zh, .review-en');
+            reviews.forEach(review => {
+                if (review.className === `review-${lang}`) {
+                    review.style.display = 'block';
+                } else {
+                    review.style.display = 'none';
+                }
+            });
+
+            // 切换按钮状态
+            const buttons = document.querySelectorAll('.language-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(lang)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // 切换标题和列名
+            const zhElements = document.querySelectorAll('.zh');
+            const enElements = document.querySelectorAll('.en');
+            
+            if (lang === 'zh') {
+                zhElements.forEach(el => el.style.display = 'inline');
+                enElements.forEach(el => el.style.display = 'none');
+            } else {
+                zhElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'inline');
+            }
+        }
+
+        // 页面加载时执行
+        window.addEventListener('load', () => {
+            sortBooksByDate();
+            switchLanguage('zh'); // 确保页面加载时执行一次语言切换
+        });
+    </script>
+</body>
+</html>

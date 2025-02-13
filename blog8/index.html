@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>LLM OS的曙光 - evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="LLM OS的曙光 - evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<article class="post">
+    <div class="post-title">
+        <h1 class="title">LLM OS的曙光</h1>
+    </div>
+    <div class="post-content">
+        <p>在今天的OpenAI的春季发布会, OpenAI发布了<a href="https://openai.com/index/hello-gpt-4o/">gpt-4o</a>. 虽然前几代模型也支持语音功能, 但是在gpt-4o中, 其中任意打断的能力和更快的响应速度, 实在是难以让人区分出是机器人还是人类. 但是现在每次对话都需要重新用语音prompt, 来让模型产生预期的“性格”. 所以显而易见的, 不久后的GPT商店会上架不同“性格”的AI. 以及对自定义AI的支持.</p>
+<p>语音和图像的联动是另一项gpt-4o所突出展示出的能力. 用语音交互的方式来让AI分析实时的摄像头数据. 并且在pc端通过桌面端应用还具备<a href="https://www.youtube.com/watch?v=ZJbu3NEPJN0">voice copliot</a>的能力. 已经能让生产力提高到下一个层次. 很明显在未来能够 <u>清晰的表达想法和理解问题</u> 的能力比单纯的技能更加重要. 其实这已经是LLM OS的一个很大的突破了.</p>
+<p>随着OpenAI开放更加便宜的AI, OpenAI的影响力肯定会进一步扩大. 他们所能获取的数据集肯定越来越多. 假如世界模型是一个向量f(x), 根据<a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">Universal approximation theorem</a>. 因此世界模型会被拟合, 假如未来的模型架构迭代, 比如使用<a href="https://arxiv.org/pdf/2404.19756">Kolmogorov–Arnold Networks</a>. 实际上变的也是拟合的基函数, 核心思想都是一致. 也是对世界模型的拟合. 因此, AI最终一定会解决现有的世界模型 f(x) 的一切问题. 但是以这种方式的AI不具备创造力.</p>
+<p>如何让AI具备创造力? 这篇文章<a href="https://arxiv.org/pdf/2002.06177">The Next Decade in AI: Four Steps Towards Robust Artificial Intelligence</a>的作者就很好的分析了这个问题. <a href="https://nonint.com/2023/06/10/the-it-in-ai-models-is-the-dataset/">现有的AI始终受限于数据集</a>. AGI需要有对知识的归纳和演化的能力.以下是原文链接.</p>
+<blockquote>
+<p>a reasoning system that can leverage large-scale background knowledge efficiently, even when available information is incomplete is a prerequisite to robustness. - p40</p>
+</blockquote>
+<p>因此在未来的AGI形态，会有一个底座的知识语料, 在这个底座的知识语料当中, AI有知识关联, 归纳, 推理能力. 当AI不断的从世界模型提炼信息的时候, 也会对这个底层的知识语料进行加工. 类比于人类来说的话, 人在不断接触外部信息源的时候也会不断迭代自己的世界观(或者说每个人的人生哲学). 而当人遇到未接触的问题时, 在没有外部信息源的接触下, 也会依赖于自己的世界观进行加工和理解.</p>
+<p>或许未来出现一种形态, 在神经网络(知识的拟合)里面嵌套专家系统(知识的推理). 能够让AI真正具有创造力.</p>
+
+    </div>
+    <div class="post-meta">
+        <span class="post-time">
+        
+            
+
+
+二〇二四年五月十四日
+
+        
+        </span>
+    </div>
+</article>
+
+<div class="prev_next">
+<nav id="prev_next">
+    <div class="prev">
+        
+    </div>
+    <div class="next">
+        
+    </div>
+</nav>
+</div>
+
+<div class="post-comment">
+
+
+
+
+</div>
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>

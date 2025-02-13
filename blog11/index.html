@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
+    
+    
+    
+        
+    
+    
+    
+    
+    
+    
+        
+    
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <title>学习如何阅读论文 - evan lyu</title>
+    <meta charset="utf-8">
+    <meta name="title" content="学习如何阅读论文 - evan lyu">
+    <meta name="description" content="">
+    <meta property="og:image:width" content="200" />
+    <meta property="og:image:height" content="200" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
+    
+    
+    <style>
+    @media screen and (min-width: 320px) {
+        body {
+            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
+        }
+    }
+    </style>
+    
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
+    <style>body { font-family: 'Source Serif Pro', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Noto Serif SC', serif }</style>
+    
+</head>
+<body>
+    
+    <header class="header">
+        <div class="blog-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io" class="logo">evan lyu</a></div>
+        <nav class="navbar">
+    <ul class="menu">
+        
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;" class="menu-item-link">主页</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;note" class="menu-item-link">书架</a>
+            
+        </li>
+        
+        <li class="menu-item">
+            
+            
+            
+            
+            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;atom.xml" class="menu-item-link">订阅</a>
+            
+        </li>
+        
+    </ul>
+</nav>
+
+    </header>
+    
+    <main class="main">
+        
+<article class="post">
+    <div class="post-title">
+        <h1 class="title">学习如何阅读论文</h1>
+    </div>
+    <div class="post-content">
+        <p>要了解一手最新的科技前沿, 研究以及阅读文献的能力必不可少. 最近在github上刷到了<a href="https://github.com/zibuyu/research_tao">research_tao</a>这个仓库by刘知远副教授, 其中有一篇文章讲的是如何阅读文献. 阅读到其中<a href="https://github.com/zibuyu/research_tao/blob/master/02_reading_paper.md">一章</a>的时候激发了思考自己阅读文献的方式是否可以再提升一步. 因此花了点时间总结了几位不同老师关于如何阅读论文(主要是计算机与人工智能方向)的材料, 希望对你有所帮助.</p>
+<blockquote>
+<p>Note: 几位老师都提到了如何选择材料, 但不是这篇文章的重点. 因此这里不会提及应该读什么. </p>
+</blockquote>
+<p><a id="目录"></a></p>
+<h1 id="mu-lu">目录</h1>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog11/#%E7%9B%AE%E5%BD%95">目录</a>
+<ul>
+<li><a href="https://evanlyu732.github.io/blog11/#%E9%98%85%E8%AF%BB%E8%AE%BA%E6%96%87%E7%9A%84%E6%96%B9%E6%B3%95">阅读论文的方法</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#%E6%B8%85%E5%8D%8E%E5%88%98%E7%9F%A5%E8%BF%9C">清华(刘知远)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#johns-hopkins-univeristyjason-eisner">Johns Hopkins Univeristy(Jason Eisner)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#univeristy-of-waterloosrinivasan-keshav">Univeristy Of Waterloo(Srinivasan Keshav)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#harvard-universitymichael-mitzenmacher">Harvard University(Michael Mitzenmacher)</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#carnegie-mellon-universityaaditya-ramdas">Carnegie Mellon University(Aaditya Ramdas)</a></li>
+</ul>
+</li>
+<li><a href="https://evanlyu732.github.io/blog11/#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="https://evanlyu732.github.io/blog11/#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+<p><a id="阅读论文的方法"></a></p>
+<h2 id="yue-du-lun-wen-de-fang-fa">阅读论文的方法</h2>
+<p><a id="清华刘知远"></a></p>
+<h2 id="qing-hua-liu-zhi-yuan">清华(刘知远)</h2>
+<p>在<a href="https://github.com/zibuyu/research_tao/blob/master/02_reading_paper.md">research_tao</a>里, 刘老师主要谈到的是论文的阅读顺序.</p>
+<blockquote>
+<p>阅读论文也不必需要每篇都从头到尾看完. 一篇学术论文通常包括以下结构, 我们用序号来标记建议的阅读顺序:</p>
+<ul>
+<li>题目(1)</li>
+<li>摘要(2)</li>
+<li>正文: 导论(3), 相关工作(6), 本文工作(5), 实验结果(4), 结论(7)</li>
+<li>参考文献(6)</li>
+<li>附录</li>
+</ul>
+<p>按照这个顺序, 基本在读完题目和摘要后, 大致可以判断这篇论文与自己研究课题的相关性, 然后就可以决定是否要精读导论和实验结果判断学术价值, 是否阅读本文工作了解方法细节. 此外, 如果希望了解相关工作和未来工作, 则可以有针对性地阅读“相关工作”和“结论”等部分.</p>
+</blockquote>
+<p><a id="johns-hopkins-univeristyjason-eisner"></a></p>
+<h2 id="johns-hopkins-univeristy-jason-eisner">Johns Hopkins Univeristy(Jason Eisner)</h2>
+<p>Jason Eisner提出Multi-pass reading. </p>
+<p>Multi-pass reading的过程:</p>
+<ul>
+<li>First pass: 大概浏览论文, 了解论文的主要脉络(解决的问题, 以及点子). 限制自己阅读每页的时间. 如果论文值得阅读的话, 开始Second pass.</li>
+<li>Second pass: 在Second pass中, 不需要仔细阅读每篇论文. 提出问题并且回答他们<a href="https://terrytao.wordpress.com/career-advice/ask-yourself-dumb-questions-and-answer-them/">(ask yourself dumb questions and answer them)</a>. 至少弄清楚论文的动机(Motivation), 原理(Mathematics and algorithms). 以及实验过程(Experiments). </li>
+</ul>
+<p>此外, 在使用Multi-pass reading的要做的事. 需要一边阅读论文一边写笔记(Write as you read). 记录细节(Low-level notes)与框架(High-level notes). </p>
+<p>细节(Low-level notes)包括以下部分:</p>
+<ul>
+<li>用自己的话复述在论文中不明白的要点</li>
+<li>补充缺失的细节(假设, 代数步骤, 证明, 伪代码)</li>
+<li>注释数学对象及其类型</li>
+<li>类比具体的例子去复述作者的点子以及作者遇到的问题</li>
+<li>与已知的其他方法和问题联系起来</li>
+<li>提出原文未说明的地方或原文存在不合理的问题</li>
+<li>挑战论文的主张或方法</li>
+<li>想出应该做的后续工作</li>
+</ul>
+<p>框架(High-level notes)包括以下部分:</p>
+<ul>
+<li>总结你感兴趣的内容, 与其他论文进行对比, 并记录你自己的问题和对未来工作的想法. 写下这些摘要会在阅读论文时给你一个目标, 并且这些笔记将来会对你有用.</li>
+<li>用自己的话复述点子, 确保以后再读这篇文章的时候可以快速重建概念. 花时间在难的部分(公式推导, 算法). 而不是在简单的部分.</li>
+</ul>
+<p>原文虽然说是Multi-pass, 但是提到了Second-pass之后就没有继续往下提及了. 不过可以从原文发现后续pass应该做什么的蛛丝马迹, 这里引用原文来表达Multi-pass reading核心思想:</p>
+<blockquote>
+<p><strong>Practice</strong> the ability to <strong>decode the entire paper</strong> —as if you were reviewing it critically and <strong>trying to catch any errors, sloppy thinking, or incompleteness</strong>. This will <strong>sharpen your critical thinking</strong>. You will want to <strong>turn this practiced critical eye on yourself as you plan, execute, and write up your own research</strong>.</p>
+</blockquote>
+<p>通过解构论文提升自己评判性思考的能力, 再将这种能力转换到自己的研究上面. 因此假如需要有后续pass的话, 应该不断的去提炼点子直到能够解构整篇文章.</p>
+<p><a id="univeristy-of-waterloosrinivasan-keshav"></a></p>
+<h2 id="univeristy-of-waterloo-srinivasan-keshav">Univeristy Of Waterloo(Srinivasan Keshav)</h2>
+<p>Srinivasan Keshav提出three-pass method. </p>
+<ul>
+<li>
+<p>First-pass: </p>
+<ul>
+<li>目的: 抓住论文主要的点子.</li>
+<li>时间: 5分钟左右</li>
+<li>做什么:
+<ol>
+<li>读标题, 摘要, 以及介绍</li>
+<li>读每一节和每一小节的标题</li>
+<li>读结论 </li>
+<li>看引用</li>
+<li>最后回答五个问题(five C's):</li>
+</ol>
+<ul>
+<li>类别(Category): 这篇文章的类型是什么?</li>
+<li>内容(Content): 这篇文章与什么内容有关? 理论基础是什么?</li>
+<li>准确度(Correctness): 文章的假设是否成立?</li>
+<li>贡献(Contributions): 这篇文章主要的贡献是什么?</li>
+<li>清晰程度(Clarity): 这篇文章是否清晰的表达点子?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Second-pass:</p>
+<ul>
+<li>目的: 抓住论文主要的内容</li>
+<li>时间: 1小时左右</li>
+<li>做什么:
+<ol>
+<li>仔细读文章所附带的图片以及其他陈述信息</li>
+<li>将未读过的有相关性参考文献加入阅读列表当中</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Third-pass:</p>
+<ul>
+<li>目的: 彻底理解论文的细节</li>
+<li>时间: 4到5个小时对于初学者， 1小时对于有经验的人</li>
+<li>做什么:
+<ol>
+<li>思考与作者处于同样的假设并且复现实验的情况下, 你会如何呈现一个点子, 并与作者的点子进行对比.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="harvard-universitymichael-mitzenmacher"></a></p>
+<h2 id="harvard-university-michael-mitzenmacher">Harvard University(Michael Mitzenmacher)</h2>
+<p>这里选择的材料是CS222-Michael Mitzenmacher的讲义: </p>
+<ul>
+<li>批判性思考: 通过提出合适的问题去批判性地思考论文, 例如: 如果作者在解决问题, 那么作者解决的问题是正确的问题吗? 是否有更简单的方法作者没有考虑到? 作者提供的方法有什么局限性?
+假设是否合理? 逻辑是否合理? 作者对于文中的图表是否是合理的解释数据?</li>
+<li>创造性阅读: 能否解构论文并且重建这篇文章? 这篇文章好在哪里? 这些点子是否有其他扩展以及应用是作者没有考虑到的? 点子能够更加泛化? 这些提升是否能让结果有明显的提升? 如果你要从这篇文章开始做研究, 你能够做什么?</li>
+<li>阅读的时候做笔记: 在第一篇读完这篇文章之后, 尝试用一到两句话去总结这篇文章. 如果可以的话, 将这篇文章与相关工作进行比较.</li>
+</ul>
+<p><a id="carnegie-mellon-universityaaditya-ramdas"></a></p>
+<h2 id="carnegie-mellon-university-aaditya-ramdas">Carnegie Mellon University(Aaditya Ramdas)</h2>
+<p>这里选用了How to I read research papers-Aaditya Ramdas的ppt讲稿, Aaditya Ramdas讲述了自己阅读论文方法不断迭代的过程.</p>
+<ul>
+<li>阅读论文的目的: 
+<ol>
+<li>直接从作者身上学习, 避免信息加工.</li>
+<li>作者在旧问题上有新点子</li>
+</ol>
+</li>
+<li>方法:
+<ul>
+<li>first-pass(5到30分钟): 
+<ul>
+<li>阅读材料: 
+<ul>
+<li>摘要, 问题定义, 主要的理论, 讨论</li>
+</ul>
+</li>
+<li>回答:
+<ul>
+<li>什么问题被解决了?</li>
+<li>大致描述一下什么有意思的点子?</li>
+<li>为什么主要的观点是这样(至少用英文, 最好能用数学公式)?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>second-pass(30分钟到2小时): 
+<ul>
+<li>阅读材料: 
+<ul>
+<li>例子, 公式, 定理, 证明</li>
+</ul>
+</li>
+<li>回答:
+<ul>
+<li>过去的方法面临什么问题? 这篇文章是如何解决的?</li>
+<li>什么是最简单的基准线? 在什么指标上这种方法更好?</li>
+<li>有哪些与之相关的问题并且为什么论文的想法还没用应用到上面去?</li>
+<li>方法能否应用到没被考虑的问题上?</li>
+<li>什么是主要的点子并且能否对以后有所帮助的?</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>third-pass(几天/周): 
+<ul>
+<li>阅读材料: 
+<ul>
+<li>附录, 参考文献, 相关工作, 推论，定理, 证明</li>
+</ul>
+</li>
+<li>回答:
+<ul>
+<li>文中的公式/理论是如何被证明的?</li>
+<li>是否能够从头复现实现结果?</li>
+<li>如果不能, 是否有关键信息被忽略了? 额外的假设是否能够让复现更简单?</li>
+<li>是否能够用简单的工具简化证明? 能否用不同的方法证明?</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a id="总结"></a></p>
+<h1 id="zong-jie">总结</h1>
+<p>其实上面提到的方法不仅仅适用于阅读论文, 只不过论文是一种结构化的信息材料. 通过其他信息材料(视频, 文章)学习新知识都可以采取类似的方法. 以记笔记的方式让自己与阅读的材料互动. 提出问题并且回答问题, 推动自己去理解文章. 并且以问题为导向学习让自己处于能够实验的环境之中. 通过复述以及写作总结自己的理解, 帮助自己消新知识. 读完这篇材料后, 不妨花点时间用一两句话总结一下这篇文章的主要观点是什么.</p>
+<p><a id="参考资料"></a></p>
+<h1 id="can-kao-zi-liao">参考资料</h1>
+<ul>
+<li><a href="https://www.stat.cmu.edu/~aramdas/checklists/reading-tips.pdf">How to I read research papers - Aaditya Ramdas</a></li>
+<li><a href="http://www.eecs.harvard.edu/~michaelm/CS222/ReadPaper.pdf">CS222 - Michael Mitzenmacher</a></li>
+<li><a href="http://ccr.sigcomm.org/online/files/p83-keshavA.pdf">How to Read a Paper - S. Keshav</a></li>
+<li><a href="https://www.cs.jhu.edu/~jason/advice/how-to-read-a-paper.html">How to Read a Technical Paper - Jason Eisner</a></li>
+</ul>
+
+    </div>
+    <div class="post-meta">
+        <span class="post-time">
+        
+            
+
+
+二〇二四年六月十三日
+
+        
+        </span>
+    </div>
+</article>
+
+<div class="prev_next">
+<nav id="prev_next">
+    <div class="prev">
+        
+    </div>
+    <div class="next">
+        
+    </div>
+</nav>
+</div>
+
+<div class="post-comment">
+
+
+
+
+</div>
+
+    </main>
+    
+    <p class="license"></p>
+    
+</body>
+</html>
