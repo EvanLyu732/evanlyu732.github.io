@@ -1,37 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evan's Reading List</title>
+{% extends "base.html" %}
+
+{% block content %}
+<section class="bookshelf">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            max-width: 1400px;  /* 增加宽度以适应封面列 */
-            margin: 0 auto;
-            padding: 20px;
+        .bookshelf {
+            padding: 0 0 2.4rem;
+            color: var(--ink);
         }
-        table {
+        .bookshelf-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .bookshelf table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 0;
+            min-width: 860px;
         }
-        th, td {
-            padding: 12px;
+        .bookshelf th, .bookshelf td {
+            padding: 0.85rem 0.7rem;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid var(--faint);
             vertical-align: top;
         }
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
+        .bookshelf th {
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 0.9rem;
         }
-        tr:hover {
-            background-color: #f5f5f5;
+        .bookshelf tr:hover {
+            background-color: rgba(255, 255, 255, 0.24);
         }
         .stars {
-            color: #ffd700;
-            font-size: 1.2em;
+            color: #8b7a2f;
+            font-size: 0.96rem;
+            white-space: nowrap;
         }
         .half-star {
             position: relative;
@@ -41,7 +45,7 @@
             content: "☆";
             position: absolute;
             left: 0;
-            color: #ffd700;
+            color: #8b7a2f;
             width: 50%;
             overflow: hidden;
         }
@@ -49,73 +53,68 @@
             content: "★";
             position: absolute;
             left: 0;
-            color: #ffd700;
+            color: #8b7a2f;
             width: 50%;
             overflow: hidden;
         }
         .book-cover {
-            width: 100px;  /* 封面列宽度 */
+            width: 92px;
         }
         .book-cover img {
-            width: 80px;
-            height: 120px;
+            width: 72px;
+            height: 108px;
             object-fit: cover;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            border-radius: 4px;
+            box-shadow: 0 1px 6px rgba(20, 27, 18, 0.18);
             transition: transform 0.2s;
         }
         .book-cover img:hover {
-            transform: scale(1.1);
+            transform: translateY(-2px);
         }
         .book-title {
-            min-width: 200px;
-            width: 20%;
+            min-width: 180px;
+            width: 22%;
         }
         .date {
-            width: 100px;
+            width: 110px;
+            color: var(--muted);
+            white-space: nowrap;
         }
         .rating {
-            width: 80px;
+            width: 90px;
         }
         .review {
-            width: 35%;
+            width: 42%;
         }
         .review-content {
-            line-height: 1.6;
-            color: #333;
+            line-height: 1.62;
+            color: var(--ink);
+            font-size: 0.94rem;
         }
         .review-zh {
             margin-bottom: 8px;
         }
         .review-en {
-            color: #666;
+            color: var(--muted);
             font-style: italic;
         }
-        .language-switch {
-            margin-bottom: 20px;
-        }
-        .language-btn {
-            padding: 8px 16px;
-            margin-right: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: #f0f0f0;
-        }
-        .language-btn.active {
-            background-color: #007bff;
-            color: white;
+        @media screen and (max-width: 700px) {
+            .bookshelf table {
+                min-width: 760px;
+            }
+            .bookshelf th, .bookshelf td {
+                padding: 0.7rem 0.55rem;
+            }
+            .book-cover {
+                width: 76px;
+            }
+            .book-cover img {
+                width: 58px;
+                height: 87px;
+            }
         }
     </style>
-</head>
-<body>
-    <h1>
-        <span class="zh">Evan的阅读清单</span>
-        <span class="en" style="display: none">Evan's Reading List</span>
-    </h1>
-    <div class="language-switch">
-        <button class="language-btn active" onclick="switchLanguage('zh')">中文</button>
-        <button class="language-btn" onclick="switchLanguage('en')">English</button>
-    </div>
+    <div class="bookshelf-table-wrap">
     <table>
         <thead>
             <tr>
@@ -284,6 +283,7 @@
             </tr>
         </tbody>
     </table>
+    </div>
 
     <script>
         function sortBooksByDate() {
@@ -301,45 +301,13 @@
             rows.forEach(row => tbody.appendChild(row));
         }
 
-        function switchLanguage(lang) {
-            // 切换书评显示
-            const reviews = document.querySelectorAll('.review-zh, .review-en');
-            reviews.forEach(review => {
-                if (review.className === `review-${lang}`) {
-                    review.style.display = 'block';
-                } else {
-                    review.style.display = 'none';
-                }
-            });
-
-            // 切换按钮状态
-            const buttons = document.querySelectorAll('.language-btn');
-            buttons.forEach(btn => {
-                if (btn.textContent.toLowerCase().includes(lang)) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            // 切换标题和列名
-            const zhElements = document.querySelectorAll('.zh');
-            const enElements = document.querySelectorAll('.en');
-            
-            if (lang === 'zh') {
-                zhElements.forEach(el => el.style.display = 'inline');
-                enElements.forEach(el => el.style.display = 'none');
-            } else {
-                zhElements.forEach(el => el.style.display = 'none');
-                enElements.forEach(el => el.style.display = 'inline');
-            }
-        }
-
         // 页面加载时执行
         window.addEventListener('load', () => {
             sortBooksByDate();
-            switchLanguage('zh'); // 确保页面加载时执行一次语言切换
+            document.querySelectorAll('.review-en, .en').forEach(el => {
+                el.style.display = 'none';
+            });
         });
     </script>
-</body>
-</html>
+</section>
+{% endblock %}

@@ -6,7 +6,8 @@ compile_sass = true
 default_language = "zh-cn"
 
 # What language to use
-generate_feed = true
+generate_feeds = true
+feed_filenames = ["atom.xml"]
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
@@ -34,18 +35,16 @@ seje_darkmode = "never"
 seje_menu_links = [
     {url = "$BASE_URL/", name = "home"},
     {url = "$BASE_URL/archives", name = "archives"},
-    {url = "$BASE_URL/about",  name = "about"},
     {url = "$BASE_URL/note",  name = "note"},
     {url = "$BASE_URL/atom.xml", name = "rss"},
 ]
 katex_enable = true
 katex_auto_render = true
 
-[languages.zh-cn.translations]
+[translations]
 title = "evan lyu"
 home = "主页"
 archives = "归档"
-about = "关于"
 more = "查看全文"
 olderArticle = "旧文"
 newer = "上一篇"
@@ -53,6 +52,3 @@ older = "下一篇"
 loading = "加載中..."
 rss = "订阅"
 note = "书架"
-
-[sass]
-compile_sass = true

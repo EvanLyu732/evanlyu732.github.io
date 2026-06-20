@@ -1,24 +1,45 @@
 .archive {
-    padding: 0 10%;
-    border: 1px #ddd;
-    border-style: solid none none none;
+    padding: 0 0 2.4rem;
     .post-archive {
         list-style: none;
         padding: 0;
+        margin: 1.6rem 0 0;
         .years {
-            border: 1px #ddd;
-            border-style: none none solid none;
+            border-bottom: 1px solid var(--faint);
             padding-bottom: 0.5em;
+            margin: 2rem 0 0.75rem;
+            color: var(--ink);
         }
         .post-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.25rem 0;
             .post-date {
                 display: inline-block;
-                margin-right: 10px;
+                min-width: 5.5rem;
+                color: var(--muted);
             }
             .post-title {
-                color: #000000;
+                color: var(--link);
                 text-decoration: none;
             }
+            .post-title:hover {
+                color: var(--ink);
+                text-decoration: underline;
+                text-underline-offset: 0.18em;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .archive .post-archive .post-item {
+        display: block;
+
+        .post-date {
+            display: block;
+            min-width: 0;
+            font-size: 0.9rem;
         }
     }
 }

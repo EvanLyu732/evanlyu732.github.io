@@ -1,45 +1,54 @@
 .header {
     display: flex;
-    margin: 0 auto;
-    padding: 1em;
-    padding-bottom: 0.5em;
-    justify-content: center;
+    margin: 0 auto 2.4rem;
+    padding: 2.1rem 0 0.9rem;
+    justify-content: flex-start;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--faint);
     .blog-title .logo {
         font-family: 'Source Serif Pro', 'Noto Serif SC', serif;
-        color: #000;
-        font-size: 1.2em;
+        color: var(--ink);
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.1;
         text-decoration: none;
     }
     .blog-title {
-        height: 26.5;
+        min-height: 26px;
     }
     .menu {
-        margin: 0 auto;
+        margin: 0.85rem 0 0;
         vertical-align: text-top;
         padding-left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.15rem 0.9rem;
         .menu-item {
-            display: inline-block;
-            padding: 0.25em;
+            display: block;
+            padding: 0;
+            list-style: none;
         }
         .menu-item-link {
-            color:  #818181;
+            color: var(--muted);
             text-decoration: none;
-            font-size: 1em;
+            font-size: 0.92rem;
             &:hover {
-                color: #111;
+                color: var(--ink);
             }
         }
         .current-menu-item-link {
-            color: #111;
+            color: var(--ink);
             text-decoration: none;
+            font-size: 0.92rem;
         }
     }
 
-    @media screen and (max-width: 320px) {
+    @media screen and (max-width: 480px) {
+        margin-bottom: 1.6rem;
+        padding-top: 1.4rem;
         .menu {
-            display: inline-flex;
+            gap: 0.25rem 0.75rem;
         }
     }
 }
