@@ -1,15 +1,14 @@
 name: Codex PR review summary
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   summarize:
-    if: github.event.pull_request.draft == false
+    if: false
     runs-on: ubuntu-latest
     outputs:
       final_message: ${{ steps.codex.outputs.final-message }}
