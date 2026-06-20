@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-
-
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (!window.renderMathInElement) return;
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\[", right: "\\]", display: true },
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "$", right: "$", display: false }
+                ],
+                ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"],
+                throwOnError: false
+            });
+        });
+    </script>
+    
+    
     
         <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
     
@@ -22,23 +39,16 @@
     
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Nvidia CUDA的前世今生 - evan lyu</title>
     <meta charset="utf-8">
     <meta name="title" content="Nvidia CUDA的前世今生 - evan lyu">
     <meta name="description" content="">
+    <meta name="theme-color" content="#f8f7f2">
     <meta property="og:image:width" content="200" />
     <meta property="og:image:height" content="200" />
     <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
     
-    
-    <style>
-    @media screen and (min-width: 320px) {
-        body {
-            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
-        }
-    }
-    </style>
     
     <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
@@ -68,15 +78,6 @@
             
             
             <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
-            
-        </li>
-        
-        <li class="menu-item">
-            
-            
-            
-            
-            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
             
         </li>
         
@@ -121,7 +122,7 @@
 <blockquote>
 <p><strong>Ian Buck</strong>, while at <strong>Stanford</strong> in 2000, created an 8K gaming rig using 32 GeForce cards, then obtained a DARPA grant to perform <strong>general purpose parallel programming on GPUs</strong>. He then joined Nvidia, where since 2004 he has been overseeing CUDA development. In pushing for CUDA, Jensen Huang aimed for the Nvidia GPUs to become a <strong>general hardware</strong> for scientific computing. CUDA was released in 2006. Around 2015, the focus of CUDA changed to neural networks.</p>
 </blockquote>
-<p>谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的<a href="https://blogs.nvidia.com/blog/author/ian-buck/">副总裁</a>, 以前是斯坦福的博士生, 点击Ian博士时期的<a href="http://scroll.stanford.edu/~ianbuck/">主页</a>. 可以看到他在博士期间做的项目<a href="http://graphics.stanford.edu/projects/brookgpu/">BrookGPU</a>, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的<a href="https://www.youtube.com/watch?v=Cmh1EHXjJsk">采访</a>，Ian在视频里面明确提到将<strong>Brook的想法迁移到CUDA</strong>上, 因此可以认为<strong>Brook就是CUDA最早的雏形</strong>. </p>
+<p>谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的<a href="https://blogs.nvidia.com/blog/author/ian-buck/">副总裁</a>, 以前是斯坦福的博士生, 点击Ian博士时期的<a href="http://scroll.stanford.edu/~ianbuck/">主页</a>. 可以看到他在博士期间做的项目<a href="http://graphics.stanford.edu/projects/brookgpu/">BrookGPU</a>, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的<a href="https://www.youtube.com/watch?v=Cmh1EHXjJsk">采访</a>，Ian在视频里面明确提到将<strong>Brook的想法迁移到CUDA</strong>上, 因此可以认为<strong>Brook就是CUDA最早的雏形</strong>.</p>
 <h2 id="ian-buckde-brookyu-yan">Ian Buck的Brook语言</h2>
 <p>让我们一起再来看看BrookGPU的项目介绍:</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu.png" alt="brook-gpu" /></p>
@@ -131,7 +132,7 @@
 <li>由于GPU与CPU所针对的场景不同，并且由于CPU的局限性: 有限的instruction level parallelism (ILP), 过度使用缓存去获取局部性. 因此GPU的编程语言形态会与CPU有所不同.</li>
 <li>当时也有针对于GPU编程的语言, 但是这些语言的实现都是针对于图形学的shader所设计的, 而不是为了<strong>通用计算编程</strong>所设计</li>
 <li>程序在GPU上执行时，其内存访问延迟主要受到两个关键因素的制约: 一是计算速率(compute rate), 二是内存带宽(memory bandwidth). 这意味着，GPU处理数据的速度和内存传输数据的能力共同决定了程序在内存操作中的延迟表现. BrookGPU的设计是为了让GPU计算充分发挥, 从而让内存时延主要部分为内存带宽.</li>
-<li>Brook不是第一个尝试去解决通用计算问题, 但是是第一个使用流式处理(stream processing)去解决通用计算. </li>
+<li>Brook不是第一个尝试去解决通用计算问题, 但是是第一个使用流式处理(stream processing)去解决通用计算.</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu2.png" alt="advantage-of-streaming" /></p>
 <p>在Ian提出Streaming Processing框架的这一节提到了很重要的一个观点. 内存的访问速度(memory access rate)即内存带宽(memory bandwidth)往往
@@ -194,9 +195,9 @@ provide a data-parallel method for calculating a single value from a set of reco
 </span></code></pre>
 <p>Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很奇怪的一点是明明这里的操作也可以归为kernel的范畴, 但是Ian却单独抽里开. 说明Brook对Reducitons的实现与kernel是不同的. 而从语法上来看, 这段代码与CUDA调用kernel function几乎是一致的. 在CUDA中没有单独的概念, 说明这一操作已经在CUDA统一了.</p>
 <p>到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processing相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.</p>
-<h2 id="wei-shi-yao-cudazhe-yang-she-ji">为什么CUDA这样设计</h2>
-<p>回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的<a href="https://www.nvidia.com/zh-tw/on-demand/session/gtcspring21-s31151/">&quot;How Gpu Computing Works&quot;</a>以及GTC2022的<a href="https://resources.nvidia.com/en-us-summer-of-learning-for-students/gtcspring22-s41487">&quot;How CUDA Programming Works&quot;</a>, 我尝试用尽可能精炼的语言描述下我的理解:</p>
-<p>从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟. </p>
+<h2 id="wei-shen-me-cudazhe-yang-she-ji">为什么CUDA这样设计</h2>
+<p>回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的<a href="https://www.nvidia.com/zh-tw/on-demand/session/gtcspring21-s31151/">"How Gpu Computing Works"</a>以及GTC2022的<a href="https://resources.nvidia.com/en-us-summer-of-learning-for-students/gtcspring22-s41487">"How CUDA Programming Works"</a>, 我尝试用尽可能精炼的语言描述下我的理解:</p>
+<p>从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟.</p>
 <p>从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了<a href="https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads">SIMT(Single Instruction Multiple Threads)</a>. 从而隐藏内存延迟.</p>
 <p>下面这张图对于理解CUDA的概念非常有帮助:
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/gtc-cuda-concepts.png" alt="cuda-concepts" /></p>
@@ -204,12 +205,12 @@ provide a data-parallel method for calculating a single value from a set of reco
 <p>CUDA的发明者Ian Buck在读博士的时候(2006年左右), 当时已经有专门针对GPU的编程语言, 但是这些特点的语言的特定都是针对于图形学里的shader设计的, 因此不具有通用性. 因此CUDA的意义在于使用流式处理(stream processsing)去解决图形处理器通用计算(General-purpose computing on graphics processing units)软件层抽象的问题.</p>
 <h2 id="can-kao-zi-liao">参考资料</h2>
 <ul>
-<li>How Gpu Computing Works - Steve Jones </li>
+<li>How Gpu Computing Works - Steve Jones</li>
 <li>How CUDA Programming Works - Steve Jones</li>
 <li>BROOK STREAM LANGUAGE - Ian Buck</li>
 <li>Brook for GPUs: Stream Computing on Graphics Hardware - Ian Buck</li>
 <li>Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0</li>
-<li>Wikipedia </li>
+<li>Wikipedia</li>
 </ul>
 
     </div>

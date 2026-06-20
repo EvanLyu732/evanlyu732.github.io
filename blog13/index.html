@@ -1,11 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-
-
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (!window.renderMathInElement) return;
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\[", right: "\\]", display: true },
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "$", right: "$", display: false }
+                ],
+                ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option"],
+                throwOnError: false
+            });
+        });
+    </script>
+    
+    
     
         <link rel="alternate" type="application/rss+xml" title="RSS" href="https://evanlyu732.github.io/atom.xml">
     
@@ -22,23 +39,16 @@
     
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>2024华为开发者大会 - evan lyu</title>
     <meta charset="utf-8">
     <meta name="title" content="2024华为开发者大会 - evan lyu">
     <meta name="description" content="">
+    <meta name="theme-color" content="#f8f7f2">
     <meta property="og:image:width" content="200" />
     <meta property="og:image:height" content="200" />
     <link rel="stylesheet" href="https:&#x2F;&#x2F;evanlyu732.github.io/style.css">
     
-    
-    <style>
-    @media screen and (min-width: 320px) {
-        body {
-            font-size: calc(16px + 2 * ((100vw - 320px) / 960));
-        }
-    }
-    </style>
     
     <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Source+Serif+Pro:wght@400;700&display=swap">
     <link rel="stylesheet" href="https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;700&display=swap">
@@ -68,15 +78,6 @@
             
             
             <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;archives" class="menu-item-link">归档</a>
-            
-        </li>
-        
-        <li class="menu-item">
-            
-            
-            
-            
-            <a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;about" class="menu-item-link">关于</a>
             
         </li>
         
@@ -115,7 +116,7 @@
 <li>云侧： open欧拉, 端侧: openharmony</li>
 <li>华为ai份额</li>
 <li>华为AI白皮书</li>
-<li>HarmonyOS Next ? </li>
+<li>HarmonyOS Next ?</li>
 </ul>
 <p>何刚:</p>
 <ul>
@@ -147,10 +148,10 @@
 <ul>
 <li>是否隐私安全? (很难说...)</li>
 </ul>
-<p>computer which contain: linux distrobute (ubuntu, arch..)  + local llm </p>
+<p>computer which contain: linux distrobute (ubuntu, arch..)  + local llm</p>
 <p>llm 塞到 linux kernel 里面</p>
 <ul>
-<li>Semantic Kernel (SK) is an open-source software development kit (SDK) designed by Microsoft for building applications that integrate large language models (LLMs) and generative AI. </li>
+<li>Semantic Kernel (SK) is an open-source software development kit (SDK) designed by Microsoft for building applications that integrate large language models (LLMs) and generative AI.</li>
 <li>符合物理规律的</li>
 <li>思维链和策略搜索</li>
 <li>STCG???</li>
