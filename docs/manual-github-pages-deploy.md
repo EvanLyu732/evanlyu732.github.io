@@ -68,6 +68,12 @@ Sync generated files into the `gh-pages` worktree:
 rsync -a --delete --exclude .git /tmp/evanlyu-site-public/ /tmp/evanlyu-gh-pages/
 ```
 
+Add `.nojekyll` in the `gh-pages` worktree so GitHub Pages serves the generated static files directly:
+
+```bash
+touch /tmp/evanlyu-gh-pages/.nojekyll
+```
+
 Commit and push `gh-pages`:
 
 ```bash
