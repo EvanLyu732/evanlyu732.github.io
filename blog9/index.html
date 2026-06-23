@@ -118,16 +118,16 @@
 <p>最近突然冒出了一个想法, 为什么CUDA要这样设计(kernel, warp, thread, block, grid...)? 带着这个疑问, 我花了一些时间
 在调研CUDA背后的历史, 以下是对Nvidia重要护城河之一的CUDA为什么这样设计的介绍:</p>
 <h2 id="cudafa-zhan-li-shi">CUDA发展历史</h2>
-<p>要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索<a href="https://en.wikipedia.org/wiki/CUDA">CUDA</a>, 里面有提到CUDA的发展历史, 以下为<a href="https://en.wikipedia.org/wiki/CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D">原文</a>:</p>
+<p>要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索<a rel="external" href="https://en.wikipedia.org/wiki/CUDA">CUDA</a>, 里面有提到CUDA的发展历史, 以下为<a rel="external" href="https://en.wikipedia.org/wiki/CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D">原文</a>:</p>
 <blockquote>
 <p><strong>Ian Buck</strong>, while at <strong>Stanford</strong> in 2000, created an 8K gaming rig using 32 GeForce cards, then obtained a DARPA grant to perform <strong>general purpose parallel programming on GPUs</strong>. He then joined Nvidia, where since 2004 he has been overseeing CUDA development. In pushing for CUDA, Jensen Huang aimed for the Nvidia GPUs to become a <strong>general hardware</strong> for scientific computing. CUDA was released in 2006. Around 2015, the focus of CUDA changed to neural networks.</p>
 </blockquote>
-<p>谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的<a href="https://blogs.nvidia.com/blog/author/ian-buck/">副总裁</a>, 以前是斯坦福的博士生, 点击Ian博士时期的<a href="http://scroll.stanford.edu/~ianbuck/">主页</a>. 可以看到他在博士期间做的项目<a href="http://graphics.stanford.edu/projects/brookgpu/">BrookGPU</a>, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的<a href="https://www.youtube.com/watch?v=Cmh1EHXjJsk">采访</a>，Ian在视频里面明确提到将<strong>Brook的想法迁移到CUDA</strong>上, 因此可以认为<strong>Brook就是CUDA最早的雏形</strong>.</p>
+<p>谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的<a rel="external" href="https://blogs.nvidia.com/blog/author/ian-buck/">副总裁</a>, 以前是斯坦福的博士生, 点击Ian博士时期的<a rel="external" href="http://scroll.stanford.edu/~ianbuck/">主页</a>. 可以看到他在博士期间做的项目<a rel="external" href="http://graphics.stanford.edu/projects/brookgpu/">BrookGPU</a>, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的<a rel="external" href="https://www.youtube.com/watch?v=Cmh1EHXjJsk">采访</a>，Ian在视频里面明确提到将<strong>Brook的想法迁移到CUDA</strong>上, 因此可以认为<strong>Brook就是CUDA最早的雏形</strong>.</p>
 <h2 id="ian-buckde-brookyu-yan">Ian Buck的Brook语言</h2>
 <p>让我们一起再来看看BrookGPU的项目介绍:</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu.png" alt="brook-gpu" /></p>
-<p>总结一下, Brook提出了<strong>stream programming model</strong>以及<strong>stream application</strong>并给出了对应的实现去解决<a href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E5%A4%84%E7%90%86%E5%99%A8%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97"><strong>通用计算</strong></a>的问题.</p>
-<p>再结合BrookGPU当时的论文<a href="https://graphics.stanford.edu/papers/brookgpu/brookgpu.pdf">Brook for GPUs: Stream Computing on Graphics Hardware</a>以及Ian Buck的博士论文<a href="http://graphics.stanford.edu/~ianbuck/thesis.pdf">STREAM COMPUTING ON GRAPHICS HARDWARE</a>. 我们能够了解到以下几个点:</p>
+<p>总结一下, Brook提出了<strong>stream programming model</strong>以及<strong>stream application</strong>并给出了对应的实现去解决<a rel="external" href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E5%A4%84%E7%90%86%E5%99%A8%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97"><strong>通用计算</strong></a>的问题.</p>
+<p>再结合BrookGPU当时的论文<a rel="external" href="https://graphics.stanford.edu/papers/brookgpu/brookgpu.pdf">Brook for GPUs: Stream Computing on Graphics Hardware</a>以及Ian Buck的博士论文<a rel="external" href="http://graphics.stanford.edu/~ianbuck/thesis.pdf">STREAM COMPUTING ON GRAPHICS HARDWARE</a>. 我们能够了解到以下几个点:</p>
 <ul>
 <li>由于GPU与CPU所针对的场景不同，并且由于CPU的局限性: 有限的instruction level parallelism (ILP), 过度使用缓存去获取局部性. 因此GPU的编程语言形态会与CPU有所不同.</li>
 <li>当时也有针对于GPU编程的语言, 但是这些语言的实现都是针对于图形学的shader所设计的, 而不是为了<strong>通用计算编程</strong>所设计</li>
@@ -136,7 +136,7 @@
 </ul>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu2.png" alt="advantage-of-streaming" /></p>
 <p>在Ian提出Streaming Processing框架的这一节提到了很重要的一个观点. 内存的访问速度(memory access rate)即内存带宽(memory bandwidth)往往
-是制约程序性能的瓶颈. 而软件层由于改变不了物理的内存带宽, 因而会采取其他技巧去隐藏内存延迟(memory latency). 这里Streaming Processing使用data parallelism与<a href="https://crd.lbl.gov/divisions/amcr/computer-science-amcr/par/research/roofline/introduction/">arithmetic Intensity</a>去隐藏内存延迟(hide memory latency). Ian也提出了什么是arithmetic Intensity的概念:</p>
+是制约程序性能的瓶颈. 而软件层由于改变不了物理的内存带宽, 因而会采取其他技巧去隐藏内存延迟(memory latency). 这里Streaming Processing使用data parallelism与<a rel="external" href="https://crd.lbl.gov/divisions/amcr/computer-science-amcr/par/research/roofline/introduction/">arithmetic Intensity</a>去隐藏内存延迟(hide memory latency). Ian也提出了什么是arithmetic Intensity的概念:</p>
 <blockquote>
 <p>In order to quantify this property, we introduce the concept of arithmetic inten-
 sity. <strong>Arithmetic intensity is the ratio of arithmetic operations performed per memory
@@ -147,16 +147,16 @@ operation, in other words, flops per word transferred.</strong></p>
 Arithmetic intensity指的是运算指令(add, mul..)与内存操作(load, store..)的比例.</p>
 <p>这里小结一下Brook做了什么事:</p>
 <p><em>Brook是一种编程语言, 通过软件层的抽象来让程序尽可能得调用GPU的运算单元，尽可能减少内存搬运操作. 从而隐藏内存延迟.</em></p>
-<p>如果有兴趣详细了解的话, GTC2022上的这个<a href="https://www.nvidia.com/en-us/on-demand/session/gtcspring22-s41487/">talk</a>会很有帮助. 在了解了这些之后, 我们再来一起看看BrookGPU与CUDA的对比.</p>
+<p>如果有兴趣详细了解的话, GTC2022上的这个<a rel="external" href="https://www.nvidia.com/en-us/on-demand/session/gtcspring22-s41487/">talk</a>会很有帮助. 在了解了这些之后, 我们再来一起看看BrookGPU与CUDA的对比.</p>
 <h2 id="brookyu-cudade-dui-bi">Brook与CUDA的对比</h2>
-<p>接下来结合上面的信息以及CUDA1.0的<a href="https://developer.download.nvidia.cn/compute/cuda/1.0/NVIDIA_CUDA_Programming_Guide_1.0.pdf">参考手册</a>, 我们来看看Brook与Cuda的一些概念的对比. 由于CUDA是在Brook之后诞生, 所以这里以Brook中的概念为准分各个小节. 为了尽可能得传递原始信息避免加工, 每个概念会附上原文.</p>
+<p>接下来结合上面的信息以及CUDA1.0的<a rel="external" href="https://developer.download.nvidia.cn/compute/cuda/1.0/NVIDIA_CUDA_Programming_Guide_1.0.pdf">参考手册</a>, 我们来看看Brook与Cuda的一些概念的对比. 由于CUDA是在Brook之后诞生, 所以这里以Brook中的概念为准分各个小节. 为了尽可能得传递原始信息避免加工, 每个概念会附上原文.</p>
 <h3 id="stream">Stream</h3>
 <blockquote>
 <p>A stream is a collection of data which can be operated on in parallel.  - Ian Buck, BROOK STREAM LANGUAGE p24</p>
 </blockquote>
 <p>由于CUDA1.0里面没有Stream的概念, 这里没有直接查到是CUDA的哪一个版本提出了Stream. 所以参考了Steve Rennich在GTC的ppt.</p>
 <blockquote>
-<p>A sequence of operations that execute in issue-order on the GPU - Steve Rennich, <a href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">CUDA C/C++
+<p>A sequence of operations that execute in issue-order on the GPU - Steve Rennich, <a rel="external" href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">CUDA C/C++
 Streams and Concurrency</a></p>
 </blockquote>
 <p>Stream在brook指带的是一系统的数据, 而在cuda里面是的一系列的指令.</p>
@@ -179,26 +179,25 @@ the instruction set of the device and the resulting program, called a <em>kernel
 provide a data-parallel method for calculating a single value from a set of records. - Ian Buck, BROOK STREAM LANGUAGE p30</p>
 </blockquote>
 <p>这里需要附上原文的代码才能更详细的说明:</p>
-<pre data-lang="c" style="background-color:#eff1f5;color:#4f5b66;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#a7adba;">// Task: Compute the sum of all the elements of a sum (a, r);
-</span><span>
-</span><span style="color:#a7adba;">// Brook
-</span><span>reduce </span><span style="color:#8fa1b3;">sum </span><span>(</span><span style="color:#b48ead;">float</span><span> a&lt;&gt;, reduce </span><span style="color:#b48ead;">float</span><span> r&lt;&gt;) {
-</span><span>    r += c;
-</span><span>}
-</span><span style="color:#b48ead;">float</span><span> r;
-</span><span style="color:#b48ead;">float</span><span> a&lt;</span><span style="color:#d08770;">100</span><span>&gt;;
-</span><span>
-</span><span style="color:#a7adba;">// Equivalant C code:
-</span><span>r = a[</span><span style="color:#d08770;">0</span><span>];
-</span><span style="color:#b48ead;">for </span><span>(i=</span><span style="color:#d08770;">1</span><span>; i&lt;</span><span style="color:#d08770;">100</span><span>; i++)
-</span><span>    r += a[i];
-</span></code></pre>
+<pre class="giallo" style="color: #CDD6F4; background-color: #1E1E2E;"><code data-lang="c"><span class="giallo-l"><span style="color: #9399B2;font-style: italic;">// Task: Compute the sum of all the elements of a sum (a, r);</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #9399B2;font-style: italic;">// Brook</span></span>
+<span class="giallo-l"><span>reduce </span><span style="color: #89B4FA;font-style: italic;">sum</span><span style="color: #9399B2;"> (</span><span style="color: #CBA6F7;">float</span><span> a</span><span style="color: #94E2D5;">&lt;&gt;</span><span style="color: #9399B2;">,</span><span> reduce </span><span style="color: #CBA6F7;">float</span><span> r</span><span style="color: #94E2D5;">&lt;&gt;</span><span style="color: #9399B2;">) {</span></span>
+<span class="giallo-l"><span>    r </span><span style="color: #94E2D5;">+=</span><span> c</span><span style="color: #9399B2;">;</span></span>
+<span class="giallo-l"><span style="color: #9399B2;">}</span></span>
+<span class="giallo-l"><span style="color: #CBA6F7;">float</span><span> r</span><span style="color: #9399B2;">;</span></span>
+<span class="giallo-l"><span style="color: #CBA6F7;">float</span><span> a</span><span style="color: #94E2D5;">&lt;</span><span style="color: #FAB387;">100</span><span style="color: #94E2D5;">&gt;</span><span style="color: #9399B2;">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #9399B2;font-style: italic;">// Equivalant C code:</span></span>
+<span class="giallo-l"><span>r </span><span style="color: #94E2D5;">=</span><span> a</span><span style="color: #9399B2;">[</span><span style="color: #FAB387;">0</span><span style="color: #9399B2;">];</span></span>
+<span class="giallo-l"><span style="color: #CBA6F7;">for</span><span style="color: #9399B2;"> (</span><span>i</span><span style="color: #94E2D5;">=</span><span style="color: #FAB387;">1</span><span style="color: #9399B2;">;</span><span> i</span><span style="color: #94E2D5;">&lt;</span><span style="color: #FAB387;">100</span><span style="color: #9399B2;">;</span><span> i</span><span style="color: #94E2D5;">++</span><span style="color: #9399B2;">)</span></span>
+<span class="giallo-l"><span>    r </span><span style="color: #94E2D5;">+=</span><span> a</span><span style="color: #9399B2;">[</span><span>i</span><span style="color: #9399B2;">];</span></span></code></pre>
 <p>Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很奇怪的一点是明明这里的操作也可以归为kernel的范畴, 但是Ian却单独抽里开. 说明Brook对Reducitons的实现与kernel是不同的. 而从语法上来看, 这段代码与CUDA调用kernel function几乎是一致的. 在CUDA中没有单独的概念, 说明这一操作已经在CUDA统一了.</p>
 <p>到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processing相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.</p>
 <h2 id="wei-shen-me-cudazhe-yang-she-ji">为什么CUDA这样设计</h2>
-<p>回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的<a href="https://www.nvidia.com/zh-tw/on-demand/session/gtcspring21-s31151/">"How Gpu Computing Works"</a>以及GTC2022的<a href="https://resources.nvidia.com/en-us-summer-of-learning-for-students/gtcspring22-s41487">"How CUDA Programming Works"</a>, 我尝试用尽可能精炼的语言描述下我的理解:</p>
+<p>回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的<a rel="external" href="https://www.nvidia.com/zh-tw/on-demand/session/gtcspring21-s31151/">"How Gpu Computing Works"</a>以及GTC2022的<a rel="external" href="https://resources.nvidia.com/en-us-summer-of-learning-for-students/gtcspring22-s41487">"How CUDA Programming Works"</a>, 我尝试用尽可能精炼的语言描述下我的理解:</p>
 <p>从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟.</p>
-<p>从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了<a href="https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads">SIMT(Single Instruction Multiple Threads)</a>. 从而隐藏内存延迟.</p>
+<p>从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了<a rel="external" href="https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads">SIMT(Single Instruction Multiple Threads)</a>. 从而隐藏内存延迟.</p>
 <p>下面这张图对于理解CUDA的概念非常有帮助:
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/gtc-cuda-concepts.png" alt="cuda-concepts" /></p>
 <h2 id="zong-jie">总结</h2>

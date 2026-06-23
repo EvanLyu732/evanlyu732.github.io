@@ -111,7 +111,7 @@
         <h1 class="title">深度强化学习101</h1>
     </div>
     <div class="post-content">
-        <p>记录一下接触深度强化学习的学习历程. 材料选自Pieter Abbeel的<a href="https://www.youtube.com/watch?v=2GwBez0D20A">Foundation of Deep RL Series.</a>. 整篇文章追求知识点的连惯性. 所以会补充详细的公式和历史背景. 这篇文章会一直持续更新. 也算是对之前说要写的llya30做一次原型测试吧. 由于会采用不用来源的资料所以概念会有重叠, 好处是可以从不同角度看到一个概念的描述. 方便更全面的理解.</p>
+        <p>记录一下接触深度强化学习的学习历程. 材料选自Pieter Abbeel的<a rel="external" href="https://www.youtube.com/watch?v=2GwBez0D20A">Foundation of Deep RL Series.</a>. 整篇文章追求知识点的连惯性. 所以会补充详细的公式和历史背景. 这篇文章会一直持续更新. 也算是对之前说要写的llya30做一次原型测试吧. 由于会采用不用来源的资料所以概念会有重叠, 好处是可以从不同角度看到一个概念的描述. 方便更全面的理解.</p>
 <h2 id="mu-lu">目录</h2>
 <ul>
 <li><a href="https://evanlyu732.github.io/blog33/#foundations-of-deep-reinforcement-learning-with-pieter-abbeel">Foundations of Deep Reinforcement Learning with Pieter Abbeel</a>
@@ -133,10 +133,10 @@
 <h1 id="foundations-of-deep-reinforcement-learning-with-pieter-abbeel">Foundations of Deep Reinforcement Learning with Pieter Abbeel</h1>
 <p><a id="lecture-1-mdps-exact-solution-methods-max-ent-rl"></a></p>
 <h2 id="lecture-1-mdps-exact-solution-methods-max-ent-rl">Lecture 1: MDPs, Exact Solution Methods, Max-ent RL</h2>
-<p>点击<a href="https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;e=1&amp;dl=0">这里</a>进入lecture1的slides. 一句话总结lecture1的内容: 强化学习可以表示为马尔可夫决策过程(Markov Decision Processes, MDPs). 解MDP有两种基本策略, Value Iteration和Policy Iteration. 另外, 引入Entropy带MDP可以提升MDP的鲁棒性.</p>
+<p>点击<a rel="external" href="https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;e=1&amp;dl=0">这里</a>进入lecture1的slides. 一句话总结lecture1的内容: 强化学习可以表示为马尔可夫决策过程(Markov Decision Processes, MDPs). 解MDP有两种基本策略, Value Iteration和Policy Iteration. 另外, 引入Entropy带MDP可以提升MDP的鲁棒性.</p>
 <ul>
 <li>
-<p>MDP: 需要了解什么是MDP. 先要了解什么是马尔可夫链(Markov chain). Markov为了证明独立同分布不是大数定律(Law of large numbers)满足的前提, 在1906年发表的文章里面提出了马尔可夫链(Markov chain). 如果需要进一步了解Markov chain, 推荐这个<a href="https://www.youtube.com/watch?v=CIe869Rce2k">视频</a></p>
+<p>MDP: 需要了解什么是MDP. 先要了解什么是马尔可夫链(Markov chain). Markov为了证明独立同分布不是大数定律(Law of large numbers)满足的前提, 在1906年发表的文章里面提出了马尔可夫链(Markov chain). 如果需要进一步了解Markov chain, 推荐这个<a rel="external" href="https://www.youtube.com/watch?v=CIe869Rce2k">视频</a></p>
 <ul>
 <li>Markov chain: 前提下一颗的状态 只取决于当前时刻 ,转移矩阵</li>
 <li>frist-order Markov chain &amp; n-order Markov chain:</li>
@@ -167,7 +167,7 @@ $$</p>
 </ul>
 <p><a id="lecture-2-deep-q-learning"></a></p>
 <h2 id="lecture-2-deep-q-learning">Lecture 2: Deep Q-Learning</h2>
-<p>点击<a href="https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;e=1&amp;dl=0">这里</a>进入lecture2的slides. 一句话总结lecture2的内容: 由于实际情况下MDP的状态空间通常很大, 不适合直接用value iteration和policy iteration来解复杂的MDP. Q-Learning通过在样本空间进行采样来解复杂的MDP. 而Q-Learning也需要表格存储状态转移信息. DQN通过使用神经网络去采样来近似Q函数.</p>
+<p>点击<a rel="external" href="https://www.dropbox.com/scl/fi/rvbpc40ozhstnwhk7h5b7/l1-mdps-exact-methods.pdf?rlkey=5bibe5t8cqmpm9dhth969iiq6&amp;e=1&amp;dl=0">这里</a>进入lecture2的slides. 一句话总结lecture2的内容: 由于实际情况下MDP的状态空间通常很大, 不适合直接用value iteration和policy iteration来解复杂的MDP. Q-Learning通过在样本空间进行采样来解复杂的MDP. 而Q-Learning也需要表格存储状态转移信息. DQN通过使用神经网络去采样来近似Q函数.</p>
 <ul>
 <li>
 <p>Q-Learning:</p>
@@ -178,7 +178,7 @@ $$</p>
 </ul>
 <p><a id="lecture-3-policy-gradients-advantage-estimation"></a></p>
 <h2 id="lecture-3-policy-gradients-advantage-estimation">Lecture 3: Policy Gradients, Advantage Estimation</h2>
-<p>点击<a href="https://www.dropbox.com/scl/fi/htn2r6ac807oluoxeihdt/l3-policy-gradient-and-advantage-estimation.pdf?rlkey=26hsbd5qvthb8ozq53vdfjrr4&amp;e=1&amp;dl=0">这里</a>进入lecture3的slides. 一句话总结lecture3的内容: 由于Value Iteration无法表示下一步的动作, 并且Q-learning在高维空间下没办法有效求解. 相比与Value Iteration和Q-learning, Policy Gradients的表示更加简单. 而Policy Gradients通过Likelihood Ratio Graident求解出来的是Path. 需要使用Temporal decomposition分解成State和Action. 需要使用Baseline subtraction去改变最终选择的Path. 在使用公式去分解的时候, 需要使用Value function estimation求解. 而在Advantage Estimation介绍一些更加进阶的Value function estimation方法.</p>
+<p>点击<a rel="external" href="https://www.dropbox.com/scl/fi/htn2r6ac807oluoxeihdt/l3-policy-gradient-and-advantage-estimation.pdf?rlkey=26hsbd5qvthb8ozq53vdfjrr4&amp;e=1&amp;dl=0">这里</a>进入lecture3的slides. 一句话总结lecture3的内容: 由于Value Iteration无法表示下一步的动作, 并且Q-learning在高维空间下没办法有效求解. 相比与Value Iteration和Q-learning, Policy Gradients的表示更加简单. 而Policy Gradients通过Likelihood Ratio Graident求解出来的是Path. 需要使用Temporal decomposition分解成State和Action. 需要使用Baseline subtraction去改变最终选择的Path. 在使用公式去分解的时候, 需要使用Value function estimation求解. 而在Advantage Estimation介绍一些更加进阶的Value function estimation方法.</p>
 <ul>
 <li>Policy Gradients:</li>
 <li>Temporal Decomposition:</li>
@@ -188,7 +188,7 @@ $$</p>
 </ul>
 <p><a id="lecture-4-trpo-ppo"></a></p>
 <h2 id="lecture-4-trpo-ppo">Lecture 4: TRPO, PPO</h2>
-<p>点击<a href="https://www.dropbox.com/scl/fi/z0ev7f53yoyilrkfl9jck/l4-TRPO-PPO.pdf?rlkey=1y8f0am0bpqyxysxq3adnkobu&amp;e=1&amp;dl=0">这里</a>进入lecture4的slides. 一句话总结lecture4的内容: 在Lecture 3中, 我们知道Policy Gradients可以求解出特定的Path. 但是在求解特定的Path的过程中, 步长(step-size)的大小该如何确定呢? TRPO解决了这个问题. 而TRPO需要second order来求解, 而不太方便做优化. PPO作为TRPO的改进, 降阶为first-order优化问题.</p>
+<p>点击<a rel="external" href="https://www.dropbox.com/scl/fi/z0ev7f53yoyilrkfl9jck/l4-TRPO-PPO.pdf?rlkey=1y8f0am0bpqyxysxq3adnkobu&amp;e=1&amp;dl=0">这里</a>进入lecture4的slides. 一句话总结lecture4的内容: 在Lecture 3中, 我们知道Policy Gradients可以求解出特定的Path. 但是在求解特定的Path的过程中, 步长(step-size)的大小该如何确定呢? TRPO解决了这个问题. 而TRPO需要second order来求解, 而不太方便做优化. PPO作为TRPO的改进, 降阶为first-order优化问题.</p>
 <ul>
 <li>Surrogate loss:</li>
 <li>Step-sizing and Trust Region Policy Optimization (TRPO):</li>
@@ -196,14 +196,14 @@ $$</p>
 </ul>
 <p><a id="lecture-5-ddpg-sac"></a></p>
 <h2 id="lecture-5-ddpg-sac">Lecture 5: DDPG, SAC</h2>
-<p>点击<a href="https://www.dropbox.com/scl/fi/302ef41a9929yvtedc77l/l5-DDPG-SAC.pdf?rlkey=xc21zgliwfjynjse1je8oo6mx&amp;dl=0">这里</a>进入lecture5的slides. 一句话总结lecture5的内容: 对于特定场景, on-policy方法采样复杂度会比较高. 而DDPG解决了这个问题. SAC通过引入entropy保证了更好的收敛和防止过拟合.</p>
+<p>点击<a rel="external" href="https://www.dropbox.com/scl/fi/302ef41a9929yvtedc77l/l5-DDPG-SAC.pdf?rlkey=xc21zgliwfjynjse1je8oo6mx&amp;dl=0">这里</a>进入lecture5的slides. 一句话总结lecture5的内容: 对于特定场景, on-policy方法采样复杂度会比较高. 而DDPG解决了这个问题. SAC通过引入entropy保证了更好的收敛和防止过拟合.</p>
 <ul>
 <li>Deep Deterministic Policy Gradient (DDPG):</li>
 <li>Soft Actor Critic (SAC):</li>
 </ul>
 <p><a id="lecture-6-model-based-rl"></a></p>
 <h2 id="lecture-6-model-based-rl">Lecture 6: Model-based RL</h2>
-<p>点击<a href="https://www.dropbox.com/scl/fi/pnv0k74lbajh2uahoegwr/l6-model-based-rl.pdf?rlkey=psemgw6b6a4c4owmc16liyba0&amp;dl=0">这里</a>进入lecture6的slides. 一句话总结lecture6的内容: 前面5个lecture讲的都是model-free RL. 所谓model-free RL是指agent直接通过action来迭代policy而不需要学习环境.  model-based RL通过对环境建模再进行policy迭代.</p>
+<p>点击<a rel="external" href="https://www.dropbox.com/scl/fi/pnv0k74lbajh2uahoegwr/l6-model-based-rl.pdf?rlkey=psemgw6b6a4c4owmc16liyba0&amp;dl=0">这里</a>进入lecture6的slides. 一句话总结lecture6的内容: 前面5个lecture讲的都是model-free RL. 所谓model-free RL是指agent直接通过action来迭代policy而不需要学习环境.  model-based RL通过对环境建模再进行policy迭代.</p>
 <ul>
 <li>Model-based RL:</li>
 <li>Robust Model-based RL:Model-EnsembleTRPO (ME-TRPO):</li>

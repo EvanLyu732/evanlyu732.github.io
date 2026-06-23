@@ -109,96 +109,144 @@
 <section class="posts">
     
     <article class="post">
+        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog46&#x2F;" class="post-title-link">The Interlude</a></div>
+        <div class="post-content">
+            
+                <p>距离上一篇博客，已经过了两年。这两年里，AI agent 与大模型的发展很快：从两年前的 prompt engineering，到如今的 harness engineering、loop engineering；存储成本持续下降，人们也开始 AI token maxxing。一层叠一层，技术趋势似乎正在收敛。</p>
+<p>还有一个更大的趋势：人们一直在往上层寻找模式。</p>
+<h2 id="ge-ren-gong-ju-de-bian-hua">个人工具的变化</h2>
+<p>两年前，我曾写过<a href="/blog42/">对笔记系统的反思</a>，认为最适合个人的系统或许是 Obsidian。两年后，这个看法有了一些变化。现在我觉得，更接近答案的可能是 Notion 加 Cursor，再配一个 Claude 或 Codex 这样的编程工具。</p>
+<p>这个转变本身，就是「往上层走」的一个例子。Obsidian 解决的是<strong>怎么记</strong>：卡片、双向链接、图谱，把信息从脑子里搬出来，再在不同笔记之间建立联系。Notion 加 Cursor 和 Claude，解决的更多是<strong>记什么、怎么用</strong>：意图怎么表达，上下文怎么组织，输出怎么验证。个人知识管理里，中间那层「把想法翻译成结构化笔记、再把笔记翻译成行动」的工作，正在被 Agent 压缩。</p>
+<p>如果把 AI 模型看作符号世界里的计算机，那么很多个人的 know-how，在足够大的数据量面前，并没有想象中那么珍贵。A2A 一定会在社会群体中蔓延；而当所有人开始拥抱 Agent——连微信今天都能推出 Agent 去总结朋友圈——以后我们面对的，往往不再是一个软件，而是一个软件 Agent。</p>
+<h2 id="zu-zhi-li-bei-chi-diao-de-na-yi-ceng">组织里被吃掉的那一层</h2>
+<p><a rel="external" href="https://ajeygore.in/content/the-anatomy-of-an-ai-native-org">Ajey Gore 最近写了一篇文章</a>，把这件事讲得很清楚。过去三十年，软件公司的组织图几乎都是同一个形状：顶层少数人决定 <strong>Why</strong>——为什么做、为什么是现在；中间一层决定 <strong>What</strong>——做什么、不做什么；最宽的那一层是 <strong>How</strong>——工程师、项目经理、Scrum Master、Tech Lead，把 What 翻译成 ticket、PR、部署、release note，再把进度翻译回业务语言。</p>
+<p>Gore 说，我们其实一直是 <strong>glorified translators</strong>——光荣的翻译官。业务意图翻译成产品 spec，spec 翻译成 JIRA ticket，ticket 翻译成 branch 和 PR，PR 翻译成部署和 release note，release note 再翻译回 status update。Agile、SAFe、Spotify model，本质上都是在让这条翻译流水线跑得更快。</p>
+<p>AI 没有来抢某个 job title。它来抢的是一种 <strong>task type</strong>：把定义清晰的输入，转换成定义清晰的输出。自然语言到 SQL，需求到代码，ticket 到 PR，设计稿到组件——这类工作被压缩了一个数量级。中间层被吃掉，而中间层恰恰是 org chart 里人头最多的地方。</p>
+<p>两端反而变难了。定义 Why 更难——因为执行一个错误 Why 的成本几乎降到了零，更多错误的 Why 会以更快的速度、更大的信心被 ship 出去。定义 What 也更难——执行越便宜，选项越多，在 abundance 下做 judgement 本身就是一门学问。</p>
+<h2 id="xin-de-xing-zhuang">新的形状</h2>
+<p>Gore 画出的新 org chart 是这样的：</p>
+<ul>
+<li><strong>Why</strong> 层依然很薄，conviction 不会随 headcount 线性增长</li>
+<li><strong>What</strong> 层会比以前更大——不是写 ticket 的产品经理，而是能在 Why 和 Agent 之间 hold context、每天做几十次「什么叫 good」判断的人</li>
+<li><strong>How</strong> 层大幅收缩，但留下来的人会处理最难的 How：架构、trust system、Agent 不该 unsupervised 碰的那 5% 代码、harness 本身的设计</li>
+<li><strong>Agent</strong> 做大部分 conversion 工作——写 PR、更新 doc、起草 release note、互相 review</li>
+</ul>
+<p>What 和 How 的比例即将翻转。中间协调翻译的 manager，如果不开始向 Why、What 或 trust system 贡献，角色本身就在溶解。hands-on 也不再等于写代码——设计 eval suite、定义 Agent 必须遵守的 contract、写驱动 Agent roadmap 的 prompt，都是 hands-on。跑 standup、批 JIRA、开 status meeting，那层工作正在缩小。</p>
+<p>这和 engineering 侧的收敛是对得上的：prompt engineering 是在教 Agent <strong>怎么翻译</strong>；harness engineering 是在设计 <strong>翻译流水线本身</strong>——spec、eval、golden build、agent-of-agent review；loop engineering 则是在 <strong>Why 和 What 的边界上</strong> 决定什么时候继续、什么时候停、什么时候换方向。</p>
+<h2 id="wang-shang-ceng-huan-shi-wang-zhong-jian">往上层，还是往中间</h2>
+<p>现在有很多文章讨论 AI 时代组织架构的变化。Gore 的框架和这些讨论有一条共同的共识：最底层执行层所负责的具体事项，可以被 AI 极大程度地替代；而原本处于这一层的人，身份将更多地迁移到决策层。</p>
+<p>但「迁移到决策层」这个说法容易让人误以为只要往上爬就行。更精确的说法或许是：<strong>中间那层 translation work 在消失，两端和 harness 在变厚。</strong> 危险的位置不是「中间的人不好」，而是如果你的主要价值仍然集中在 translation——无论是组织里的 ticket conversion，还是个人笔记系统里的信息搬运——那块地都会被压缩得最快。</p>
+<p>对个人来说，Obsidian 到 Notion + Cursor 的切换，和组织里 How 层收缩、What 层扩张，是同一种结构变化在不同尺度上的重复。笔记系统曾经是个人 wiki，是收集箱；现在 Agent 可以读、写、改、搜，个人更需要的是定义 good、设计 harness、验证 output，而不是亲手维护每一张卡片之间的链接。</p>
+<h2 id="interlude">Interlude</h2>
+<p>Interlude 是幕间休息，是两幕之间的过渡。上一篇博客停在 Obsidian 和 PARA method 的反思里，那时我还在个人知识管理的 How 层里找最优解。两年过去，Agent 把 translation 这层吃掉了，技术栈从 prompt 收敛到 harness 再到 loop，组织图从宽 How 窄 What 走向宽 What 窄 How。</p>
+<p>这不是说笔记不重要，或者 execution 没有价值。Gore 说得对：留下来的 How 工作反而更有趣——设计 trust system，hold 住 Agent 不能负责的 outcome。对个人也一样：Notion 还是容器，Cursor 还是界面，但真正的工作变成了怎么定义 correct、怎么 build harness、怎么在 Agent 做错的时候还能 operate 到最底层。</p>
+<p>The Interlude 之后，下一幕会是什么，我还不知道。但至少方向清楚了：<strong>别和 Agent 比翻译，它只会越来越快赢。</strong> 往上层找模式，不是逃避 execution，而是去做 Agent 吃不掉的那些事——Why、What，以及围绕 Agent 的那套 harness。</p>
+<hr />
+<p>参考：<a rel="external" href="https://ajeygore.in/content/the-anatomy-of-an-ai-native-org">The Anatomy of an AI-Native Org — Ajey Gore</a></p>
+<p><em>Credit: 这篇博客是与 Cursor 共同完成。</em></p>
+
+            
+        </div>
+        <div class="post-meta">
+            
+                
+
+
+二〇二六年六月廿三日
+
+            
+        </div>
+    </article>
+    
+    <article class="post">
         <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog45&#x2F;" class="post-title-link">春节后开工LLM学习记录</a></div>
         <div class="post-content">
             
-                <p>春节期间手机完全被DeepSeek-R1刷屏了, 无论是海内外媒体都疯狂讨论DeepSeek-R1. 趁着假期返工花了一整天大致了解了DeepSeek-R1的实现主体. 之后刚好同一天Andrej Karpathy发了<a href="https://www.youtube.com/watch?v=7xTGNNLPyMI">Deep Dive into LLMs like ChatGPT</a>. 查阅了一天资料, 有些心得. 写下此文, 也是记录自己如何了解新的技术.</p>
+                <p>春节期间手机完全被DeepSeek-R1刷屏了, 无论是海内外媒体都疯狂讨论DeepSeek-R1. 趁着假期返工花了一整天大致了解了DeepSeek-R1的实现主体. 之后刚好同一天Andrej Karpathy发了<a rel="external" href="https://www.youtube.com/watch?v=7xTGNNLPyMI">Deep Dive into LLMs like ChatGPT</a>. 查阅了一天资料, 有些心得. 写下此文, 也是记录自己如何了解新的技术.</p>
 <h1 id="ji-lu">记录</h1>
-<pre data-lang="txt" style="background-color:#eff1f5;color:#4f5b66;" class="language-txt "><code class="language-txt" data-lang="txt"><span>20250206:0910 早上到公司 
-</span><span>目标: 了解DeepSeek-R1以及为什么R1会这么火 
-</span><span>背景: 无任何关于DeepSeek-R1的资料阅读, 没读过论文
-</span><span>
-</span><span>20250206:0932 动作: 刷hacker news关于deepseek的post, 看各个thread的观点
-</span><span>    * 动作: 跟着Simon Willison的blog(DeepSeek-R1 and exploring DeepSeek-R1-Distill-Llama-8B)实现本地ollama跑DeepSeek-R1-Distill-Llama-8B-GGUF
-</span><span>    * 收获: 了解了DeepSeek-R1-Zero, DeepSeek-R1以及DeepSeek蒸馏模型的关系.
-</span><span>
-</span><span>20240206:1014 动作: 看yt视频# DeepSeek R1 Theory Overview | GRPO + RL + SFT
-</span><span>    * 收获: 
-</span><span>      * 整个DS-R1被训练出来的脉络, 博主画了个图, 表达很清楚, 见附录[1]
-</span><span>      * 什么是GRPO以及GRPO公式大概的含义
-</span><span>      * 相比于OpenAI闭源的COT推理能力[2], DS开源了如何实现推理模型
-</span><span>      * 知道了GRPO是R1的重点
-</span><span>
-</span><span>20240206:1030 动作: 看yt视频: # Group Relative Policy Optimization (GRPO) - Formula and Code
-</span><span>    * 衍生动作: 
-</span><span>      * 看yt video视频 # Proximal Policy Optimization (PPO) - How to train Large Language Models
-</span><span>      * 看了看知乎上关于GRPO的讨论和解析
-</span><span>	* 收获: 
-</span><span>        * 了解了PPO的大致流程
-</span><span>        * 大致了解了GRPO, 但还是不懂, 需要找个场景实现一下. #TODO 
-</span><span>        * 刷到了王兴兴关于GRPO的讨论和解析[3], 深入研究下GRPO在机器人控制的应用中 #TODO
-</span><span>
-</span><span>20240206:1414 动作: 看yt视频 # Building a fully local &quot;deep researcher&quot; with DeepSeek-R1
-</span><span>	* 收获: 
-</span><span>        * 了解了如何用langchain使用r1达到像openai deep research类似的效果, 以后可以考录用api部署一个试下 #TODO
-</span><span>
-</span><span>20240206:1442: 动作: 看yt视频 # Paper: DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning
-</span><span>	* 收获: 
-</span><span>        *  自回归模型的输出可以被看成是一个RL的过程
-</span><span>        *  大致跟着视频过了一遍论文, 没仔细看
-</span><span>        *  这个视频长度大概一个小时, 百分之80的时间都在讲GRPO, 所以GRPO一定是R1的重点.
-</span><span>
-</span><span>20240206:16:00 - 20240207:11:30:  动作: 看yt视频 # Deep Dive into LLMs like ChatGPT
-</span><span>	* 收获(这个视频是我看到关于LLM最干的视频, 强烈推荐观看原版3个小时): 
-</span><span>        *  LLM的训练流程为预训练(Pre-Training)产生基座模型(Base Model),
-</span><span>           但是Base Model不具有对话的能力, 因此要通过后训练(Post Training),
-</span><span>           通过SFT(Supervised Fine-Tuning)的方式, 输入多轮对话的数据, 来让
-</span><span>           模型有对话的能力. 最后通过Post Training RL, 来让模型有推理能力.
-</span><span>        * PreTraining阶段, 数据集和分词过程决定了Base Model的效果
-</span><span>        * PreTraining阶段, 通过不断改变context size, 模型能够实现in context learning能力
-</span><span>        * 由于Base Model本质上根据互联网数据的词语接龙, 因此幻觉一定会存在
-</span><span>        * 幻觉可以通过改变post training SFT的数据集, 或者使用tool use能够减少
-</span><span>        * 模型需要更多的token去做思考
-</span><span>        * 模型不擅长做in memory computing
-</span><span>        * 要让模型能在post training中实现tool use的能力,就是在SFT中加入pre training没见过的token
-</span><span>        * knowledge in the parameters =&gt; vague recollection 
-</span><span>        * knowledge in the token of context window =&gt; working memory 
-</span><span>        * 以人阅读一本教材进行学习为例, 训练模型学习书中的背景知识就是pre training, 学会书中的例题称为post training. 而完成课后习题就是post training with RL 
-</span><span>        * 在最后一个阶段post training with RL, 需要喂模型课后题(prompt), 并且人类给出打分. 由于这个过程需要进行很多次, RLHF通过拟合人类回答的偏好. 来实现自动训练.
-</span><span>        * RLHF不算RL, 而是微调模型来达到人类偏好
-</span><span>        * DeepSeek R1的aha moment和AlphaGo Zero的Aha moment很像, 训练效果都是非线性的, 一开始上升非常缓慢, 到了某一刻急速上升.
-</span><span>        * 通过[4]可以了解AI的最新动态
-</span><span>        * 通过[5]可以了解AI的排名
-</span></code></pre>
-<h1 id="zong-jie">总结</h1>
+<pre class="giallo" style="color: #CDD6F4; background-color: #1E1E2E;"><code data-lang="plain"><span class="giallo-l"><span>20250206:0910 早上到公司 </span></span>
+<span class="giallo-l"><span>目标: 了解DeepSeek-R1以及为什么R1会这么火 </span></span>
+<span class="giallo-l"><span>背景: 无任何关于DeepSeek-R1的资料阅读, 没读过论文</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>20250206:0932 动作: 刷hacker news关于deepseek的post, 看各个thread的观点</span></span>
+<span class="giallo-l"><span>    * 动作: 跟着Simon Willison的blog(DeepSeek-R1 and exploring DeepSeek-R1-Distill-Llama-8B)实现本地ollama跑DeepSeek-R1-Distill-Llama-8B-GGUF</span></span>
+<span class="giallo-l"><span>    * 收获: 了解了DeepSeek-R1-Zero, DeepSeek-R1以及DeepSeek蒸馏模型的关系.</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>20240206:1014 动作: 看yt视频# DeepSeek R1 Theory Overview | GRPO + RL + SFT</span></span>
+<span class="giallo-l"><span>    * 收获: </span></span>
+<span class="giallo-l"><span>      * 整个DS-R1被训练出来的脉络, 博主画了个图, 表达很清楚, 见附录[1]</span></span>
+<span class="giallo-l"><span>      * 什么是GRPO以及GRPO公式大概的含义</span></span>
+<span class="giallo-l"><span>      * 相比于OpenAI闭源的COT推理能力[2], DS开源了如何实现推理模型</span></span>
+<span class="giallo-l"><span>      * 知道了GRPO是R1的重点</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>20240206:1030 动作: 看yt视频: # Group Relative Policy Optimization (GRPO) - Formula and Code</span></span>
+<span class="giallo-l"><span>    * 衍生动作: </span></span>
+<span class="giallo-l"><span>      * 看yt video视频 # Proximal Policy Optimization (PPO) - How to train Large Language Models</span></span>
+<span class="giallo-l"><span>      * 看了看知乎上关于GRPO的讨论和解析</span></span>
+<span class="giallo-l"><span>	* 收获: </span></span>
+<span class="giallo-l"><span>        * 了解了PPO的大致流程</span></span>
+<span class="giallo-l"><span>        * 大致了解了GRPO, 但还是不懂, 需要找个场景实现一下. #TODO </span></span>
+<span class="giallo-l"><span>        * 刷到了王兴兴关于GRPO的讨论和解析[3], 深入研究下GRPO在机器人控制的应用中 #TODO</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>20240206:1414 动作: 看yt视频 # Building a fully local &quot;deep researcher&quot; with DeepSeek-R1</span></span>
+<span class="giallo-l"><span>	* 收获: </span></span>
+<span class="giallo-l"><span>        * 了解了如何用langchain使用r1达到像openai deep research类似的效果, 以后可以考录用api部署一个试下 #TODO</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>20240206:1442: 动作: 看yt视频 # Paper: DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</span></span>
+<span class="giallo-l"><span>	* 收获: </span></span>
+<span class="giallo-l"><span>        *  自回归模型的输出可以被看成是一个RL的过程</span></span>
+<span class="giallo-l"><span>        *  大致跟着视频过了一遍论文, 没仔细看</span></span>
+<span class="giallo-l"><span>        *  这个视频长度大概一个小时, 百分之80的时间都在讲GRPO, 所以GRPO一定是R1的重点.</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span>20240206:16:00 - 20240207:11:30:  动作: 看yt视频 # Deep Dive into LLMs like ChatGPT</span></span>
+<span class="giallo-l"><span>	* 收获(这个视频是我看到关于LLM最干的视频, 强烈推荐观看原版3个小时): </span></span>
+<span class="giallo-l"><span>        *  LLM的训练流程为预训练(Pre-Training)产生基座模型(Base Model),</span></span>
+<span class="giallo-l"><span>           但是Base Model不具有对话的能力, 因此要通过后训练(Post Training),</span></span>
+<span class="giallo-l"><span>           通过SFT(Supervised Fine-Tuning)的方式, 输入多轮对话的数据, 来让</span></span>
+<span class="giallo-l"><span>           模型有对话的能力. 最后通过Post Training RL, 来让模型有推理能力.</span></span>
+<span class="giallo-l"><span>        * PreTraining阶段, 数据集和分词过程决定了Base Model的效果</span></span>
+<span class="giallo-l"><span>        * PreTraining阶段, 通过不断改变context size, 模型能够实现in context learning能力</span></span>
+<span class="giallo-l"><span>        * 由于Base Model本质上根据互联网数据的词语接龙, 因此幻觉一定会存在</span></span>
+<span class="giallo-l"><span>        * 幻觉可以通过改变post training SFT的数据集, 或者使用tool use能够减少</span></span>
+<span class="giallo-l"><span>        * 模型需要更多的token去做思考</span></span>
+<span class="giallo-l"><span>        * 模型不擅长做in memory computing</span></span>
+<span class="giallo-l"><span>        * 要让模型能在post training中实现tool use的能力,就是在SFT中加入pre training没见过的token</span></span>
+<span class="giallo-l"><span>        * knowledge in the parameters =&gt; vague recollection </span></span>
+<span class="giallo-l"><span>        * knowledge in the token of context window =&gt; working memory </span></span>
+<span class="giallo-l"><span>        * 以人阅读一本教材进行学习为例, 训练模型学习书中的背景知识就是pre training, 学会书中的例题称为post training. 而完成课后习题就是post training with RL </span></span>
+<span class="giallo-l"><span>        * 在最后一个阶段post training with RL, 需要喂模型课后题(prompt), 并且人类给出打分. 由于这个过程需要进行很多次, RLHF通过拟合人类回答的偏好. 来实现自动训练.</span></span>
+<span class="giallo-l"><span>        * RLHF不算RL, 而是微调模型来达到人类偏好</span></span>
+<span class="giallo-l"><span>        * DeepSeek R1的aha moment和AlphaGo Zero的Aha moment很像, 训练效果都是非线性的, 一开始上升非常缓慢, 到了某一刻急速上升.</span></span>
+<span class="giallo-l"><span>        * 通过[4]可以了解AI的最新动态</span></span>
+<span class="giallo-l"><span>        * 通过[5]可以了解AI的排名</span></span></code></pre><h1 id="zong-jie">总结</h1>
 <p>之前我也在别的地方刷到R1实现了更低成本的训练, 例如使用PTX而不是raw cuda等, 这算infra层的创新. 但是我看的视频下来 <strong>开源的推理模型, 以及纯RL而不用SFT(DeepSeek-R1-Zero)</strong> 或许是R1更大的意义.</p>
 <h1 id="sheng-xia-de-todo">剩下的TODO</h1>
 <ul>
 <li>找一个场景复现PPO以及GRPO</li>
 <li>刚好在2月7号, o3-mini开源了思维链的过程, 对比一下</li>
 <li>了解下RL-LLM的现状, 输出一篇文章</li>
-<li>阅读R1原文, 自己总结一下, 并对比这篇<a href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247545512&amp;idx=1&amp;sn=3826ae3f788e8b90ffeb8fb3cc908c6e&amp;chksm=e8eafcecde166feebab4345c2d027cca4c9574c6058f90df5fe4513cefae17180f2344507e31&amp;mpshare=1&amp;srcid=0207SpaQkGmiF7zHxsYYVcxv&amp;sharer_shareinfo=72ac166e2fd073a2d05195fba0d13c61&amp;sharer_shareinfo_first=72ac166e2fd073a2d05195fba0d13c61&amp;from=singlemessage&amp;scene=1&amp;subscene=10000&amp;sessionid=1738908596&amp;clicktime=1738912215&amp;enterid=1738912215&amp;ascene=1&amp;fasttmpl_type=0&amp;fasttmpl_fullversion=7592104-zh_CN-zip&amp;fasttmpl_flag=0&amp;realreporttime=1738912215423&amp;devicetype=android-34&amp;version=28003855&amp;nettype=WIFI&amp;abtest_cookie=AAACAA%3D%3D&amp;lang=zh_CN&amp;countrycode=AD&amp;exportkey=n_ChQIAhIQysgSGGYJ6guKNuOW3xqwIBLnAQIE97dBBAEAAAAAAMNIGcR4l2MAAAAOpnltbLcz9gKNyK89dVj0BWdk0ar1sZ1xZJAIx0fAVnhfktWB%2Fz8itbQaTOFkU4h7gQp9odCzk1ocQAS2AUeWAu3HuMOHuo%2B%2FRg4fqobn1Sj%2FGrp4kC2%2FwnQlidKKe9rC6DG9QskGXu%2Bd98s3PWSu9KCdhFPBcrHoj4jUqJQ5Kz7qS%2BImYs1u3W1vlhbKXcsLlzKIyFwXeDEPA4g8M3ykfYORxphxXaIw3Pf%2Bk6zjwSjkWZGQXrWe8KOI6k6kgOm2EZ4zt7jgZZ1WwC3xAUzQXA%3D%3D&amp;pass_ticket=Qc%2FprbYOLQVh%2BBnvnYJVgLdkqVNLBJx%2BkqpS%2FYUP3njk1%2BHNc0IUwJ%2BW1jQKEFwe&amp;wx_header=3">文章</a>, 了解更多的技术细节.</li>
+<li>阅读R1原文, 自己总结一下, 并对比这篇<a rel="external" href="https://mp.weixin.qq.com/s?__biz=MzIzOTU0NTQ0MA==&amp;mid=2247545512&amp;idx=1&amp;sn=3826ae3f788e8b90ffeb8fb3cc908c6e&amp;chksm=e8eafcecde166feebab4345c2d027cca4c9574c6058f90df5fe4513cefae17180f2344507e31&amp;mpshare=1&amp;srcid=0207SpaQkGmiF7zHxsYYVcxv&amp;sharer_shareinfo=72ac166e2fd073a2d05195fba0d13c61&amp;sharer_shareinfo_first=72ac166e2fd073a2d05195fba0d13c61&amp;from=singlemessage&amp;scene=1&amp;subscene=10000&amp;sessionid=1738908596&amp;clicktime=1738912215&amp;enterid=1738912215&amp;ascene=1&amp;fasttmpl_type=0&amp;fasttmpl_fullversion=7592104-zh_CN-zip&amp;fasttmpl_flag=0&amp;realreporttime=1738912215423&amp;devicetype=android-34&amp;version=28003855&amp;nettype=WIFI&amp;abtest_cookie=AAACAA%3D%3D&amp;lang=zh_CN&amp;countrycode=AD&amp;exportkey=n_ChQIAhIQysgSGGYJ6guKNuOW3xqwIBLnAQIE97dBBAEAAAAAAMNIGcR4l2MAAAAOpnltbLcz9gKNyK89dVj0BWdk0ar1sZ1xZJAIx0fAVnhfktWB%2Fz8itbQaTOFkU4h7gQp9odCzk1ocQAS2AUeWAu3HuMOHuo%2B%2FRg4fqobn1Sj%2FGrp4kC2%2FwnQlidKKe9rC6DG9QskGXu%2Bd98s3PWSu9KCdhFPBcrHoj4jUqJQ5Kz7qS%2BImYs1u3W1vlhbKXcsLlzKIyFwXeDEPA4g8M3ykfYORxphxXaIw3Pf%2Bk6zjwSjkWZGQXrWe8KOI6k6kgOm2EZ4zt7jgZZ1WwC3xAUzQXA%3D%3D&amp;pass_ticket=Qc%2FprbYOLQVh%2BBnvnYJVgLdkqVNLBJx%2BkqpS%2FYUP3njk1%2BHNc0IUwJ%2BW1jQKEFwe&amp;wx_header=3">文章</a>, 了解更多的技术细节.</li>
 <li>pi0开源了, 研究下pi0</li>
 <li>借助xxx平台提供的api, 实现一个属于自己的deep research. 也算是往agentic ai迈了一步.</li>
 <li>总结下DS的发展路线, 输出一篇文章</li>
 </ul>
 <h1 id="fu-lu">附录</h1>
-<p>[1] <a href="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdf800d6c-7a41-49b0-b5d8-5e13620cb6f1_1043x1200.png">(yt video # DeepSeek R1 Theory Overview | GRPO + RL + SFT)各个模型关系图</a></p>
-<p>[2] <a href="https://openai.com/index/learning-to-reason-with-llms/">Hiding the Chains of Thought - OpenAI</a></p>
-<p>[3] <a href="https://zhuanlan.zhihu.com/p/21131372654">DeepSeek GRPO在简单控制系统上和PPO的对比</a></p>
-<p>[4] <a href="https://buttondown.com/ainews">AI News</a></p>
-<p>[5] <a href="https://lmarena.ai/">LM Arena for model rankings</a></p>
+<p>[1] <a rel="external" href="https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fdf800d6c-7a41-49b0-b5d8-5e13620cb6f1_1043x1200.png">(yt video # DeepSeek R1 Theory Overview | GRPO + RL + SFT)各个模型关系图</a></p>
+<p>[2] <a rel="external" href="https://openai.com/index/learning-to-reason-with-llms/">Hiding the Chains of Thought - OpenAI</a></p>
+<p>[3] <a rel="external" href="https://zhuanlan.zhihu.com/p/21131372654">DeepSeek GRPO在简单控制系统上和PPO的对比</a></p>
+<p>[4] <a rel="external" href="https://buttondown.com/ainews">AI News</a></p>
+<p>[5] <a rel="external" href="https://lmarena.ai/">LM Arena for model rankings</a></p>
 <hr />
 <h1 id="20240208geng-xin">20240208更新</h1>
-<p>接着上片文章, 在2月7日的时候, 我一直在找如何请求deepseek-r1 api的方式. 因此现在ds大火, 服务器一直繁忙. 想找个渠道试一下r1都难. 也尝试了<a href="https://www.silicon-flow.com/">硅基流动</a>以及一些其他的api提供商. 因为是尝试, 不太想直接往api服务商充钱. 于是, 截至到今日(20250208), 我试下来有两种免费方式可以请求deepseek-r1.</p>
+<p>接着上片文章, 在2月7日的时候, 我一直在找如何请求deepseek-r1 api的方式. 因此现在ds大火, 服务器一直繁忙. 想找个渠道试一下r1都难. 也尝试了<a rel="external" href="https://www.silicon-flow.com/">硅基流动</a>以及一些其他的api提供商. 因为是尝试, 不太想直接往api服务商充钱. 于是, 截至到今日(20250208), 我试下来有两种免费方式可以请求deepseek-r1.</p>
 <ol>
-<li><a href="https://console.bce.baidu.com/qianfan/ais/console/onlineTest/LLM/DeepSeek-V3">百度千帆</a></li>
-<li><a href="https://cloud.infini-ai.com/genstudio/experience">无问苍穹</a></li>
+<li><a rel="external" href="https://console.bce.baidu.com/qianfan/ais/console/onlineTest/LLM/DeepSeek-V3">百度千帆</a></li>
+<li><a rel="external" href="https://cloud.infini-ai.com/genstudio/experience">无问苍穹</a></li>
 </ol>
 <p>目前这两个平台的api请求是免费的, 无问苍穹会快很多, 并且api的速度远比不上playground. 并且两个平台的api稳定性都不太好, 会有请求失败的问题. 之后, 我用cursor写了一个适配于百度千帆的命令行工具. 效果如下.</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/refs/heads/main/static/images/tui.gif" alt="bd_llm_tui demo" /></p>
 <p>顺便试了下百度的其他免费的模型, 响应速度还行.
-仓库链接点击<a href="https://github.com/EvanLyu732/bd_llm_tui">这里</a></p>
+仓库链接点击<a rel="external" href="https://github.com/EvanLyu732/bd_llm_tui">这里</a></p>
 
             
         </div>
@@ -221,7 +269,7 @@
 <p>2025年新年快乐!!! 祝2025年蛇年活力四射. 祝新的一年是节节升高, 万事如意. 这一篇文章分享我在2024年读过几本难忘的书(排除上一篇文章提到的"控制论与科学方法论"). 以下顺序按照安利程度排名.</p>
 <h1 id="shu-dan">书单</h1>
 <ol>
-<li><a href="https://www.amazon.com/Tao-Physics-Exploration-Parallels-Mysticism/dp/1590308352">The Tao of Physics: An Exploration of the Parallels between Modern Physics and Eastern Mysticism</a>: 这是我在2024年读过最特别的一本书没有之一, 因此我想在这里推荐给你, 如果只让我推荐一本书, 我会选这本. 因为这本书用最清晰的语言回答了科学(物理学)和玄学(宗教,东方哲学)的起源以及它们之间的联系. 看完这本书你能够理解为什么最开始的人们会选择相信宗教, 为什么宗教不是迷信. 会对玄学产生更多的敬畏以及探索. 以及玄学和科学最开始会分源而不是一起发展. 分享几句书中的摘要:</li>
+<li><a rel="external" href="https://www.amazon.com/Tao-Physics-Exploration-Parallels-Mysticism/dp/1590308352">The Tao of Physics: An Exploration of the Parallels between Modern Physics and Eastern Mysticism</a>: 这是我在2024年读过最特别的一本书没有之一, 因此我想在这里推荐给你, 如果只让我推荐一本书, 我会选这本. 因为这本书用最清晰的语言回答了科学(物理学)和玄学(宗教,东方哲学)的起源以及它们之间的联系. 看完这本书你能够理解为什么最开始的人们会选择相信宗教, 为什么宗教不是迷信. 会对玄学产生更多的敬畏以及探索. 以及玄学和科学最开始会分源而不是一起发展. 分享几句书中的摘要:</li>
 </ol>
 <blockquote>
 <p>Fishing baskets are employed to catch fish; but when the fish are got, the men forget the baskets; snares are employed to catch hares; but when the hares are got, men forget the snares. <strong>Words are employed to convey ideas; but when the ideas are grasped, men forget the words.</strong></p>
@@ -241,16 +289,16 @@
 <p>东方神秘主义的核心是直接体验, 科学会说东方神秘主义不具有可证伪性(falsifiability). 但是如果能够以第一人称视角体验到了. 它就不是迷信.</p>
 <ol start="2">
 <li>
-<p><a href="https://www.amazon.com/How-Think-Like-Leonardo-Vinci/dp/0440508274">How to think like Leonardo Da Vinci seven steps to genius every day</a>: 这本书是取了看似没什么营养的名字, 但是讲了非常多能够帮助你解决问题并且可以实际操作的事项. 举个例子, 书中的第一章是关于达芬奇是如何好奇身边的事物的. 那如何变的好奇呢? 书中有提到<strong>写100个能够帮助你的问题</strong>. 我尝试了一下写20个问题就写不出来了. 提出的问题越多说明发现了不同的细节. 书中拆解了达芬奇七种不同的品质, 并且安排了合理可操作的练习来培养这些品质. 强烈推荐.</p>
+<p><a rel="external" href="https://www.amazon.com/How-Think-Like-Leonardo-Vinci/dp/0440508274">How to think like Leonardo Da Vinci seven steps to genius every day</a>: 这本书是取了看似没什么营养的名字, 但是讲了非常多能够帮助你解决问题并且可以实际操作的事项. 举个例子, 书中的第一章是关于达芬奇是如何好奇身边的事物的. 那如何变的好奇呢? 书中有提到<strong>写100个能够帮助你的问题</strong>. 我尝试了一下写20个问题就写不出来了. 提出的问题越多说明发现了不同的细节. 书中拆解了达芬奇七种不同的品质, 并且安排了合理可操作的练习来培养这些品质. 强烈推荐.</p>
 </li>
 <li>
-<p><a href="https://www.amazon.com/Second-Law-Resolving-Mystery-Thermodynamics/dp/1579550835">The Second Law: Resolving the Mystery of the Second Law of Thermodynamics</a>: 这本书是关于热力学第二定律的起源以及从计算复杂性的视角去解读. 我在24年的读完这本书时候写过一篇<a href="https://evanlyu732.github.io/blog19/">文章</a>. 作者Stephen Wolfram非常博学, 看完本书能够让你从不一样的视角了解热力学第二定律.</p>
+<p><a rel="external" href="https://www.amazon.com/Second-Law-Resolving-Mystery-Thermodynamics/dp/1579550835">The Second Law: Resolving the Mystery of the Second Law of Thermodynamics</a>: 这本书是关于热力学第二定律的起源以及从计算复杂性的视角去解读. 我在24年的读完这本书时候写过一篇<a rel="external" href="https://evanlyu732.github.io/blog19/">文章</a>. 作者Stephen Wolfram非常博学, 看完本书能够让你从不一样的视角了解热力学第二定律.</p>
 </li>
 <li>
-<p><a href="https://www.amazon.com/Language-Thought-Action-S-I-Hayakawa/dp/0156482401">Language in Thought and Action</a>: 这本书是关于语言是如何形成和如何影响我们的想法的. 更重要的这是一本关于"抽象"的书籍. "抽象"是如何形成的? 语言和抽象之间有什么关系? 为什么有些事情无法达成共识? 这本书很好的回答了这些问题. 非常值得推荐.</p>
+<p><a rel="external" href="https://www.amazon.com/Language-Thought-Action-S-I-Hayakawa/dp/0156482401">Language in Thought and Action</a>: 这本书是关于语言是如何形成和如何影响我们的想法的. 更重要的这是一本关于"抽象"的书籍. "抽象"是如何形成的? 语言和抽象之间有什么关系? 为什么有些事情无法达成共识? 这本书很好的回答了这些问题. 非常值得推荐.</p>
 </li>
 <li>
-<p><a href="https://www.amazon.com/Psycho-Cybernetics-Updated-Expanded-Maxwell-Maltz/dp/0399176136/ref=sr_1_1?adgrpid=128521906692&amp;dib=eyJ2IjoiMSJ9.O5H-kouhIgmvh6dPMHHhHY1RoTPE1ciVatfm5MziTLSVSYSUPHCFLYxNTKgMMBILcgciMrovgyM9XdEHzofm3C4fu6V4x3GQZvdqD9NV6POWrMxkFzr_xDCa7wNqr-CB1tyxyGb9aXxr5Pg4wflBj0Ar63bRy-iPijsjxNRiHWwPx8eyX3UlCLJmvYZMFWFTsZQcaw8mTPti0FkdLj6BEl08mwtY239n5-mXqGyqumU.66IBImfGIYWzDaXW_9rZ2OTD_jRd86GkCXF-sXv8Cy8&amp;dib_tag=se&amp;hvadid=673526597249&amp;hvdev=c&amp;hvlocphy=2344&amp;hvnetw=g&amp;hvqmt=e&amp;hvrand=13065075103364209520&amp;hvtargid=kwd-297246306449&amp;hydadcr=22016_13508085&amp;keywords=psycho+cybernetics&amp;qid=1735626505&amp;sr=8-1">Psycho-Cybernetics</a>: 这本书是关于如何使用控制论的方法去改变自己心理的自我描述. 比如如何练习放松, 如何利用想象状态来改变自己的行为等. 和第二本书一样, 需要实际完成对应的练习才能体验到作者想表达的精髓.</p>
+<p><a rel="external" href="https://www.amazon.com/Psycho-Cybernetics-Updated-Expanded-Maxwell-Maltz/dp/0399176136/ref=sr_1_1?adgrpid=128521906692&amp;dib=eyJ2IjoiMSJ9.O5H-kouhIgmvh6dPMHHhHY1RoTPE1ciVatfm5MziTLSVSYSUPHCFLYxNTKgMMBILcgciMrovgyM9XdEHzofm3C4fu6V4x3GQZvdqD9NV6POWrMxkFzr_xDCa7wNqr-CB1tyxyGb9aXxr5Pg4wflBj0Ar63bRy-iPijsjxNRiHWwPx8eyX3UlCLJmvYZMFWFTsZQcaw8mTPti0FkdLj6BEl08mwtY239n5-mXqGyqumU.66IBImfGIYWzDaXW_9rZ2OTD_jRd86GkCXF-sXv8Cy8&amp;dib_tag=se&amp;hvadid=673526597249&amp;hvdev=c&amp;hvlocphy=2344&amp;hvnetw=g&amp;hvqmt=e&amp;hvrand=13065075103364209520&amp;hvtargid=kwd-297246306449&amp;hydadcr=22016_13508085&amp;keywords=psycho+cybernetics&amp;qid=1735626505&amp;sr=8-1">Psycho-Cybernetics</a>: 这本书是关于如何使用控制论的方法去改变自己心理的自我描述. 比如如何练习放松, 如何利用想象状态来改变自己的行为等. 和第二本书一样, 需要实际完成对应的练习才能体验到作者想表达的精髓.</p>
 </li>
 </ol>
 
@@ -262,37 +310,6 @@
 
 
 二〇二五年一月一日
-
-            
-        </div>
-    </article>
-    
-    <article class="post">
-        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog43&#x2F;" class="post-title-link">控制论与科学方法论读后感</a></div>
-        <div class="post-content">
-            
-                <p>大概在上周的时候, 我看完了<a href="https://www.goodreads.com/zh/book/show/37419698">控制论与科学方法论</a>. 很少有书籍在看完之后能让人有方法论提升的感觉. 如果你还没看过这本书, 这本书值得放到你的书单里面. 里面有非常多精彩的观点和例子. 这本书值得被翻译成英文版. 其中关于"曹冲称象"的例子令人印象深刻. 先让我们来快速回顾一下:</p>
-<blockquote>
-<p>孙权给曹操送了一头大象，曹操想知道大象有多重. 但是没有这么大的秤, 大臣们都没办法, 这时候曹冲想出来了一个办法. 先将大象牵到岸边的一艘船上. 记录下这时候的水位线. 再把大象替换成石头块，使得两次水位线高度一样. 最后记录石头块的总重量就是大象的重量.</p>
-</blockquote>
-<p>曹冲的这种思想方法在控制论叫做<strong>共轭控制(Inferential Control)</strong>:</p>
-<ol>
-<li>大象的重量等于等价石头的重量, 把这一步变换过程用L表示</li>
-<li>称出石头的重量,这一步用A表示</li>
-<li>等价石头的重量等于大象的重量. 把这一步变换过程用L-1(L的逆)表示</li>
-</ol>
-<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/lal.png" height="100" width="100"/>
-<p>共轭变换的思想可以说是解决问题的一种经典范式(scheme). 举个例子, 在自动驾驶问题当中, 有一种解决思路就是将感知域的信息映射到文本域, 在文本域处理完结果, 再映射到车辆的执行状态. 比如<a href="https://leimao.github.io/blog/DriveGPT/">DriveGPT</a>系列. 再比如最近的科研界Meta今年年初发的<a href="https://arxiv.org/abs/2402.14083">Beyond A*: Better Planning with Transformers via Search Dynamics Bootstrapping</a>也是一样的思路, 将基于离散图的规划问题映射到文本域从而变成symbolic planning. <a href="https://evanlyu732.github.io/blog12/#:~:text=%E5%9C%A8%22The%20Dawning,llms%20take%20all.">在现有的牛顿范式的方法中进行采样变成开普勒范式方法的输入, 从而使得开普勒范式方法能够与牛顿范式的方法达到一样甚至超越的效果.</a></p>
-<p>此外这本书关于系统的类型以及演化，黑盒认识论, 量变与质变的论述都非常精彩. 将书中的方法论套用到自己生活所面临的场景中有不一样的思路. 另外有一本非常值得推荐的书是<a href="https://www.amazon.com/Psycho-Cybernetics-Updated-Expanded-Maxwell-Maltz/dp/0399176136">Psycho-Cybernetics</a>里面讲如何运用控制论的方法改变自己的self-image. 不同于传统的鸡汤文学. 我个人在尝试了书中的练习后觉得效果很好.</p>
-
-            
-        </div>
-        <div class="post-meta">
-            
-                
-
-
-二〇二四年十二月廿一日
 
             
         </div>

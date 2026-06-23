@@ -111,11 +111,11 @@
         <h1 class="title">五分钟读论文: Scaling and evaluating sparse autoencoders</h1>
     </div>
     <div class="post-content">
-        <p>这几天OpenAI新发了一篇<a href="https://openai.com/index/extracting-concepts-from-gpt-4/">博客</a>关于使用sparse-autoencoders去解释GPT4的内部机制. 本文是对论文的解读方便读者快速获取关键信息, 如果好求甚解, 请点击传送门:</p>
+        <p>这几天OpenAI新发了一篇<a rel="external" href="https://openai.com/index/extracting-concepts-from-gpt-4/">博客</a>关于使用sparse-autoencoders去解释GPT4的内部机制. 本文是对论文的解读方便读者快速获取关键信息, 如果好求甚解, 请点击传送门:</p>
 <ul>
-<li>blog: <a href="https://openai.com/index/extracting-concepts-from-gpt-4/">Extracting Concepts from GPT-4</a></li>
-<li>paper: <a href="https://cdn.openai.com/papers/sparse-autoencoders.pdf">Scaling and evaluating sparse autoencoders</a></li>
-<li>code: <a href="https://github.com/openai/sparse_autoencoder">openai/sparse_autoencoder</a></li>
+<li>blog: <a rel="external" href="https://openai.com/index/extracting-concepts-from-gpt-4/">Extracting Concepts from GPT-4</a></li>
+<li>paper: <a rel="external" href="https://cdn.openai.com/papers/sparse-autoencoders.pdf">Scaling and evaluating sparse autoencoders</a></li>
+<li>code: <a rel="external" href="https://github.com/openai/sparse_autoencoder">openai/sparse_autoencoder</a></li>
 </ul>
 <p><a id="目录"></a></p>
 <h1 id="mu-lu">目录</h1>
@@ -138,21 +138,21 @@
 <h1 id="bei-jing-zhi-shi">背景知识</h1>
 <p><a id="Autoencoder"></a></p>
 <h2 id="autoencoder">Autoencoder</h2>
-<p>根据吴恩达在CS294A的<a href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">讲义</a>, Autoencoder是一种无监督学习, 在没有给定标签的数据{x(1), x(2), x(3)....}, 通过隐藏层(hidden layer)学习输入中隐含的特征, 从而让输出{x^(1), x^(2), x^(3)...}尽可能的逼近输入. 下图为autoencoder的结构(引用自<a href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">这里</a>):</p>
+<p>根据吴恩达在CS294A的<a rel="external" href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">讲义</a>, Autoencoder是一种无监督学习, 在没有给定标签的数据{x(1), x(2), x(3)....}, 通过隐藏层(hidden layer)学习输入中隐含的特征, 从而让输出{x^(1), x^(2), x^(3)...}尽可能的逼近输入. 下图为autoencoder的结构(引用自<a rel="external" href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">这里</a>):</p>
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png" height="100" width="100"/>
 <!-- ![autoencoder](https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/autoencoder.png) -->
 <p><a id="Sparse Autoencoder"></a></p>
 <h2 id="sparse-autoencoder">Sparse Autoencoder</h2>
-<p>Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通过增加稀疏惩罚项(sparse penalty)使得前向传播时只有一部分神经元激活, 而不是所有神经元都激活. 由于相比与未做稀疏化处理的autoencoder结构, 激活的隐藏层神经元(hidden neruon)变少了, 因此每一个隐藏层神经元都包含了更丰富的隐藏特征(latent feature). 是不是和现在流行的<a href="https://huggingface.co/blog/moe">Mixture of Experts</a>很像?
-下图为sparse autoencoder的结构(引用自<a href="https://medium.com/@syoya/what-happens-in-sparse-autencoder-b9a5a69da5c6">这里</a>):</p>
+<p>Sparse Autoencoder是Autoencoder的一种变种, 在Autoencoder的基础上通过增加稀疏惩罚项(sparse penalty)使得前向传播时只有一部分神经元激活, 而不是所有神经元都激活. 由于相比与未做稀疏化处理的autoencoder结构, 激活的隐藏层神经元(hidden neruon)变少了, 因此每一个隐藏层神经元都包含了更丰富的隐藏特征(latent feature). 是不是和现在流行的<a rel="external" href="https://huggingface.co/blog/moe">Mixture of Experts</a>很像?
+下图为sparse autoencoder的结构(引用自<a rel="external" href="https://medium.com/@syoya/what-happens-in-sparse-autencoder-b9a5a69da5c6">这里</a>):</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/sparse-autoencoder2.png" alt="sparse-autoencoder" /></p>
 <p><a id="sparse-autoencoder的特征可解释性"></a></p>
 <h2 id="sparse-autoencoderde-te-zheng-ke-jie-shi-xing">Sparse Autoencoder的特征可解释性</h2>
-<p>MIT6.S898 Deep Learning在2023年发表的一篇<a href="https://deep-learning-mit.github.io/staging/blog/2023/learning-interpretable-features-with-sparse-autoencoders/">blog</a>在这里提到了</p>
+<p>MIT6.S898 Deep Learning在2023年发表的一篇<a rel="external" href="https://deep-learning-mit.github.io/staging/blog/2023/learning-interpretable-features-with-sparse-autoencoders/">blog</a>在这里提到了</p>
 <blockquote>
 <p>A sparse autoencoder lets us learn a sparse representation for a vector, but in a higher dimensional space.</p>
 </blockquote>
-<p>相比与未稀疏化的Autoencoder, 稀疏化的Autoencoder可以学习到更高维度的隐含特征. 换个角度说, 未经稀疏化的隐藏层神经往往是表示多维特征(polysemantic). 而经过稀疏化的隐藏层神经元所表示的特征维度更少, 从而使得隐含特征更加容易理解. 更详细的关于sparse autoencoder的可解释性, 可以点击Anthropic发的<a href="https://transformer-circuits.pub/2023/monosemantic-features">"Towards Monosemanticity: Decomposing Language Models With Dictionary Learning"</a>查看.</p>
+<p>相比与未稀疏化的Autoencoder, 稀疏化的Autoencoder可以学习到更高维度的隐含特征. 换个角度说, 未经稀疏化的隐藏层神经往往是表示多维特征(polysemantic). 而经过稀疏化的隐藏层神经元所表示的特征维度更少, 从而使得隐含特征更加容易理解. 更详细的关于sparse autoencoder的可解释性, 可以点击Anthropic发的<a rel="external" href="https://transformer-circuits.pub/2023/monosemantic-features">"Towards Monosemanticity: Decomposing Language Models With Dictionary Learning"</a>查看.</p>
 <p><a id="Bottleneck Layer"></a></p>
 <h2 id="bottleneck-layer">Bottleneck Layer</h2>
 <p>bottlenect layer指的是含有比前一层更少的神经元的网络层, 使得输入特征维度减少. 这里引用英文原文更方便理解:</p>
@@ -173,7 +173,7 @@
 </ul>
 <p>到了正文部分, 作者一开始比较了不同的激活函数对autoencoder的影响. 发现TopK的获得最小的正规化均方根误差(Normalized root mean square error). 如下图所示:</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/openai-topk.png" alt="topk" /></p>
-<p>接下来作者在不同指标上又进行了测试, 如果有兴趣建议阅读原文. 为了抓住重点, 我们先跳过这一部分. 作者使用<a href="https://arxiv.org/pdf/2305.19911">Neuron to Graph(N2G)</a>去做特征的解释.</p>
+<p>接下来作者在不同指标上又进行了测试, 如果有兴趣建议阅读原文. 为了抓住重点, 我们先跳过这一部分. 作者使用<a rel="external" href="https://arxiv.org/pdf/2305.19911">Neuron to Graph(N2G)</a>去做特征的解释.</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/n2g.png" alt="n2g" /></p>
 <p>上图的N2G论文原文的描述, 可以看到N2G是将语言模型输出的回答进行关联生成一张有向图.</p>
 <p>之后作者对比了ReLU与TopK在N2G中的表现. 发现TopK的召回率以及精度都更高. 如下图所示:</p>
@@ -183,8 +183,8 @@
 <p><a id="参考资料"></a></p>
 <h1 id="can-kao-zi-liao">参考资料</h1>
 <ul>
-<li><a href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">Sparse autoencoder, CS294A Lecture notes - Andrew Ng</a></li>
-<li><a href="https://stats.stackexchange.com/questions/262044/what-does-a-bottleneck-layer-mean-in-neural-networks">What does a bottleneck layer mean in neural networks?</a></li>
+<li><a rel="external" href="http://stanford.edu/class/cs294a/sparseAutoencoder.pdf">Sparse autoencoder, CS294A Lecture notes - Andrew Ng</a></li>
+<li><a rel="external" href="https://stats.stackexchange.com/questions/262044/what-does-a-bottleneck-layer-mean-in-neural-networks">What does a bottleneck layer mean in neural networks?</a></li>
 </ul>
 <hr />
 <br>

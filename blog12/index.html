@@ -143,14 +143,14 @@
 </ul>
 <p><a id="背景"></a></p>
 <h1 id="bei-jing">背景</h1>
-<p>最近在听四年前Ilya Sutskever在Lex Fridman的PodCast上提到了一个观点. <a href="https://www.podgist.com/lex-fridman/94-ilya-sutskever-deep-learning/index.html#0:43:06">Lex问Ilya</a>.</p>
+<p>最近在听四年前Ilya Sutskever在Lex Fridman的PodCast上提到了一个观点. <a rel="external" href="https://www.podgist.com/lex-fridman/94-ilya-sutskever-deep-learning/index.html#0:43:06">Lex问Ilya</a>.</p>
 <blockquote>
 <p>Lex: Do you think neural networks can be made to reason?</p>
 <p>Ilya: Why not?</p>
 <p>Lex: 你认为神经网络可以被设计成具备推理能力吗？</p>
 <p>Ilya: 为什么不能?</p>
 </blockquote>
-<p>与之类似的是<a href="https://www.podgist.com/lex-fridman/333-andrej-karpathy-tesla-ai-self-driving-optimus-aliens-and-agi/index.html#2:33:57">Andrej Karpathy在Lex Fridman的PodCast</a>上的观点:</p>
+<p>与之类似的是<a rel="external" href="https://www.podgist.com/lex-fridman/333-andrej-karpathy-tesla-ai-self-driving-optimus-aliens-and-agi/index.html#2:33:57">Andrej Karpathy在Lex Fridman的PodCast</a>上的观点:</p>
 <blockquote>
 <p>Lex: What's your sense of where we stand with language models? Does it feel like the beginning, the middle, or the end?</p>
 <p>Andrej: The begining. 100 percent.</p>
@@ -165,13 +165,13 @@
 <p>但是当你和陌生人对话, 有时候陌生人说完了, 你并不能理解. 此时你会说你不理解别人说的是什么.</p>
 <p>在这个过程中, 你会先提取话的语义(表现为抽象能力), <u>再去以某种方式去检索信息(表现为压缩能力)</u>, 然后去对话(表现为预测能力).</p>
 <p>在与大语言模型对话的过程中, 大语言模型会先分词(表现为抽象能力)<a href="https://evanlyu732.github.io/blog12/#1">[1]</a>, <u>再去以某种方式去检索信息(表现为压缩能力)</u>, 然后去回答人类的问题(表现为预测能力).</p>
-<p>其中, <strong>要弄清楚人类与大语言模型是如何实现检索信息的方式并不重要</strong>, 就如同<a href="https://en.wikipedia.org/wiki/Lambda_calculus">λ演算</a>即使是黑盒也可以表示任何函数一样. <a href="https://evanlyu732.github.io/blog12/#5">[5]</a></p>
+<p>其中, <strong>要弄清楚人类与大语言模型是如何实现检索信息的方式并不重要</strong>, 就如同<a rel="external" href="https://en.wikipedia.org/wiki/Lambda_calculus">λ演算</a>即使是黑盒也可以表示任何函数一样. <a href="https://evanlyu732.github.io/blog12/#5">[5]</a></p>
 <p>因此,  基于上面的描述过程我们可以定义理解能力:</p>
 <blockquote>
 <p>understand = abstract + compression + prediction</p>
 <p>理解 = 抽象 + 压缩 + 预测</p>
 </blockquote>
-<p>追求理解能力等价于追求压缩能力. 如果人类说理解语言, 人类对于知识有有损压缩. 而<a href="https://bigeagle.me/2023/03/llm-is-compression/">大语言模型是无损压缩</a>, 因此大语言模型也一定理解人类语言.</p>
+<p>追求理解能力等价于追求压缩能力. 如果人类说理解语言, 人类对于知识有有损压缩. 而<a rel="external" href="https://bigeagle.me/2023/03/llm-is-compression/">大语言模型是无损压缩</a>, 因此大语言模型也一定理解人类语言.</p>
 <p><a id="假设"></a></p>
 <h1 id="jia-she">假设</h1>
 <ol>
@@ -280,14 +280,14 @@
 <p>所有压缩器和所有预测器之间存在一一对应关系 - Ilya Sutskever, An Observation on Generalization</p>
 </blockquote>
 <p>整个过程最关键的一环在于理解 <strong>压缩与预测是相同操作.</strong> 现在让我们来理解为什么压缩与预测是相同操作.</p>
-<p>香农早在1951年的时候发表的<a href="https://archive.org/details/bstj30-1-50/page/n3/mode/2up?view=theater">"Prediction and Entropy of Printed English"</a>就讨论了”语言模型".</p>
+<p>香农早在1951年的时候发表的<a rel="external" href="https://archive.org/details/bstj30-1-50/page/n3/mode/2up?view=theater">"Prediction and Entropy of Printed English"</a>就讨论了”语言模型".</p>
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/text.png" height="100" width="100"/>
 <p>给一个人一段不认识并且有缺少单词文本(见上图, 第二行有缺失信息的文本叫做reduced text), 从第一个缺失的单词开始逐个猜字母. 如果猜错了, 这个人会再猜一次. 如果猜对了就继续. 直到把缺失的文本复原. 整个过程如下图. 如果要通过缺失的文本(reduced text)去复原原始文本(original text), 香农说我们需要有一个与猜词的人完全一样的双胞胎(不止是生理, 思考方式也完全一样, 并且可以用数学公式量化)负责生产文本序列(produce text sequence), 当负责生产文本的双胞胎去猜词的时候, 和与之前在猜词的人猜一样的结果. 也会在同样的字母上犯错. 当负责猜词的人去生产词的话, 也会生成相同的缺失文本.</p>
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/predictor.png" height="100" width="100"/>
 <p>在这种情况下, 缺失的文本相当与原文本的编码. 去生产缺失文本的行为(压缩)相当于预测的逆操作. <a href="https://evanlyu732.github.io/blog12/#4">[4]</a></p>
 <p>所以在这种情况下, 只要压缩算法是双向(单向的也没有意义)的. 比如能够将输入X压缩成Y, 也能够通过Y还原X. 那么两个这种压缩器拼接在一起的时候. 你总是能够通过X还原X. 虽然这个操作看起来没有意义.</p>
 <p>这就好比比如你有个文件夹, 你压缩成zip文件. 发送给你的朋友, 你的朋友解压zip文件, 得到了和你文件夹一样的内容. 所以 <strong>无损压缩就等于无损预测</strong>.</p>
-<p>大模型是无监督学习, 无监督学习本身就是给定输入X映射到某个空间Y, 再通过Y重建X. 而刚好 <strong><a href="https://bigeagle.me/2023/03/llm-is-compression/">大语言模型是无损压缩</a></strong> 也是目前压缩人类语言里面最好的压缩器.</p>
+<p>大模型是无监督学习, 无监督学习本身就是给定输入X映射到某个空间Y, 再通过Y重建X. 而刚好 <strong><a rel="external" href="https://bigeagle.me/2023/03/llm-is-compression/">大语言模型是无损压缩</a></strong> 也是目前压缩人类语言里面最好的压缩器.</p>
 <blockquote>
 <p>You're basically zipping the world knowledge. It's not much more than that, actually.</p>
 <p>-- Arthur Mensch, CEO of MistralAI, said on training a model.</p>
@@ -300,9 +300,9 @@
 <p>人脑对于信息压缩的方式也与计算机不同. 这里借用Reddit上面一篇帖子的回答, 虽然大脑和数字计算机在表面上做着类似的事情, 但实际操作方式却有很大不同. 记忆并非通过占据“存储单元”中的空间来存储在大脑中. 据我们所知, 它们表现为神经元之间连接的模式. 特定的记忆可能是一组神经元在受到刺激时通过它们的连接共同激活(与其他可能包含部分相同细胞的集合不同).</p>
 <p><a id="大语言模型是无损压缩"></a></p>
 <h1 id="da-yu-yan-mo-xing-shi-wu-sun-ya-suo">大语言模型是无损压缩</h1>
-<p>这一节是对<a href="https://www.youtube.com/watch?v=af8Vi0kP3X4">Jack Rae</a>在讲座里的实验过程的具体描述的补充. 如果明白大语言模型是无损压缩的话, 请跳过这一节. 如果不明白的话, 强烈建议先阅读<a href="https://zhuanlan.zhihu.com/p/615554635">这篇</a>与<a href="https://bigeagle.me/2023/03/llm-is-compression/">这篇</a>文章.</p>
-<p>在信息论里, <a href="https://en.wikipedia.org/wiki/Entropy_coding">熵编码(entropy encoding)是一种进行无损压缩编码方式</a>. 我们在上文提到过, 越短的编码方式意味着越高的压缩率.</p>
-<p>而在熵编码(entropy encoding)里, 算术编码(arithmetic coding)是熵编码(entropy encoding)是目前最短编码长度的方法. 因此我们选用算术编码. 关于算术编码的详细过程在这篇<a href="https://go-compression.github.io/algorithms/arithmetic/">文章</a>写的很详细.</p>
+<p>这一节是对<a rel="external" href="https://www.youtube.com/watch?v=af8Vi0kP3X4">Jack Rae</a>在讲座里的实验过程的具体描述的补充. 如果明白大语言模型是无损压缩的话, 请跳过这一节. 如果不明白的话, 强烈建议先阅读<a rel="external" href="https://zhuanlan.zhihu.com/p/615554635">这篇</a>与<a rel="external" href="https://bigeagle.me/2023/03/llm-is-compression/">这篇</a>文章.</p>
+<p>在信息论里, <a rel="external" href="https://en.wikipedia.org/wiki/Entropy_coding">熵编码(entropy encoding)是一种进行无损压缩编码方式</a>. 我们在上文提到过, 越短的编码方式意味着越高的压缩率.</p>
+<p>而在熵编码(entropy encoding)里, 算术编码(arithmetic coding)是熵编码(entropy encoding)是目前最短编码长度的方法. 因此我们选用算术编码. 关于算术编码的详细过程在这篇<a rel="external" href="https://go-compression.github.io/algorithms/arithmetic/">文章</a>写的很详细.</p>
 <p>这里的核心思想是在发送端Alice与接受端Bob在传输数据的过程中. 每一次传输实际是在传输训练数据的概率密度, 由于Alice与Bob是相同的程序. 并且迭代过程也是一致, 所以给定相同的输入. 会有相同的输出.
 所以大模型在从压缩数据(compress data)去预测(prediciton)时候不需要传输模型的参数量.</p>
 <p><a id="追求压缩等于追求智能"></a></p>
@@ -320,7 +320,7 @@ the environment.  - The Book Of Why</p>
 <p>没人说的准. 只能让时间验证这条路最终会通往何方.</p>
 <p><a id="猜想"></a></p>
 <h1 id="cai-xiang">猜想</h1>
-<p>在<a href="https://www.ams.org/journals/notices/202104/rnoti-p565.pdf">"The Dawning of a New Era in Applied Mathematics"</a>, 作者提到从牛顿时代以来自然科学有两种范式(paradigms).</p>
+<p>在<a rel="external" href="https://www.ams.org/journals/notices/202104/rnoti-p565.pdf">"The Dawning of a New Era in Applied Mathematics"</a>, 作者提到从牛顿时代以来自然科学有两种范式(paradigms).</p>
 <ol>
 <li>开普勒范式(Keplerian paradigm): 又称数据驱动的方法(data-driven approach). 通过数据分析来研究科学规律. 能帮助我们发现很多事物的规律, 但是可解释性(explanability)很差.</li>
 <li>牛顿范式(Newtonian paradigm): 又称第一性原理(first-principle-based approach). 通过事物的基本准测(principle)去分析世界. 由于基本准测(principle)往往非常底层, 因此实践当中很难应用上.</li>
@@ -356,26 +356,26 @@ the environment.  - The Book Of Why</p>
 <p><a id="参考资料"></a></p>
 <h1 id="can-kao-zi-liao">参考资料</h1>
 <ul>
-<li><a href="https://www.lesswrong.com/posts/kqxEJkq5Big9nNKxy/beyond-kolmogorov-and-shannon">Beyond Kolmogorov and Shannon</a></li>
-<li><a href="https://bigeagle.me/2023/03/llm-is-compression/">为什么说 GPT 是无损压缩</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/615554635">压缩即泛化，泛化即智能</a></li>
-<li><a href="https://www.lesswrong.com/posts/hAvGi9YAPZAnnjZNY/prediction-compression-transcript-1">Prediction = Compression [Transcript]</a></li>
-<li><a href="https://sumanthrh.com/post/notes-on-generalization/">Notes on "An Observation on Generalization"</a></li>
-<li><a href="https://www.youtube.com/watch?v=AKMuA_TVz3A">An Observation on Generalization</a></li>
-<li><a href="https://www.youtube.com/watch?v=dO4TPJkeaaU">Compression for AGI - Jack Rae | Stanford MLSys #76</a></li>
-<li><a href="https://news.ycombinator.com/item?id=40262417#40262417">Using a LLM to compress text - Hacker News Post</a></li>
-<li><a href="https://news.ycombinator.com/item?id=35813991#35813991">Prediction and Entropy of Printed English - Hacker News Post</a></li>
-<li><a href="https://arxiv.org/pdf/2306.04050">LLMZip: Lossless Text Compression using Large Language Models</a></li>
-<li><a href="https://www.lesswrong.com/posts/KqgujtM3vSAfZE2dR/on-ilya-sutskever-s-a-theory-of-unsupervised-learning">On Ilya Sutskever's "A Theory of Unsupervised Learning"</a></li>
-<li><a href="https://arxiv.org/pdf/2309.10668v2">LANGUAGE MODELING IS COMPRESSION</a></li>
-<li><a href="https://www.youtube.com/watch?v=ZgGNFylv5hc">The Theory of Knowledge: How Information &amp; Knowledge are two sides of the same "bit"!</a></li>
-<li><a href="https://plato.stanford.edu/entries/logic-probability/">Logic and Probability</a></li>
-<li><a href="https://iep.utm.edu/understa/">Understanding in Epistemology</a></li>
+<li><a rel="external" href="https://www.lesswrong.com/posts/kqxEJkq5Big9nNKxy/beyond-kolmogorov-and-shannon">Beyond Kolmogorov and Shannon</a></li>
+<li><a rel="external" href="https://bigeagle.me/2023/03/llm-is-compression/">为什么说 GPT 是无损压缩</a></li>
+<li><a rel="external" href="https://zhuanlan.zhihu.com/p/615554635">压缩即泛化，泛化即智能</a></li>
+<li><a rel="external" href="https://www.lesswrong.com/posts/hAvGi9YAPZAnnjZNY/prediction-compression-transcript-1">Prediction = Compression [Transcript]</a></li>
+<li><a rel="external" href="https://sumanthrh.com/post/notes-on-generalization/">Notes on "An Observation on Generalization"</a></li>
+<li><a rel="external" href="https://www.youtube.com/watch?v=AKMuA_TVz3A">An Observation on Generalization</a></li>
+<li><a rel="external" href="https://www.youtube.com/watch?v=dO4TPJkeaaU">Compression for AGI - Jack Rae | Stanford MLSys #76</a></li>
+<li><a rel="external" href="https://news.ycombinator.com/item?id=40262417#40262417">Using a LLM to compress text - Hacker News Post</a></li>
+<li><a rel="external" href="https://news.ycombinator.com/item?id=35813991#35813991">Prediction and Entropy of Printed English - Hacker News Post</a></li>
+<li><a rel="external" href="https://arxiv.org/pdf/2306.04050">LLMZip: Lossless Text Compression using Large Language Models</a></li>
+<li><a rel="external" href="https://www.lesswrong.com/posts/KqgujtM3vSAfZE2dR/on-ilya-sutskever-s-a-theory-of-unsupervised-learning">On Ilya Sutskever's "A Theory of Unsupervised Learning"</a></li>
+<li><a rel="external" href="https://arxiv.org/pdf/2309.10668v2">LANGUAGE MODELING IS COMPRESSION</a></li>
+<li><a rel="external" href="https://www.youtube.com/watch?v=ZgGNFylv5hc">The Theory of Knowledge: How Information &amp; Knowledge are two sides of the same "bit"!</a></li>
+<li><a rel="external" href="https://plato.stanford.edu/entries/logic-probability/">Logic and Probability</a></li>
+<li><a rel="external" href="https://iep.utm.edu/understa/">Understanding in Epistemology</a></li>
 </ul>
 <hr />
 <p><a id="后记"></a></p>
 <h1 id="hou-ji">后记</h1>
-<p>分享在看之前Ilya点赞的<a href="https://arxiv.org/abs/2405.07987">The Platonic Representation Hypothesis</a>里面, 有一段很有意思的话.</p>
+<p>分享在看之前Ilya点赞的<a rel="external" href="https://arxiv.org/abs/2405.07987">The Platonic Representation Hypothesis</a>里面, 有一段很有意思的话.</p>
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/plato.png" height="100" width="100"/>
 <p>神经网络必将走向智能.</p>
 <hr />
@@ -388,9 +388,9 @@ the environment.  - The Book Of Why</p>
 <p><a id="3">[3]</a>
 在这个过程中我们不会用"学习". 理解是一种状态, 学习是导致理解的行为. 所以要达到理解, 不一定非得通过学习.</p>
 <p><a id="4">[4]</a>
-<a href="https://archive.org/details/bstj30-1-50/page/n5/mode/2up?view=theater">原文</a>的实验(p54~p55)描述的会更加清楚.</p>
+<a rel="external" href="https://archive.org/details/bstj30-1-50/page/n5/mode/2up?view=theater">原文</a>的实验(p54~p55)描述的会更加清楚.</p>
 <p><a id="5">[5]</a>
-比较好的文章是<a href="https://personal.utdallas.edu/~gupta/courses/apl/lambda.pdf">这篇</a>. 或者b站上的这个<a href="https://www.youtube.com/watch?v=af8Vi0kP3X4">视频</a>讲的很清楚.</p>
+比较好的文章是<a rel="external" href="https://personal.utdallas.edu/~gupta/courses/apl/lambda.pdf">这篇</a>. 或者b站上的这个<a rel="external" href="https://www.youtube.com/watch?v=af8Vi0kP3X4">视频</a>讲的很清楚.</p>
 <p><a id="6">[6]</a>
 在奇点降临(The Singularity Is Near)里面在2030年代意识上传将会出现.</p>
 

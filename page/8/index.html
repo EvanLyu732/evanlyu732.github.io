@@ -109,13 +109,131 @@
 <section class="posts">
     
     <article class="post">
+        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog9&#x2F;" class="post-title-link">Nvidia CUDA的前世今生</a></div>
+        <div class="post-content">
+            
+                <blockquote>
+<p>Any sufficiently advanced technology is indistinguishable from magic. - Arthur C. Clarke</p>
+</blockquote>
+<p>CUDA(Compute Unified Device Architecture)是Nvidia强大的护城河之一, 也绝对算是科技黑魔法.</p>
+<p>最近突然冒出了一个想法, 为什么CUDA要这样设计(kernel, warp, thread, block, grid...)? 带着这个疑问, 我花了一些时间
+在调研CUDA背后的历史, 以下是对Nvidia重要护城河之一的CUDA为什么这样设计的介绍:</p>
+<h2 id="cudafa-zhan-li-shi">CUDA发展历史</h2>
+<p>要了解CUDA为什么这样设计就需要了解CUDA的发展时间线. 在维基百科上搜索<a rel="external" href="https://en.wikipedia.org/wiki/CUDA">CUDA</a>, 里面有提到CUDA的发展历史, 以下为<a rel="external" href="https://en.wikipedia.org/wiki/CUDA#:~:text=Ian%20Buck%2C%20while,neural%20networks.%5B8%5D">原文</a>:</p>
+<blockquote>
+<p><strong>Ian Buck</strong>, while at <strong>Stanford</strong> in 2000, created an 8K gaming rig using 32 GeForce cards, then obtained a DARPA grant to perform <strong>general purpose parallel programming on GPUs</strong>. He then joined Nvidia, where since 2004 he has been overseeing CUDA development. In pushing for CUDA, Jensen Huang aimed for the Nvidia GPUs to become a <strong>general hardware</strong> for scientific computing. CUDA was released in 2006. Around 2015, the focus of CUDA changed to neural networks.</p>
+</blockquote>
+<p>谁是Ian Buck? 继续搜索Ian Buck会发现他现在英伟达的<a rel="external" href="https://blogs.nvidia.com/blog/author/ian-buck/">副总裁</a>, 以前是斯坦福的博士生, 点击Ian博士时期的<a rel="external" href="http://scroll.stanford.edu/~ianbuck/">主页</a>. 可以看到他在博士期间做的项目<a rel="external" href="http://graphics.stanford.edu/projects/brookgpu/">BrookGPU</a>, 里面有提到Brook是Ian提出的针对与GPU编程的流式编程语言. 此外在CUDA1.0时期的<a rel="external" href="https://www.youtube.com/watch?v=Cmh1EHXjJsk">采访</a>，Ian在视频里面明确提到将<strong>Brook的想法迁移到CUDA</strong>上, 因此可以认为<strong>Brook就是CUDA最早的雏形</strong>.</p>
+<h2 id="ian-buckde-brookyu-yan">Ian Buck的Brook语言</h2>
+<p>让我们一起再来看看BrookGPU的项目介绍:</p>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu.png" alt="brook-gpu" /></p>
+<p>总结一下, Brook提出了<strong>stream programming model</strong>以及<strong>stream application</strong>并给出了对应的实现去解决<a rel="external" href="https://zh.wikipedia.org/wiki/%E5%9B%BE%E5%BD%A2%E5%A4%84%E7%90%86%E5%99%A8%E9%80%9A%E7%94%A8%E8%AE%A1%E7%AE%97"><strong>通用计算</strong></a>的问题.</p>
+<p>再结合BrookGPU当时的论文<a rel="external" href="https://graphics.stanford.edu/papers/brookgpu/brookgpu.pdf">Brook for GPUs: Stream Computing on Graphics Hardware</a>以及Ian Buck的博士论文<a rel="external" href="http://graphics.stanford.edu/~ianbuck/thesis.pdf">STREAM COMPUTING ON GRAPHICS HARDWARE</a>. 我们能够了解到以下几个点:</p>
+<ul>
+<li>由于GPU与CPU所针对的场景不同，并且由于CPU的局限性: 有限的instruction level parallelism (ILP), 过度使用缓存去获取局部性. 因此GPU的编程语言形态会与CPU有所不同.</li>
+<li>当时也有针对于GPU编程的语言, 但是这些语言的实现都是针对于图形学的shader所设计的, 而不是为了<strong>通用计算编程</strong>所设计</li>
+<li>程序在GPU上执行时，其内存访问延迟主要受到两个关键因素的制约: 一是计算速率(compute rate), 二是内存带宽(memory bandwidth). 这意味着，GPU处理数据的速度和内存传输数据的能力共同决定了程序在内存操作中的延迟表现. BrookGPU的设计是为了让GPU计算充分发挥, 从而让内存时延主要部分为内存带宽.</li>
+<li>Brook不是第一个尝试去解决通用计算问题, 但是是第一个使用流式处理(stream processing)去解决通用计算.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/brookgpu2.png" alt="advantage-of-streaming" /></p>
+<p>在Ian提出Streaming Processing框架的这一节提到了很重要的一个观点. 内存的访问速度(memory access rate)即内存带宽(memory bandwidth)往往
+是制约程序性能的瓶颈. 而软件层由于改变不了物理的内存带宽, 因而会采取其他技巧去隐藏内存延迟(memory latency). 这里Streaming Processing使用data parallelism与<a rel="external" href="https://crd.lbl.gov/divisions/amcr/computer-science-amcr/par/research/roofline/introduction/">arithmetic Intensity</a>去隐藏内存延迟(hide memory latency). Ian也提出了什么是arithmetic Intensity的概念:</p>
+<blockquote>
+<p>In order to quantify this property, we introduce the concept of arithmetic inten-
+sity. <strong>Arithmetic intensity is the ratio of arithmetic operations performed per memory
+operation, in other words, flops per word transferred.</strong></p>
+</blockquote>
+<p>感觉这里解释的不是很清楚, 于是询问GPT4的回答, 讲的很清楚:
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/arth-intensity.png" alt="arithmetic Intensity" />
+Arithmetic intensity指的是运算指令(add, mul..)与内存操作(load, store..)的比例.</p>
+<p>这里小结一下Brook做了什么事:</p>
+<p><em>Brook是一种编程语言, 通过软件层的抽象来让程序尽可能得调用GPU的运算单元，尽可能减少内存搬运操作. 从而隐藏内存延迟.</em></p>
+<p>如果有兴趣详细了解的话, GTC2022上的这个<a rel="external" href="https://www.nvidia.com/en-us/on-demand/session/gtcspring22-s41487/">talk</a>会很有帮助. 在了解了这些之后, 我们再来一起看看BrookGPU与CUDA的对比.</p>
+<h2 id="brookyu-cudade-dui-bi">Brook与CUDA的对比</h2>
+<p>接下来结合上面的信息以及CUDA1.0的<a rel="external" href="https://developer.download.nvidia.cn/compute/cuda/1.0/NVIDIA_CUDA_Programming_Guide_1.0.pdf">参考手册</a>, 我们来看看Brook与Cuda的一些概念的对比. 由于CUDA是在Brook之后诞生, 所以这里以Brook中的概念为准分各个小节. 为了尽可能得传递原始信息避免加工, 每个概念会附上原文.</p>
+<h3 id="stream">Stream</h3>
+<blockquote>
+<p>A stream is a collection of data which can be operated on in parallel.  - Ian Buck, BROOK STREAM LANGUAGE p24</p>
+</blockquote>
+<p>由于CUDA1.0里面没有Stream的概念, 这里没有直接查到是CUDA的哪一个版本提出了Stream. 所以参考了Steve Rennich在GTC的ppt.</p>
+<blockquote>
+<p>A sequence of operations that execute in issue-order on the GPU - Steve Rennich, <a rel="external" href="https://developer.download.nvidia.cn/CUDA/training/StreamsAndConcurrencyWebinar.pdf">CUDA C/C++
+Streams and Concurrency</a></p>
+</blockquote>
+<p>Stream在brook指带的是一系统的数据, 而在cuda里面是的一系列的指令.</p>
+<h3 id="kernel">Kernel</h3>
+<blockquote>
+<p>Brook kernels are special functions, specified by the kernel
+keyword, which operate on streams. - Ian Buck, BROOK STREAM LANGUAGE p26</p>
+</blockquote>
+<p>在Brook里面kernel指的是处理stream的函数. 由于stream是的是一系列的数据, 因此kernel也就是处理data的函数.</p>
+<blockquote>
+<p>More precisely, a portion of an application that is executed many times, but
+independently on different data, can be isolated into a function that is executed on
+the device as many different threads. To that effect, such a function is compiled to
+the instruction set of the device and the resulting program, called a <em>kernel</em>  - Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0, p7</p>
+</blockquote>
+<p>可以看到kernel在Brook与CUDA里面的概念是一致的. 都表示为处理数据的函数.</p>
+<h3 id="reductions">Reductions</h3>
+<blockquote>
+<p>While kernels provide a mechanism for applying a function to a set of data, reductions
+provide a data-parallel method for calculating a single value from a set of records. - Ian Buck, BROOK STREAM LANGUAGE p30</p>
+</blockquote>
+<p>这里需要附上原文的代码才能更详细的说明:</p>
+<pre class="giallo" style="color: #CDD6F4; background-color: #1E1E2E;"><code data-lang="c"><span class="giallo-l"><span style="color: #9399B2;font-style: italic;">// Task: Compute the sum of all the elements of a sum (a, r);</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #9399B2;font-style: italic;">// Brook</span></span>
+<span class="giallo-l"><span>reduce </span><span style="color: #89B4FA;font-style: italic;">sum</span><span style="color: #9399B2;"> (</span><span style="color: #CBA6F7;">float</span><span> a</span><span style="color: #94E2D5;">&lt;&gt;</span><span style="color: #9399B2;">,</span><span> reduce </span><span style="color: #CBA6F7;">float</span><span> r</span><span style="color: #94E2D5;">&lt;&gt;</span><span style="color: #9399B2;">) {</span></span>
+<span class="giallo-l"><span>    r </span><span style="color: #94E2D5;">+=</span><span> c</span><span style="color: #9399B2;">;</span></span>
+<span class="giallo-l"><span style="color: #9399B2;">}</span></span>
+<span class="giallo-l"><span style="color: #CBA6F7;">float</span><span> r</span><span style="color: #9399B2;">;</span></span>
+<span class="giallo-l"><span style="color: #CBA6F7;">float</span><span> a</span><span style="color: #94E2D5;">&lt;</span><span style="color: #FAB387;">100</span><span style="color: #94E2D5;">&gt;</span><span style="color: #9399B2;">;</span></span>
+<span class="giallo-l"></span>
+<span class="giallo-l"><span style="color: #9399B2;font-style: italic;">// Equivalant C code:</span></span>
+<span class="giallo-l"><span>r </span><span style="color: #94E2D5;">=</span><span> a</span><span style="color: #9399B2;">[</span><span style="color: #FAB387;">0</span><span style="color: #9399B2;">];</span></span>
+<span class="giallo-l"><span style="color: #CBA6F7;">for</span><span style="color: #9399B2;"> (</span><span>i</span><span style="color: #94E2D5;">=</span><span style="color: #FAB387;">1</span><span style="color: #9399B2;">;</span><span> i</span><span style="color: #94E2D5;">&lt;</span><span style="color: #FAB387;">100</span><span style="color: #9399B2;">;</span><span> i</span><span style="color: #94E2D5;">++</span><span style="color: #9399B2;">)</span></span>
+<span class="giallo-l"><span>    r </span><span style="color: #94E2D5;">+=</span><span> a</span><span style="color: #9399B2;">[</span><span>i</span><span style="color: #9399B2;">];</span></span></code></pre>
+<p>Reduction指的是将从一组数据中计算单个值的任务抽离出来, 很奇怪的一点是明明这里的操作也可以归为kernel的范畴, 但是Ian却单独抽里开. 说明Brook对Reducitons的实现与kernel是不同的. 而从语法上来看, 这段代码与CUDA调用kernel function几乎是一致的. 在CUDA中没有单独的概念, 说明这一操作已经在CUDA统一了.</p>
+<p>到此为止, 我们已经了解了Brook里面提出的主要概念并且与CUDA里面的概念做了对比. 了解了Brook与CUDA之间的关系. 尽管Ian在自己的博士论文里面论述了Streaming Processing相比于SIMD的优势. 但是CUDA1.0的编程设计仍然是针对于SIMD Processor而不是后来的Streaming Processor. 而从2006年Ian的博士毕业到2007年CUDA1.0的发布. 中间肯定有受限于当时硬件设计的妥协. 说明任何事物发展都有个规律, 从概念提出最后到完全时间的周期往往会比较长. SIMD到SIMT也不是一蹴而就.</p>
+<h2 id="wei-shen-me-cudazhe-yang-she-ji">为什么CUDA这样设计</h2>
+<p>回到开头所提出的问题, 为什么CUDA这样设计? 结合Steve Jone在GTC2021的<a rel="external" href="https://www.nvidia.com/zh-tw/on-demand/session/gtcspring21-s31151/">"How Gpu Computing Works"</a>以及GTC2022的<a rel="external" href="https://resources.nvidia.com/en-us-summer-of-learning-for-students/gtcspring22-s41487">"How CUDA Programming Works"</a>, 我尝试用尽可能精炼的语言描述下我的理解:</p>
+<p>从CUDA的目标上来看, 制约现在程序性能往往不是由于通常概念上的运算性能, 而是由于内存延迟. CUDA的任务就是让程序尽可能的调动GPU的运算单元, 从而隐藏内存延迟.</p>
+<p>从CUDA的实现方式上来看, 因为GPU最开始是为加速渲染所设计并且适合执行大量重复的计算, 因此CUDA会有概念层的抽象. 通过将一张图片或者一次渲染做拆分成grid, 而每个grid会有多个blocks作为操作单元, 每个block的数据可以由多个thread来共享数据. 每个thread是最小操作单元. 通过这样划分, 实现了<a rel="external" href="https://en.wikipedia.org/wiki/Single_instruction,_multiple_threads">SIMT(Single Instruction Multiple Threads)</a>. 从而隐藏内存延迟.</p>
+<p>下面这张图对于理解CUDA的概念非常有帮助:
+<img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/gtc-cuda-concepts.png" alt="cuda-concepts" /></p>
+<h2 id="zong-jie">总结</h2>
+<p>CUDA的发明者Ian Buck在读博士的时候(2006年左右), 当时已经有专门针对GPU的编程语言, 但是这些特点的语言的特定都是针对于图形学里的shader设计的, 因此不具有通用性. 因此CUDA的意义在于使用流式处理(stream processsing)去解决图形处理器通用计算(General-purpose computing on graphics processing units)软件层抽象的问题.</p>
+<h2 id="can-kao-zi-liao">参考资料</h2>
+<ul>
+<li>How Gpu Computing Works - Steve Jones</li>
+<li>How CUDA Programming Works - Steve Jones</li>
+<li>BROOK STREAM LANGUAGE - Ian Buck</li>
+<li>Brook for GPUs: Stream Computing on Graphics Hardware - Ian Buck</li>
+<li>Nvidia CUDA Compute Unified Device Architecture Programming Guide, version1.0</li>
+<li>Wikipedia</li>
+</ul>
+
+            
+        </div>
+        <div class="post-meta">
+            
+                
+
+
+二〇二四年六月五日
+
+            
+        </div>
+    </article>
+    
+    <article class="post">
         <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog8&#x2F;" class="post-title-link">LLM OS的曙光</a></div>
         <div class="post-content">
             
-                <p>在今天的OpenAI的春季发布会, OpenAI发布了<a href="https://openai.com/index/hello-gpt-4o/">gpt-4o</a>. 虽然前几代模型也支持语音功能, 但是在gpt-4o中, 其中任意打断的能力和更快的响应速度, 实在是难以让人区分出是机器人还是人类. 但是现在每次对话都需要重新用语音prompt, 来让模型产生预期的“性格”. 所以显而易见的, 不久后的GPT商店会上架不同“性格”的AI. 以及对自定义AI的支持.</p>
-<p>语音和图像的联动是另一项gpt-4o所突出展示出的能力. 用语音交互的方式来让AI分析实时的摄像头数据. 并且在pc端通过桌面端应用还具备<a href="https://www.youtube.com/watch?v=ZJbu3NEPJN0">voice copliot</a>的能力. 已经能让生产力提高到下一个层次. 很明显在未来能够 <u>清晰的表达想法和理解问题</u> 的能力比单纯的技能更加重要. 其实这已经是LLM OS的一个很大的突破了.</p>
-<p>随着OpenAI开放更加便宜的AI, OpenAI的影响力肯定会进一步扩大. 他们所能获取的数据集肯定越来越多. 假如世界模型是一个向量f(x), 根据<a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">Universal approximation theorem</a>. 因此世界模型会被拟合, 假如未来的模型架构迭代, 比如使用<a href="https://arxiv.org/pdf/2404.19756">Kolmogorov–Arnold Networks</a>. 实际上变的也是拟合的基函数, 核心思想都是一致. 也是对世界模型的拟合. 因此, AI最终一定会解决现有的世界模型 f(x) 的一切问题. 但是以这种方式的AI不具备创造力.</p>
-<p>如何让AI具备创造力? 这篇文章<a href="https://arxiv.org/pdf/2002.06177">The Next Decade in AI: Four Steps Towards Robust Artificial Intelligence</a>的作者就很好的分析了这个问题. <a href="https://nonint.com/2023/06/10/the-it-in-ai-models-is-the-dataset/">现有的AI始终受限于数据集</a>. AGI需要有对知识的归纳和演化的能力.以下是原文链接.</p>
+                <p>在今天的OpenAI的春季发布会, OpenAI发布了<a rel="external" href="https://openai.com/index/hello-gpt-4o/">gpt-4o</a>. 虽然前几代模型也支持语音功能, 但是在gpt-4o中, 其中任意打断的能力和更快的响应速度, 实在是难以让人区分出是机器人还是人类. 但是现在每次对话都需要重新用语音prompt, 来让模型产生预期的“性格”. 所以显而易见的, 不久后的GPT商店会上架不同“性格”的AI. 以及对自定义AI的支持.</p>
+<p>语音和图像的联动是另一项gpt-4o所突出展示出的能力. 用语音交互的方式来让AI分析实时的摄像头数据. 并且在pc端通过桌面端应用还具备<a rel="external" href="https://www.youtube.com/watch?v=ZJbu3NEPJN0">voice copliot</a>的能力. 已经能让生产力提高到下一个层次. 很明显在未来能够 <u>清晰的表达想法和理解问题</u> 的能力比单纯的技能更加重要. 其实这已经是LLM OS的一个很大的突破了.</p>
+<p>随着OpenAI开放更加便宜的AI, OpenAI的影响力肯定会进一步扩大. 他们所能获取的数据集肯定越来越多. 假如世界模型是一个向量f(x), 根据<a rel="external" href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">Universal approximation theorem</a>. 因此世界模型会被拟合, 假如未来的模型架构迭代, 比如使用<a rel="external" href="https://arxiv.org/pdf/2404.19756">Kolmogorov–Arnold Networks</a>. 实际上变的也是拟合的基函数, 核心思想都是一致. 也是对世界模型的拟合. 因此, AI最终一定会解决现有的世界模型 f(x) 的一切问题. 但是以这种方式的AI不具备创造力.</p>
+<p>如何让AI具备创造力? 这篇文章<a rel="external" href="https://arxiv.org/pdf/2002.06177">The Next Decade in AI: Four Steps Towards Robust Artificial Intelligence</a>的作者就很好的分析了这个问题. <a rel="external" href="https://nonint.com/2023/06/10/the-it-in-ai-models-is-the-dataset/">现有的AI始终受限于数据集</a>. AGI需要有对知识的归纳和演化的能力.以下是原文链接.</p>
 <blockquote>
 <p>a reasoning system that can leverage large-scale background knowledge efficiently, even when available information is incomplete is a prerequisite to robustness. - p40</p>
 </blockquote>
@@ -140,13 +258,13 @@
         <div class="post-content">
             
                 <h1 id="can-hui-ji-lu">参会记录</h1>
-<p>记录一下本周线下参加的2024百度Create ai大会, 大会回放链接点击<a href="https://create.baidu.com/?lng=en">这里</a>. 大会的主要内容是百度的ai产品发布会. 我当时看大部分演讲的内容其实更多的是偏应用方面. 我个人对技术方面的内容更感兴趣就只参加了主论坛并且只听了前三场讲座.</p>
+<p>记录一下本周线下参加的2024百度Create ai大会, 大会回放链接点击<a rel="external" href="https://create.baidu.com/?lng=en">这里</a>. 大会的主要内容是百度的ai产品发布会. 我当时看大部分演讲的内容其实更多的是偏应用方面. 我个人对技术方面的内容更感兴趣就只参加了主论坛并且只听了前三场讲座.</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/baidu-create00.jpg" alt="intro" /></p>
-<p>首先开场的是李彦宏, 他讲的大部分内容都是偏向产品端. 我印象比较深刻的是开场没多久就说了下面这张图. "未来大型的AI原生应用基本都是MOE." .并且他说明这里的MOE指的是混合模型(Mixture Of Engine)并不是技术上的MOE, 出于对技术上指代的MOE的好奇, 我开始去研究Mixture Of Experts. <a href="https://twitter.com/karpathy/status/1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&amp;ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png">这个链接 </a>是非常好的资料. 现有很多大模型会包含Mixture Of Experts Layer. 因此在提示词工程里面需要有角色扮演, 相当于激活特定分支的Expert来让优化输出结果.</p>
+<p>首先开场的是李彦宏, 他讲的大部分内容都是偏向产品端. 我印象比较深刻的是开场没多久就说了下面这张图. "未来大型的AI原生应用基本都是MOE." .并且他说明这里的MOE指的是混合模型(Mixture Of Engine)并不是技术上的MOE, 出于对技术上指代的MOE的好奇, 我开始去研究Mixture Of Experts. <a rel="external" href="https://twitter.com/karpathy/status/1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&amp;ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png">这个链接 </a>是非常好的资料. 现有很多大模型会包含Mixture Of Experts Layer. 因此在提示词工程里面需要有角色扮演, 相当于激活特定分支的Expert来让优化输出结果.</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/baidu-create01.png" alt="moe" /></p>
 <p>之后是王海峰介绍的多模型推理部分. 也是从输入端会经过路由模型. 再由路由模型分发输入给不同的模型. 实际上所谓的Mixture Of Engine与Mixture Of Experts的思想是一致的. 只不过是宏观(多个模型)与微观(单个模型)之间的区别.
 <img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/baidu-create02.png" alt="infer" /></p>
-<p>最后是沈抖介绍的万源智能操作系统, 与Andrej Karpathy所提及的<a href="https://twitter.com/karpathy/status/1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&amp;ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png">LLM-OS</a>是相同的. 之前看过Andrej的一个talk里面就讲到基本所有人都在往LLM-OS发力. 将一个复杂任务拆解的话, 现有的LLM已经具有相当的理解能力, 但是缺少对工具的使用能力. 如果要让LLM能够使用工具的话, 许多现有的应用都要重新开发. 或许也是未来的一个风口所在.</p>
+<p>最后是沈抖介绍的万源智能操作系统, 与Andrej Karpathy所提及的<a rel="external" href="https://twitter.com/karpathy/status/1723140519554105733?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1723140519554105733%7Ctwgr%5E07d2037d9d6cbc882a44890ce223b50c270f617e%7Ctwcon%5Es1_&amp;ref_url=https%3A%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Ftype%3Dtext2Fhtmlkey%3Da19fcc184b9711e1b4764040d3dc5c07schema%3Dtwitterurl%3Dhttps3A%2F%2Ftwitter.com%2Fkarpathy%2Fstatus%2F17231405195541057333Fs3D4626t3DuuEcj3Up_XwhDshmNCpLBQimage%3Dhttps3A%2F%2Fabs.twimg.com%2Ferrors%2Flogo46x38.png">LLM-OS</a>是相同的. 之前看过Andrej的一个talk里面就讲到基本所有人都在往LLM-OS发力. 将一个复杂任务拆解的话, 现有的LLM已经具有相当的理解能力, 但是缺少对工具的使用能力. 如果要让LLM能够使用工具的话, 许多现有的应用都要重新开发. 或许也是未来的一个风口所在.</p>
 <p><img src="https://raw.githubusercontent.com/EvanLyu732/evanlyu732.github.io/main/static/images/baidu-create06.png" alt="wanyuan" /></p>
 <h1 id="can-kao-zi-liao">参考资料</h1>
 <p>下面是对于了解Mixutre Of Experts有帮助的链接:</p>
@@ -164,52 +282,6 @@
 
 
 二〇二四年四月十七日
-
-            
-        </div>
-    </article>
-    
-    <article class="post">
-        <div class="post-title"><a href="https:&#x2F;&#x2F;evanlyu732.github.io&#x2F;blog6&#x2F;" class="post-title-link">工具的重要性</a></div>
-        <div class="post-content">
-            
-                <h1 id="bei-jing">背景</h1>
-<p>最近在思考关于"技术无用论"的说法. 从事程序工作难免会遇到技术无用论的观点. 持有这样观点的人通常的思路如下:
-比方说, 在一个公司里往往靠的是商务能力生存下去, 而技术往往是服务于商务. 而商务的变更就会直接影响到一个项目是否要推进下去.
-直白点, 技术是商务的下游. 而上游决定下游, 如果上游不存在自然下游也不存在, 并且技术只是实现目的的一种手段, 而不是唯一. 因此技术不重要.</p>
-<p>与其相似的是第二个观点是“工具无用论". 举个具体的例子, 很多人会认为学习vim或者emacs这种编辑器是浪费时间, 付出对应的学习成本是没有必要的. 或者折腾arch linux，window manager这些也是花里胡哨, 没什么实际用处. 类似的, 编程语言学习一两种就行了, 语言只是工具, 都差不多, 学会了一种再学其他的语言也很快. 毕竟还是需要面向“薪资”编程.</p>
-<h1 id="zheng-wen">正文</h1>
-<p>要给出结论需要一些铺垫. 我相信提出上面观点的人不会怀疑“薪资”或者财富是无用的. 所有的人都想解决“财富”问题. 这里要明确一点就是. <strong>财富不等于金钱，财富是金钱的载体</strong>. 如果社会流通金钱远远超过了载体的数量就会导致通货膨胀, 或者在某个具体的行业产生泡沫, 追求金钱是追求财富的副产物, 而财富还有其他名字, 它也叫做产品或者服务. 而通常意义上来讲, 工作就是指创造产品或者提供服务的时间. 提供产品可以不用金钱, 最好的例子某过于开源或者免费服务. 一个组织或者个人所提供的产品的影响力越大, 相应的, 组织也会获得越多的金钱. 组织中的个人也会获得更好的薪资待遇. 因此，<strong>金钱直接与影响力</strong> 挂钩. <a href="https://www.amazon.com/Millionaire-Fastlane-Crack-Wealth-Lifetime/dp/0984358102">The Millionaire Fastlane: Crack the Code to Wealth and Live Rich for a Lifetime</a>中有一个公式很清晰的表达了这个过程:</p>
-<blockquote>
-<p>Wealth = Width * Depth</p>
-</blockquote>
-<p>这里的Wealth我更倾向于解读成金钱. 金钱的数量取决于产品的影响力的广度(受众的个数)乘深度(用户粘性).  在这个过程中, 去提供对应的产品需要对应的工具, 程序员需要编程语言去创造软件, 雕塑家需要对应的工具去创建雕塑. 任何行业的专业人员都需要专业的工具的提供相应的产品.</p>
-<p><strong>那技术在这个链路里面指的是什么呢？</strong></p>
-<p>在中文语境下, 技术往往有两个指向:</p>
-<ol>
-<li>技术指代的是工具本身, 即技术等于工具</li>
-<li>技术指代的是创造工具的背景或者说基础知识</li>
-</ol>
-<p>由于技术这个词同时有两个指代, 我认为有不同观点是第二个指代. 第一种指代是创造产品必需的, 好的技术能更好服务于产品. 从而创造更大的影响力. 而第二种指向对于使用工具的人来说很重要, 但对于创造产品没有直接影响. 从这个角度上讲, 第二种指向的技术确实没什么用. 所以我在这里想反驳的其实是第二种观点, 即“工具无用论”. 更具体的说是在软件开发工程中, 好的工具是如何改变思维的.</p>
-<h1 id="lun-gong-ju-de-zhong-yao-xing">论工具的重要性</h1>
-<p>截止到2024年还无法完全使用AI相关的工具达到全流程闭环的今天, 我认为软件开发可以用一句话总结:"通过某种交互方式进行文本编辑, 按照规则(编程语言), 实现模型的过程称为软件开发". 所以这里面有三个因素:</p>
-<ul>
-<li>文本编辑</li>
-<li>规则(编程语言)</li>
-<li>模型</li>
-</ul>
-<p>模型会根据不同行业而有所区分, 因此不具有通用性. 由于99.99%的人都无法创造 <strong>有生态以及有社区影响力的规则</strong> , 因此都必须要理解规则, 按照规则进行开发. 而不管进行哪种软件开发, 都需要进行文本编辑. 熟练使用Vim以及Emacs都可以让编辑速度有质的提升, 加速了迭代速度, 从而让更多的开发时间花在模型的构建上. 同时能够熟练掌握Vim以及Emacs能够更好的帮助你理解规则. 但是Vim和Emacs的定位不一样, Vim更强调的是编辑本身, Vim配置也更多的是编辑本身的拓展, 而在Emacs里面任何操作都是一条命令, 通过Elisp去自定义命令达到预期的功能. 这里十分推荐Hacker news上的一篇<a href="https://news.ycombinator.com/item?id=30709487">Post</a>, 然而在工作中真正花时间能够很熟练使用Vim的人已经寥寥无几, 使用Emacs的就更稀有了. 并不是每个学校都像mit会开<a href="https://missing.csail.mit.edu/">The Missing Semester of Your CS Education</a>这种课. 这也是国内大部分高校计算机教育缺少的一环, 我认为在大学里面花一个学期把Vim或者Emacs当成主修一点都不为过. 它们能够直接加深对计算机的理解.</p>
-<h1 id="lispyu-qi-ta-yu-yan">Lisp与其他语言</h1>
-<p>不是专门研究编程语言或者折腾Emacs的话, 大部分人应该都不会接触Lisp相关的语言. 但Lisp实在是太独特了, 学习Lisp可以影响思维. 由于Lisp的dialect(方言)很多, 有lexical scoping, 而有dynamic scoping的. 但是精华部分都有一致性, 在Lisp中任何函数调用最终都是由eval去执行, 任何数据都是Data, 函数是Data. 并且几乎没有语法. 只有一种数据结构就是list, 而list只有两个部分构成, car和cdr. 通过操作car(contents of address part of a register)，cdr(contents of the decrement part of a register). Lisp就像<a href="https://www.amazon.com/G%C3%B6del-Escher-Bach-Eternal-Golden/dp/0465026567">GEB</a>里面说的strange loop的完备符号形式, 一旦了解了lisp的基本结构, 会发现没有任何语言能像它一样简洁. 如果让我重新学习编程, 我肯定会先选择这本1990年出版的<a href="https://www.cs.cmu.edu/~dst/LispBook/book.pdf">Common Lisp</a>书籍作为学习编程的第一本教材.</p>
-
-            
-        </div>
-        <div class="post-meta">
-            
-                
-
-
-二〇二四年三月十日
 
             
         </div>
