@@ -271,6 +271,16 @@
                 overflow-x: auto;
             }
         }
+        pre[data-lang="txt"] {
+            background-color: #eeeeee !important;
+            border-color: #d0d0d0;
+            color: #000000 !important;
+        }
+        pre[data-lang="txt"] code,
+        pre[data-lang="txt"] span {
+            background-color: #eeeeee !important;
+            color: #000000 !important;
+        }
     }
     .post-meta {
         color: var(--muted);
