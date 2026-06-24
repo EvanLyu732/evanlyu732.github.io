@@ -3,7 +3,7 @@ title = "The Interlude"
 date = 2026-06-23
 +++
 
-距离上一篇博客，已经过了两年。这两年里，AI agent 与大模型的发展很快：从两年前的 prompt engineering，到如今的 harness engineering、loop engineering；存储成本持续下降，人们也开始 AI token maxxing。一层叠一层，技术趋势似乎正在收敛。
+距离上一篇博客，已经过了两年。这两年里，AI agent 与大模型的发展很快：从两年前的 prompt engineering，到如今的 harness engineering、loop engineering；存储成本持续下降，人们也开始 token maxing。一层叠一层，技术趋势似乎正在收敛。
 
 还有一个更大的趋势：人们一直在往上层寻找模式。
 
