@@ -112,6 +112,11 @@
         scrollbar-width: auto;
         display: block;
     }
+    pre[data-lang="txt"] {
+        background-color: #eeeeee !important;
+        border-color: #d0d0d0;
+        color: #000000 !important;
+    }
     img {
         height: auto !important;
         margin: 1.5rem auto;
@@ -132,6 +137,11 @@
         box-sizing: border-box;
         -moz-tab-size: 4;
         tab-size: 4;
+    }
+    pre[data-lang="txt"] code,
+    pre[data-lang="txt"] span {
+        background-color: #eeeeee !important;
+        color: #000000 !important;
     }
     .katex-display {
         overflow-x: auto;
