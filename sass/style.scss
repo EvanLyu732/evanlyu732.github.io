@@ -55,6 +55,32 @@ a:hover {
     width: 100%;
 }
 
+.selection-share-button {
+    position: absolute;
+    z-index: 20;
+    display: none;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font: inherit;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    cursor: pointer;
+    box-shadow: 0 5px 14px rgba(23, 23, 23, 0.16);
+}
+
+.selection-share-button.is-visible {
+    display: block;
+}
+
+.selection-share-button:hover,
+.selection-share-button:focus {
+    background: var(--link-hover);
+    outline: none;
+}
+
 @media screen and (max-width: 640px) {
     body {
         font-size: 16px;
