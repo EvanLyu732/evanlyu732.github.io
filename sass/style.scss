@@ -10,7 +10,8 @@
     --code-bg: #e6eddf;
     --link: #34302a;
     --link-hover: #000000;
-    --selection: #dbe8b3;
+    --highlight: #fff2a8;
+    --selection: var(--highlight);
 }
 
 * {
@@ -37,6 +38,11 @@ body {
 
 ::selection {
     background: var(--selection);
+    color: var(--ink);
+}
+
+::target-text {
+    background: var(--highlight);
     color: var(--ink);
 }
 
